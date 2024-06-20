@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* Define height and width for map */
+#map {
+    height: 80vh;
+    width: 100vh;
+}
