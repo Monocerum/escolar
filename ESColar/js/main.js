@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Edges
     var edges = [
+        // Oval: Grandstand, CommunityBuilding, OvalE1, OvalE2
         ['Oval', 'Grandstand'], 
         ['Oval', 'CommunityBuilding'],
         ['Oval', 'OvalE1'],
@@ -318,14 +319,101 @@ document.addEventListener('DOMContentLoaded', () => {
         ['InfoCenter', 'I1'],
         ['InfoCenter', 'OvalE1'],
         ['I1', 'GI3'],
-        
         ['AMShrine', 'AMSE'],
         ['AMShrine', 'AME'],
         ['AMMuseum', 'AMME'],
         ['AMME', 'AME'],
-        ['OBL4', 'AME'], 
-        ['PEI1', 'PEI2'], 
+        // I1: I2, 
+        ['I1', 'I2'],
+
+        // I2: I1, Souvenir, I3
+        ['I2', 'Souvenir'],
+        ['I2', 'I3'],
+
+        // I3: I2, CHI1
+        ['I3', 'CHI1'],
+        
+        // B1E: GI3, Gate2
+        ['B1E', 'Gate2'],
+
+        // B1: B1E
+        ['B1', 'B1E'],
+
+        // Gymnasium: GE1, GE2, GE3
+        ['Gymnasium', 'GE1'],
+        ['Gymnasium', 'GE2'],
+        ['Gymnasium', 'GE3'],
+
+        // GE1: GI3, B1E
+        ['GE1', 'B1E'],
+
+        // GE2: GE3, GI1, GI3
+
+        // GE3: GI1, GE2, GI3
+        ['GE3', 'GI1'],
+        ['GE3', 'GE2'],
+        ['GE3', 'GI3'],
+
+        // GI3: GI1, GE2, GE1, B1E, I1, GE3
+        ['GI3', 'GE2'],
+        ['GI3', 'GE1'],
+        ['GI3', 'B1E'],
+        ['GI3', 'I1'],
+
+        // CI2: CI1
+        ['CI2', 'CI1'],
+
+        // CI1: OBL5, OBL7, CI2
+        ['CI1', 'OBL5'],
+        ['CI1', 'OBL7'],
+
+        // GI1: PEI3, GI2, GI3, GE1, GE2, GE3
+        ['GI1', 'GI3'],
+        ['GI1', 'GE1'],
+        ['GI1', 'GE2'],
+        ['GI1', 'GE3'],
+
+        // GI2: GI1
+        ['GI2', 'GI1'],
+
+        // PEI1: OBL8, PEI2, PEI3
+        ['PEI1', 'PEI2'],
         ['PEI1', 'PEI3'],
+
+        // SE: PEI1, PEI2, SPI3, SPI2, TahananAlumni, PE
+        ['SE', 'SPI2'],
+        ['SE', 'TahananAlumni'],
+        ['SE', 'PE'],
+
+        // SPI1: SPI2, SPI4, Pool
+
+        // SPI2: SPI3, SPI1
+        ['SPI2', 'SPI1'],
+
+        // SPI3: SE, SPI2, SPI4
+        ['SPI3', 'SE'],
+        ['SPI3', 'SPI2'],
+
+        // SPI4: SPI3, SPI1, Pool
+        ['SPI4', 'SPI3'],
+        ['SPI4', 'SPI1'],
+
+        // Pool: SPI1, SPI4
+        ['Pool', 'SPI1'],
+        ['Pool', 'SPI4'],
+
+        // PEI2: PEI1, PE, TahananAlumni, SE
+        ['PEI2', 'PEI1'],
+        ['PEI2', 'PE'],
+        ['PEI2', 'TahananAlumni'],
+        ['PEI2', 'SE'],
+
+        // PEI3: PEI1, PE, TahananAlumni, SE, GI1
+        ['PEI3', 'PEI1'],
+        ['PEI3', 'PE'],
+        ['PEI3', 'TahananAlumni'],
+        ['PEI3', 'SE'],
+        ['PEI3', 'GI1'],
 
         // OBL8: NALRCI8, OBL6, PEI1
         ['OBL8', 'NALRCI8'],
@@ -343,8 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ['OBL5', 'OBL6'],
         ['OBL5', 'OBL7'],
 
-        // OBL4: OBL3, OBL7
+        // OBL4: OBL3, OBL7, AME
         ['OBL4', 'OBL7'],
+        ['OBL4', 'AME'], 
         
         // OBL3: LAGE1, OBL1, OBL2, OBL4
         ['OBL3', 'OBL4'],
