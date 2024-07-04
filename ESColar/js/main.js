@@ -108,72 +108,101 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initializes new campus_map using the Campus() class
     var campus_map = new Campus();
-
+""
     // Vertices
-    var vertices = [{id: 'Oval', name: "Oval", latitude: 14.598115, longitude: 121.012039},  // Buildings / Areas
-        {id: 'Grandstand', name: "Grandstand", latitude: 14.598021, longitude: 121.011524},
-        {id: 'CommunityBuilding', name: "Community Building", latitude: 14.598094, longitude: 121.012484},
-        {id: 'InfoCenter', name: "Information Center", latitude: 14.599077, longitude: 121.011583},
-        {id: 'BCourt', name: "Court", latitude: 14.598635, longitude: 121.010821},
-        {id: 'CommunityBuilding', name: "Grandstand", latitude: 14.598094, longitude: 121.012484},
-        {id: 'B1', name: "Building 1", latitude: 14.599585, longitude: 121.011070},
-        {id: 'Gymnasium', name: "PUP Gymnasium", latitude: 14.599237, longitude: 121.010743},
-        {id: 'Pool', name: "Swimming Pool Area", latitude: 14.5989, longitude: 121.010211},
-        {id: 'Souvenir', name: "PUP Souvenir Shop", latitude: 14.598428, longitude: 121.011235},
-        {id: 'AMShrine', name: "Apolinario Mabini Shrine", latitude: 14.598195, longitude: 121.011151},
-        {id: 'AMMuseum', name: "Apolinario Mabini Museum", latitude: 14.597905, longitude: 121.01122},
-        {id: 'PE', name: "PE Building", latitude: 14.598451, longitude: 121.010134},
-        {id: 'TahananAlumni', name: "Tahanan ng Alumni", latitude: 14.598507, longitude: 121.010171},
+    var vertices = [
+        {id: 'Oval', class: "dn", name: "Oval", latitude: 14.598115, longitude: 121.012039},  // Buildings / Areas
+        {id: 'Grandstand', class: "bn", name: "Grandstand", latitude: 14.598021, longitude: 121.011524},
+        {id: 'CommunityBuilding', class: "bn", name: "Community Building", latitude: 14.598094, longitude: 121.012484},
+        {id: 'InfoCenter', class: "bn", name: "Information Center", latitude: 14.599077, longitude: 121.011583},
+        {id: 'BCourt', class: "bn", name: "Court", latitude: 14.598635, longitude: 121.010821},
+        {id: 'CommunityBuilding', class: "bn", name: "Grandstand", latitude: 14.598094, longitude: 121.012484},
+        {id: 'B1', class: "bn", name: "Building 1", latitude: 14.599585, longitude: 121.011070},
+        {id: 'Gymnasium', class: "bn", name: "PUP Gymnasium", latitude: 14.599237, longitude: 121.010743},
+        {id: 'Pool', class: "bn", name: "Swimming Pool Area", latitude: 14.5989, longitude: 121.010211},
+        {id: 'Souvenir', class: "bn", name: "PUP Souvenir Shop", latitude: 14.598428, longitude: 121.011235},
+        {id: 'AMShrine', class: "bn", name: "Apolinario Mabini Shrine", latitude: 14.598195, longitude: 121.011151},
+        {id: 'AMMuseum', class: "bn", name: "Apolinario Mabini Museum", latitude: 14.597905, longitude: 121.01122},
+        {id: 'PE', class: "bn", name: "PE Building", latitude: 14.598451, longitude: 121.010134},
+        {id: 'TahananAlumni', class: "bn", name: "Tahanan ng Alumni", latitude: 14.598507, longitude: 121.010171},
+        {id: 'B2', class: "bn", name: "Building 2", latitude: 14.598326, longitude: 121.009626},
+        {id: 'MT', class: "bn", name: "Millenium Tower", latitude: 14.597809, longitude: 121.009356},
+        {id: 'LaboratoryHS', class: "bn", name: "PUP Laboratory High School", latitude: 14.597237, longitude: 121.009122},
+        {id: 'PBMO', class: "bn", name: "Property Building and Motorpool Office", latitude: 14.597385, longitude: 121.00857},
+        {id: 'PO', class: "bn", name: "Printing Office", latitude: 14.597303, longitude: 121.008731},
+        {id: 'SB', class: "bn", name: "Sampaguita Building", latitude: 14.596827, longitude: 121.009862},
+        {id: 'PS', class: "bn", name: "PUP Pumping Station", latitude: 14.596573, longitude: 121.010136},
+        {id: 'NALRC', class: "bn", name: "Ninoy Aquino Learning Resource Center", latitude: 14.597884, longitude: 121.009761},
+        {id: 'PK', class: "bn", name: "PUP Kasarianlan", latitude: 14.597123, longitude: 121.009754},
+        {id: 'SC', class: "bn", name: "Student Canteen", latitude: 14.596962, longitude: 121.009806},
+        {id: 'MBMD', class: "bn", name: "Main Building Main Dome", latitude: 14.596993, longitude: 121.010778},
+        {id: 'MBWW', class: "bn", name: "Main Building West Wing", latitude: 14.596908, longitude: 121.010397},
+        {id: 'MBEW', class: "bn", name: "Main Building East Wing", latitude: 14.596726, longitude: 121.011082},
+        {id: 'MBNW', class: "bn", name: "Main Building North Wing", latitude: 14.597362, longitude: 121.010881},
+        {id: 'MBSW', class: "bn", name: "Main Building South Wing", latitude: 14.596545, longitude: 121.010663},
+        {id: 'CH', class: "bn", name: "Interfaith Ecumenical Chapel", latitude: 14.597136, longitude: 121.011442}, // Intersection around PUP Chapel, near East Wing
+        {id: 'NFSB', class: "bn", name: "Nutrition and Food Science Building", latitude: 14.596877, longitude: 121.011693}, 
+        {id: 'CDM', class: "bn", name: "Campus Development and Maintenance", latitude: 14.596368, longitude: 121.011199},
 
-        {id: 'B2', name: "Building 2", latitude: 14.598326, longitude: 121.009626},
-        {id: 'MT', name: "Millenium Tower", latitude: 14.597809, longitude: 121.009356},
-        {id: 'LaboratoryHS', name: "PUP Laboratory High School", latitude: 14.597237, longitude: 121.009122},
-        {id: 'PBMO', name: "Property Building and Motorpool Office", latitude: 14.597385, longitude: 121.00857},
-        {id: 'PO', name: "Printing Office", latitude: 14.597303, longitude: 121.008731},
-        {id: 'SB', name: "Sampaguita Building", latitude: 14.596827, longitude: 121.009862},
-        {id: 'PS', name: "PUP Pumping Station", latitude: 14.596573, longitude: 121.010136},
-        
         // Exits
-        {id: 'OvalE1', name: "Oval Exit/Entrance 1", latitude: 14.598949, longitude: 121.011719},
-        {id: 'OvalE2', name: "Oval Exit/Entrance 2", latitude: 14.597432, longitude: 121.011698},
-        {id: 'B1E', name: "B1 Exit", latitude: 14.599458, longitude: 121.011202},
-        {id: 'GE1', name: "Gymnasium Exit 1", latitude: 14.599438, longitude: 121.010976},
-        {id: 'GE2', name: "Gymnasium Exit 2", latitude: 14.599181, longitude: 121.010991},
-        {id: 'GE3', name: "Gymnasium Exit 3", latitude: 14.598992, longitude: 121.010778},
-        {id: 'AMSE', name: "Shrine Exit", latitude: 14.598091, longitude: 121.01112},
-        {id: 'AMME', name: "Museum Exit", latitude: 14.597875, longitude: 121.01118},
-        {id: 'AME', name: "Apolinario Mabini Museum", latitude: 14.597942, longitude: 121.011037},
-        {id: 'SE', name: "Swimming Pool Exit", latitude: 14.598515, longitude: 121.0102777},
+        {id: 'OvalE1', class: "en", name: "Oval Exit/Entrance 1", latitude: 14.598949, longitude: 121.011719},
+        {id: 'OvalE2', class: "en", name: "Oval Exit/Entrance 2", latitude: 14.597432, longitude: 121.011698},
+        {id: 'B1E', class: "en", name: "B1 Exit", latitude: 14.599458, longitude: 121.011202},
+        {id: 'GE1', class: "en", name: "Gymnasium Exit 1", latitude: 14.599438, longitude: 121.010976},
+        {id: 'GE2', class: "en", name: "Gymnasium Exit 2", latitude: 14.599181, longitude: 121.010991},
+        {id: 'GE3', class: "en", name: "Gymnasium Exit 3", latitude: 14.598992, longitude: 121.010778},
+        {id: 'AMSE', class: "en", name: "Shrine Exit", latitude: 14.598091, longitude: 121.01112},
+        {id: 'AMME', class: "en", name: "Museum Exit", latitude: 14.597875, longitude: 121.01118},
+        {id: 'AME', class: "en", name: "Apolinario Mabini Museum Exit", latitude: 14.597942, longitude: 121.011037},
+        {id: 'SE', class: "en", name: "Swimming Pool Exit", latitude: 14.598515, longitude: 121.0102777},
 
-        {id: 'LAGE1', name: "Lagoon Exit 1", latitude: 14.597946, longitude: 121.010655},
-        {id: 'LAGE2', name: "Lagoon Exit 2", latitude: 14.597332, longitude: 121.010008},
+        {id: 'LAGE1', class: "en", name: "Lagoon Exit 1", latitude: 14.597946, longitude: 121.010655},
+        {id: 'LAGE2', class: "en", name: "Lagoon Exit 2", latitude: 14.597332, longitude: 121.010008},
 
-        {id: 'NALRCE', name: "Ninoy Aquino Learning Resource Center Exit", latitude: 14.597726, longitude: 121.009692},
+        {id: 'NALRCE', class: "en", name: "Ninoy Aquino Learning Resource Center Exit", latitude: 14.597726, longitude: 121.009692},
         
-        {id: 'PKE', name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
-        {id: 'SCE', name: "Student Canteen Exit", latitude: 14.59699, longitude: 121.009926},
-        {id: 'PKE', name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
+        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
+        {id: 'SCE', class: "en", name: "Student Canteen Exit", latitude: 14.59699, longitude: 121.009926},
+        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
 
-        {id: 'LHSE1', name: "Laboratory High School Exit 1", latitude: 14.597524, longitude: 121.008955},
-        {id: 'LHSE2', name: "Laboratory High School Exit 2", latitude: 14.597394, longitude: 121.009122},
-        {id: 'LHSE3', name: "Laboratory High School Exit 3", latitude: 14.597344, longitude: 121.009164},
-        {id: 'LHSE4', name: "Laboratory High School Exit 4", latitude: 14.59738, longitude: 121.009305},
-        {id: 'LHSE5', name: "Laboratory High School Exit 5", latitude: 14.597173, longitude: 121.009289},
+        {id: 'LHSE1', class: "en", name: "Laboratory High School Exit 1", latitude: 14.597524, longitude: 121.008955},
+        {id: 'LHSE2', class: "en", name: "Laboratory High School Exit 2", latitude: 14.597394, longitude: 121.009122},
+        {id: 'LHSE3', class: "en", name: "Laboratory High School Exit 3", latitude: 14.597344, longitude: 121.009164},
+        {id: 'LHSE4', class: "en", name: "Laboratory High School Exit 4", latitude: 14.59738, longitude: 121.009305},
+        {id: 'LHSE5', class: "en", name: "Laboratory High School Exit 5", latitude: 14.597173, longitude: 121.009289},
+
+        {id: 'MDE1', class: "en", name: "Main Dome Exit 1", latitude: 14.597148, longitude: 121.010641},
+        {id: 'MDE2', class: "en", name: "Main Dome Exit 2", latitude: 14.597024, longitude: 121.010981},
+
+        {id: 'EWE1', class: "en", name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301}, // Exit from MDI7
+        {id: 'EWE2', class: "en", name: "East Wing Exit 2", latitude: 14.596469, longitude: 121.01119},
+        {id: 'EWE3', class: "en", name: "East Wing Exit 3", latitude: 14.596622, longitude: 121.011352},
+
+        {id: 'SWE1', class: "en", name: "South Wing Exit 1", latitude: 14.596476, longitude: 121.01038},
+        {id: 'SWE2', class: "en", name: "South Wing Exit 2", latitude: 14.596351, longitude: 121.010872},
+
+        {id: 'WWE1', class: "en", name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101},
+        {id: 'WWE2', class: "en", name: "West Wing Exit 2", latitude: 14.596936, longitude: 121.010114},
+        {id: 'WWE3', class: "en", name: "West Wing Exit 3", latitude: 14.596734, longitude: 121.010175},
+
+        {id: 'NWE1', class: "en", name: "North Wing Exit 1", latitude: 14.597659, longitude: 121.010951},
+        {id: 'NWE2', class: "en", name: "North Wing Exit 2", latitude: 14.597658, longitude: 121.010845},
+        {id: 'NWE3', class: "en", name: "North Wing Exit 3", latitude: 14.597618, longitude: 121.011047},
+
 
         // Gates
-        {id: 'MainGate', name: "Main Gate", latitude: 14.599127, longitude: 121.011823},
-        {id: 'Gate2', name: "Gate 2", latitude: 14.5995, longitude: 121.011406},
+        {id: 'MainGate', class: "gn", name: "Main Gate", latitude: 14.599127, longitude: 121.011823},
+        {id: 'Gate2', class: "gn", name: "Gate 2", latitude: 14.5995, longitude: 121.011406},
 
         // Paths / Intersections
-        {id: 'I1', name: "Intersection 1", latitude: 14.598854, longitude: 121.011538}, // Intersection to Gym and main path, near entrance
-        {id: 'I2', name: "Intersection 2", latitude: 14.598218, longitude: 121.011368}, // Intersection to PUP Chapel
-        {id: 'I3', name: "Intersection 3", latitude: 14.59786, longitude: 121.011368}, // Intersection to PUP Chapel
+        {id: 'I1', class: "in", name: "Intersection 1", latitude: 14.598854, longitude: 121.011538}, // Intersection to Gym and main path, near entrance
+        {id: 'I2', class: "in", name: "Intersection 2", latitude: 14.598218, longitude: 121.011368}, // Intersection to PUP Chapel
+        {id: 'I3', class: "in", name: "Intersection 3", latitude: 14.59786, longitude: 121.011368}, // Intersection to PUP Chapel
         
         // Main Building: North Wing (Under Construction)
         {id: 'NWI1', name: "North Wing Intersection 1", latitude: 14.597159, longitude: 121.010624}, // Intersection around Lagoon
         {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789}, // Intersection around Lagoon
         {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789},
-
 
         // To Main Building
         {id: 'TMBI1', name: "Intersection to Main Building 1", latitude: 14.597119, longitude: 121.010298}, // Intersection near Auditorium from I25
@@ -191,40 +220,35 @@ document.addEventListener('DOMContentLoaded', () => {
         {id: 'CHI8', name: "Chapel Intersection 8", latitude: 14.597316, longitude: 121.011151}, // Intersection around PUP Chapel, near North Wing
         {id: 'CHI9', name: "Chapel Intersection 9", latitude: 14.59745, longitude: 121.011341}, // Intersection around PUP Chapel, near Main Dome
         {id: 'CHI10', name: "Chapel Intersection 10", latitude: 14.596739, longitude: 121.011408}, // Intersection around PUP Chapel, near East Wing
-        {id: 'CHC1', name: "Chapel Center 1", latitude: 14.597136, longitude: 121.011442}, // Intersection around PUP Chapel, near East Wing
 
         // Main Building: Main Dome
-        {id: 'MDI1', name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749},
-        {id: 'MDI2', name: "Main Dome Intersection 2", latitude: 14.596993, longitude: 121.010778},
-        {id: 'MDI3', name: "Main Dome Intersection 3", latitude: 14.596982, longitude: 121.01068},
-        {id: 'MDI4', name: "Main Dome Intersection 4", latitude: 14.597081, longitude: 121.010709}, // Intersection to NWI1
-        {id: 'MDI5', name: "Main Dome Intersection 5", latitude: 14.597112, longitude: 121.010809},
-        {id: 'MDI2', name: "Main Dome Intersection 6", latitude: 14.597001, longitude: 121.010895}, // Intersection to CHI7
-        {id: 'MDI2', name: "Main Dome Intersection 7", latitude: 14.597661, longitude: 121.010949},
+        {id: 'MDI1', class: "min", name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749},
+        {id: 'MDI2', class: "min", name: "Main Dome Intersection 2", latitude: 14.596982, longitude: 121.01068},
+        {id: 'MDI3', class: "min", name: "Main Dome Intersection 3", latitude: 14.597081, longitude: 121.010709}, // Intersection to NWI1
+        {id: 'MDI4', class: "min", name: "Main Dome Intersection 4", latitude: 14.597112, longitude: 121.010809},
+        {id: 'MDI5', class: "min", name: "Main Dome Intersection 5", latitude: 14.597001, longitude: 121.010895}, // Intersection to CHI7
+        {id: 'MDI6', class: "min", name: "Main Dome Intersection 6", latitude: 14.596934, longitude: 121.010868},
 
         // Main Building: East Wing
         {id: 'EWI1', name: "East Wing Intersection 1", latitude: 14.596641, longitude: 121.011419}, // Intersection near East Wing
         {id: 'EWI2', name: "East Wing Intersection 2", latitude: 14.596572, longitude: 121.011379}, // Intersection near East Wing
-        {id: 'EWE1', name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301}, // Exit from MDI7
-
+        
         // Main Building: South Wing
         {id: 'SWI1', name: "South Wing Intersection 1", latitude: 14.596248, longitude: 121.011029}, // Intersection between South and East Wing
         {id: 'SWI2', name: "South Wing Intersection 2", latitude: 14.596443, longitude: 121.010309}, // Intersection southwest corner of South Wing
         {id: 'SWI3', name: "South Wing Intersection 3", latitude: 14.596589, longitude: 121.010247}, // Intersection between South and West Wing
-        {id: 'SWE1', name: "South Wing Exit/Entrance 1", latitude: 14.596523, longitude: 121.010396},
-        {id: 'SWE2', name: "South Wing Exit/Entrance 2", latitude: 14.59669, longitude: 121.01044},
-        {id: 'SWW1', name: "South Wing Walkway 1", latitude: 14.596633, longitude: 121.010689},
-        {id: 'SWE3', name: "South Wing Exit/Entrance 3", latitude: 14.596565, longitude: 121.01093},
-        {id: 'SWE4', name: "South Wing Exit/Entrance 4", latitude: 14.596402, longitude: 121.010888},
-        {id: 'SWW2', name: "South Wing Walkway 2", latitude: 14.596545, longitude: 121.010663},
-        {id: 'SWW3', name: "South Wing Walkway 3", latitude: 14.596465, longitude: 121.010644},
+        {id: 'SWI4', class: "min", name: "South Wing Intersection 4", latitude: 14.596523, longitude: 121.010396},
+        {id: 'SWI5', class: "min", name: "South Wing Intersection 5", latitude: 14.59669, longitude: 121.01044},
+        {id: 'SWI6', class: "min", name: "South Wing Intersection 6", latitude: 14.596565, longitude: 121.01093},
+        {id: 'SWI7', class: "min", name: "South Wing Intersection 7", latitude: 14.596402, longitude: 121.010888},
+        {id: 'SWI8', class: "min", name: "South Wing Intersection 8", latitude: 14.596633, longitude: 121.010689},
+        {id: 'SWI9', class: "min", name: "South Wing Intersection 9", latitude: 14.596465, longitude: 121.010644},
 
         // Main Building: West Wing
         {id: 'WWI1', name: "West Wing Intersection 1", latitude: 14.59677, longitude: 121.010064}, // Intersection near West Wing
         {id: 'WWI2', name: "West Wing Intersection 2", latitude: 14.596958, longitude: 121.010001}, // Intersection near Student Canteen to PUP Auditorium
         {id: 'WWI3', name: "West Wing Intersection 3", latitude: 14.597032, longitude: 121.00998}, // Intersection near Student Canteen to PUP Auditorium
-        {id: 'WWE1', name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101},
-
+        
         // Court Intersection
         {id: 'CI1', name: "Court Intersection 1", latitude: 14.598488, longitude: 121.010958}, // Intersection inside courts 
         {id: 'CI2', name: "Court Intersection 2", latitude: 14.598787, longitude: 121.011261}, // Intersection in Tennis Court
@@ -256,47 +280,47 @@ document.addEventListener('DOMContentLoaded', () => {
         {id: 'OBL8', name: "Obelisk Intersection 8", latitude: 14.598265, longitude: 121.010565}, // Intersection to PE Building
 
         // lagoon
-        {id: 'LAGI1', name: "Lagoon Intersection 1", latitude: 14.597364, longitude: 121.010034}, // Intersection, Lagoon
-        {id: 'LAGI2', name: "Lagoon Intersection 2", latitude: 14.597351, longitude: 121.010055}, // Intersection, Lagoon
-        {id: 'LAGI3', name: "Lagoon Intersection 3", latitude: 14.597257, longitude: 121.010186}, // Intersection, Lagoon
-        {id: 'LAGI4', name: "Lagoon Intersection 4", latitude: 14.597222, longitude: 121.010239}, // Intersection, Lagoon
-        {id: 'LAGI5', name: "Lagoon Intersection 5", latitude: 14.597149, longitude: 121.010378}, // Intersection, Lagoon
-        {id: 'LAGI6', name: "Lagoon Intersection 6", latitude: 14.597192, longitude: 121.010541}, // Intersection, Lagoon
-        {id: 'LAGI7', name: "Lagoon Intersection 7", latitude: 14.597322, longitude: 121.0106}, // Intersection, Lagoon
-        {id: 'LAGI8', name: "Lagoon Intersection 8", latitude: 14.597709, longitude: 121.01071}, // Intersection, Lagoon
-        {id: 'LAGI9a', name: "Lagoon Intersection 9A", latitude: 14.597865, longitude: 121.010689}, // Intersection, Lagoon
-        {id: 'LAGI9b', name: "Lagoon Intersection 9B", latitude: 14.597924, longitude: 121.010633}, // Intersection, Lagoon
-        {id: 'LAGI10', name: "Lagoon Intersection 10", latitude: 14.598001, longitude: 121.010561}, // Intersection, Lagoon
-        {id: 'LAGI11', name: "Lagoon Intersection 11", latitude: 14.598132, longitude: 121.010452}, // Intersection, Lagoon
-        {id: 'LAGI12', name: "Lagoon Intersection 12", latitude: 14.5981, longitude: 121.01036}, // Intersection, Lagoon
-        {id: 'LAGI13', name: "Lagoon Intersection 13", latitude: 14.598052, longitude: 121.010216}, // Intersection, Lagoon
-        {id: 'LAGI14', name: "Lagoon Intersection 14", latitude: 14.598018, longitude: 121.010123}, // Intersection, Lagoon
-        {id: 'LAGI15', name: "Lagoon Intersection 15", latitude: 14.597901, longitude: 121.010073}, // Intersection, Lagoon
-        {id: 'LAGI16', name: "Lagoon Intersection 16", latitude: 14.597838, longitude: 121.010142}, // Intersection, Lagoon
-        {id: 'LAGI17', name: "Lagoon Intersection 17", latitude: 14.597789, longitude: 121.010239}, // Intersection, Lagoon
-        {id: 'LAGI18', name: "Lagoon Intersection 18", latitude: 14.597707, longitude: 121.010229}, // Intersection, Lagoon
-        {id: 'LAGI19', name: "Lagoon Intersection 19", latitude: 14.597598, longitude: 121.010154}, // Intersection, Lagoon
-        {id: 'LAGI20', name: "Lagoon Intersection 20", latitude: 14.597471, longitude: 121.010162}, // Intersection, Lagoon
-        {id: 'LAGI21', name: "Lagoon Intersection 21", latitude: 14.597367, longitude: 121.01028}, // Intersection, Lagoon
-        {id: 'LAGI22', name: "Lagoon Intersection 22", latitude: 14.597422, longitude: 121.010392}, // Intersection, Lagoon
-        {id: 'LAGI23', name: "Lagoon Intersection 23", latitude: 14.597354, longitude: 121.010519}, // Intersection, Lagoon
-        {id: 'LAGI24', name: "Lagoon Intersection 24", latitude: 14.597371, longitude: 121.01054}, // Intersection, Lagoon
-        {id: 'LAGI25', name: "Lagoon Intersection 25", latitude: 14.597362, longitude: 121.010569}, // Intersection, Lagoon
-        {id: 'LAGI26', name: "Lagoon Intersection 26", latitude: 14.597336, longitude: 121.010573}, // Intersection, Lagoon
-        {id: 'LAGI27', name: "Lagoon Intersection 27", latitude: 14.59751, longitude: 121.010544}, // Intersection, Lagoon
-        {id: 'LAGI28', name: "Lagoon Intersection 28", latitude: 14.597683, longitude: 121.010605}, // Intersection, Lagoon
-        {id: 'LAGI29', name: "Lagoon Intersection 29", latitude: 14.597706, longitude: 121.010609}, // Intersection, Lagoon
-        {id: 'LAGI30', name: "Lagoon Intersection 30", latitude: 14.597727, longitude: 121.010613}, // Intersection, Lagoon
-        {id: 'LAGI31', name: "Lagoon Intersection 31", latitude: 14.597763, longitude: 121.010462}, // Intersection, Lagoon
-        {id: 'LAGI32', name: "Lagoon Intersection 32", latitude: 14.597644, longitude: 121.010446}, // Intersection, Lagoon
-        {id: 'LAGI33', name: "Lagoon Intersection 33", latitude: 14.597726, longitude: 121.010426}, // Intersection, Lagoon
-        {id: 'LAGI34', name: "Lagoon Intersection 34", latitude: 14.597846, longitude: 121.010549}, // Intersection, Lagoon
-        {id: 'LAGI35', name: "Lagoon Intersection 35", latitude: 14.597883, longitude: 121.010373}, // Intersection, Lagoon
-        {id: 'LAGI36', name: "Lagoon Intersection 36", latitude: 14.597951, longitude: 121.010372}, // Intersection, Lagoon
-        {id: 'LAGI37', name: "Lagoon Intersection 37", latitude: 14.597927, longitude: 121.010484}, // Intersection, Lagoon
-        {id: 'LAGI38', name: "Lagoon Intersection 38", latitude: 14.597988, longitude: 121.01045}, // Intersection, Lagoon
-        {id: 'LAGI39', name: "Lagoon Intersection 39", latitude: 14.598011, longitude: 121.010357}, // Intersection, Lagoon
-        {id: 'LAGI40', name: "Lagoon Intersection 40", latitude: 14.598044, longitude: 121.0103}, // Intersection, Lagoon
+        {id: 'LAGI1', class: "lin", name: "Lagoon Intersection 1", latitude: 14.597364, longitude: 121.010034}, // Intersection, Lagoon
+        {id: 'LAGI2', class: "lin", name: "Lagoon Intersection 2", latitude: 14.597351, longitude: 121.010055}, // Intersection, Lagoon
+        {id: 'LAGI3', class: "lin", name: "Lagoon Intersection 3", latitude: 14.597257, longitude: 121.010186}, // Intersection, Lagoon
+        {id: 'LAGI4', class: "lin", name: "Lagoon Intersection 4", latitude: 14.597222, longitude: 121.010239}, // Intersection, Lagoon
+        {id: 'LAGI5', class: "lin", name: "Lagoon Intersection 5", latitude: 14.597149, longitude: 121.010378}, // Intersection, Lagoon
+        {id: 'LAGI6', class: "lin", name: "Lagoon Intersection 6", latitude: 14.597192, longitude: 121.010541}, // Intersection, Lagoon
+        {id: 'LAGI7', class: "lin", name: "Lagoon Intersection 7", latitude: 14.597322, longitude: 121.0106}, // Intersection, Lagoon
+        {id: 'LAGI8', class: "lin", name: "Lagoon Intersection 8", latitude: 14.597709, longitude: 121.01071}, // Intersection, Lagoon
+        {id: 'LAGI9a', class: "lin", name: "Lagoon Intersection 9A", latitude: 14.597865, longitude: 121.010689}, // Intersection, Lagoon
+        {id: 'LAGI9b', class: "lin", name: "Lagoon Intersection 9B", latitude: 14.597924, longitude: 121.010633}, // Intersection, Lagoon
+        {id: 'LAGI10', class: "lin", name: "Lagoon Intersection 10", latitude: 14.598001, longitude: 121.010561}, // Intersection, Lagoon
+        {id: 'LAGI11', class: "lin", name: "Lagoon Intersection 11", latitude: 14.598132, longitude: 121.010452}, // Intersection, Lagoon
+        {id: 'LAGI12', class: "lin", name: "Lagoon Intersection 12", latitude: 14.5981, longitude: 121.01036}, // Intersection, Lagoon
+        {id: 'LAGI13', class: "lin", name: "Lagoon Intersection 13", latitude: 14.598052, longitude: 121.010216}, // Intersection, Lagoon
+        {id: 'LAGI14', class: "lin", name: "Lagoon Intersection 14", latitude: 14.598018, longitude: 121.010123}, // Intersection, Lagoon
+        {id: 'LAGI15', class: "lin", name: "Lagoon Intersection 15", latitude: 14.597901, longitude: 121.010073}, // Intersection, Lagoon
+        {id: 'LAGI16', class: "lin", name: "Lagoon Intersection 16", latitude: 14.597838, longitude: 121.010142}, // Intersection, Lagoon
+        {id: 'LAGI17', class: "lin", name: "Lagoon Intersection 17", latitude: 14.597789, longitude: 121.010239}, // Intersection, Lagoon
+        {id: 'LAGI18', class: "lin", name: "Lagoon Intersection 18", latitude: 14.597707, longitude: 121.010229}, // Intersection, Lagoon
+        {id: 'LAGI19', class: "lin", name: "Lagoon Intersection 19", latitude: 14.597598, longitude: 121.010154}, // Intersection, Lagoon
+        {id: 'LAGI20', class: "lin", name: "Lagoon Intersection 20", latitude: 14.597471, longitude: 121.010162}, // Intersection, Lagoon
+        {id: 'LAGI21', class: "lin", name: "Lagoon Intersection 21", latitude: 14.597367, longitude: 121.01028}, // Intersection, Lagoon
+        {id: 'LAGI22', class: "lin", name: "Lagoon Intersection 22", latitude: 14.597422, longitude: 121.010392}, // Intersection, Lagoon
+        {id: 'LAGI23', class: "lin", name: "Lagoon Intersection 23", latitude: 14.597354, longitude: 121.010519}, // Intersection, Lagoon
+        {id: 'LAGI24', class: "lin", name: "Lagoon Intersection 24", latitude: 14.597371, longitude: 121.01054}, // Intersection, Lagoon
+        {id: 'LAGI25', class: "lin", name: "Lagoon Intersection 25", latitude: 14.597362, longitude: 121.010569}, // Intersection, Lagoon
+        {id: 'LAGI26', class: "lin", name: "Lagoon Intersection 26", latitude: 14.597336, longitude: 121.010573}, // Intersection, Lagoon
+        {id: 'LAGI27', class: "lin", name: "Lagoon Intersection 27", latitude: 14.59751, longitude: 121.010544}, // Intersection, Lagoon
+        {id: 'LAGI28', class: "lin", name: "Lagoon Intersection 28", latitude: 14.597683, longitude: 121.010605}, // Intersection, Lagoon
+        {id: 'LAGI29', class: "lin", name: "Lagoon Intersection 29", latitude: 14.597706, longitude: 121.010609}, // Intersection, Lagoon
+        {id: 'LAGI30', class: "lin", name: "Lagoon Intersection 30", latitude: 14.597727, longitude: 121.010613}, // Intersection, Lagoon
+        {id: 'LAGI31', class: "lin", name: "Lagoon Intersection 31", latitude: 14.597763, longitude: 121.010462}, // Intersection, Lagoon
+        {id: 'LAGI32', class: "lin", name: "Lagoon Intersection 32", latitude: 14.597644, longitude: 121.010446}, // Intersection, Lagoon
+        {id: 'LAGI33', class: "lin", name: "Lagoon Intersection 33", latitude: 14.597726, longitude: 121.010426}, // Intersection, Lagoon
+        {id: 'LAGI34', class: "lin", name: "Lagoon Intersection 34", latitude: 14.597846, longitude: 121.010549}, // Intersection, Lagoon
+        {id: 'LAGI35', class: "lin", name: "Lagoon Intersection 35", latitude: 14.597883, longitude: 121.010373}, // Intersection, Lagoon
+        {id: 'LAGI36', class: "lin", name: "Lagoon Intersection 36", latitude: 14.597951, longitude: 121.010372}, // Intersection, Lagoon
+        {id: 'LAGI37', class: "lin", name: "Lagoon Intersection 37", latitude: 14.597927, longitude: 121.010484}, // Intersection, Lagoon
+        {id: 'LAGI38', class: "lin", name: "Lagoon Intersection 38", latitude: 14.597988, longitude: 121.01045}, // Intersection, Lagoon
+        {id: 'LAGI39', class: "lin", name: "Lagoon Intersection 39", latitude: 14.598011, longitude: 121.010357}, // Intersection, Lagoon
+        {id: 'LAGI40', class: "lin", name: "Lagoon Intersection 40", latitude: 14.598044, longitude: 121.0103}, // Intersection, Lagoon
 
         // Ninoy Aquino LRC
         {id: 'NALRCI1', name: "Ninoy Aquino LRC Intersection 1", latitude: 14.597423, longitude: 121.009847}, // Intersection, Ninoy Aquino LRC
@@ -353,7 +377,196 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // I3: I2, CHI1
         ['I3', 'CHI1'],
+
+        // CHI1 (Chapel Intersection 1) -> CH, I3, CHI9, OvalE2, CHI2
+        ['CHI1', 'CHI9'],
+        ['CHI1', 'OvalE2'],
+        ['CHI1', 'CHI2'],
+
+        // CHI2 (Chapel Intersection 2) -> CH, CHI1, OvalE2, CHI3
+        ['CHI2', 'OvalE2'],
+        ['CHI2', 'CHI3'],
+
+        // CHI3 (Chapel Intersection 3) -> CH, CHI2, CH, CHI4
+        ['CHI3', 'CHI4'],
+
+        // CHI4 (Chapel Intersection 4) -> CH, CHI3, CHI5, NFSB
+        ['CHI4', 'CHI5'],
+        ['CHI4', 'NFSB'],
+
+        // CHI5 (Chapel Intersection 5) -> CH, CHI4, CHI6, NFSB
+        ['CHI5', 'CHI6'],
+        ['CHI5', 'NFSB'],
+
+        // NFSB (Nutrition and Food Science Building) -> CHI4, CHI5
+
+        // CHI6 (Chapel Intersection 6) -> CH, CHI5, CHI7, CHI10
+        ['CHI6', 'CHI7'],
+        ['CHI6', 'CHI10'],
+
+        // CHI7 (Chapel Intersection 7) -> CH, CHI6, CHI8, MDE2
+        ['CHI7', 'MDE2'],
+        ['CHI7', 'CHI8'],
+
+        // CHI8 (Chapel Intersection 7) -> CH, CHI7, CHI9, MDE2
+        ['CHI8', 'CHI9'],
+        ['CHI8', 'MDE2'],
+
+        // CHI9 (Chapel Intersection 7) -> CH, CHI8, CHI1, NWE1
+        ['CHI9', 'NWE1'],
+
+        // CHI10 (Chapel Intersection 7) -> CHI8, CHI1, NWE1
+        ['CHI10', 'EWI1'],
+
+        // CH (Chapel) -> CHI1, CHI2, CHI3, CHI4, CHI5, CHI6, CHI7, CHI8
+        ['CH', 'CHI1'],
+        ['CH', 'CHI2'],
+        ['CH', 'CHI3'],
+        ['CH', 'CHI4'],
+        ['CH', 'CHI5'],
+        ['CH', 'CHI6'],
+        ['CH', 'CHI7'],
+        ['CH', 'CHI8'],
+        ['CH', 'CHI9'],
         
+        // EWI1 (East Wing Intersection 1) -> CH10, EWE3, EWI2
+        ['EWI1', 'EWE3'],
+        ['EWI1', 'EWI2'],
+
+        // EWI2 (East Wing Intersection 2) -> EWI1, EWE3, EWE1, SWI1
+        ['EWI2', 'EWE3'],
+        ['EWI2', 'EWE1'],
+        ['EWI2', 'SWI1'],
+
+        // EWE1 (East Wing Exit 1) -> EWI2, EWE2, SWI1
+        ['EWE1', 'EWE2'],
+        ['EWE1', 'SWI1'],
+
+        // EWE2 (East Wing Exit 1) -> EWE1, SWI1
+        ['EWI2', 'SWI1'],
+
+        // CDM (Campus Development and Maintenance) -> EWI2, SWI1, EWE2
+        ['CDM', 'EWI2'],
+        ['CDM', 'SWI1'],
+        ['CDM', 'EWE2'],
+
+        // MBEW (Main Building East Wing) -> EWE1, EWE2, EWE3, MDI6
+        ['MBEW', 'EWE1'],
+        ['MBEW', 'EWE2'],
+        ['MBEW', 'EWE3'],
+        ['MBEW', 'MDI6'],
+
+        // MBMD (Main Building Main Dome) -> MDI1, MDI2, MDI3, MDI4, MDI5, MDI6
+        ['MBMD', 'MDI1'],
+        ['MBMD', 'MDI2'],
+        ['MBMD', 'MDI3'],
+        ['MBMD', 'MDI4'],
+        ['MBMD', 'MDI5'],
+        ['MBMD', 'MDI6'],
+
+        // MDI5 (Main Dome Intersection 5) -> MDE2, MDI4, MDI6
+        ['MDI5', 'MDE2'],
+        ['MDI5', 'MDI4'],
+        ['MDI5', 'MDI6'],
+
+        // MDI4 (Main Dome Intersection 4) -> MDE5, MDI3, MBNW
+        ['MDI4', 'MDI3'],
+        ['MDI4', 'MBNW'],
+
+        // MBNW (Main Building North Wing) -> MDI4, NWE1, NWE2, NWE3
+        ['MBNW', 'NWE1'],
+        ['MBNW', 'NWE2'],
+        ['MBNW', 'NWE3'],
+
+        // NWE3 (North Wing Exit 3) -> MBNW, CHI8, CHI9, AME, NWE1
+        ['NWE3', 'NWE1'],
+        ['NWE3', 'AME'],
+
+        // NWE1 (North Wing Exit 1) -> MBNW, NWE3, AME
+        ['NWE1', 'AME'],
+
+        // NWE2 (North Wing Exit 2) -> MBNW, NWI1, AME 
+        ['NWE2', 'NWI1'],
+        ['NWE2', 'AME'],
+
+        // NWI2 (North Wing Intersection 2) -> NWE2, OBL3, NWI1
+        ['NWI2', 'OBL3'],
+        ['NWI2', 'NWI1'],
+
+        // NWI1 (North Wing Intersection 1) -> NWI2, MDE1, LAGI6, TMBI2
+        ['NWI1', 'MDE1'],
+        ['NWI1', 'LAGI6'],
+        ['NWI1', 'TMBI2'],
+
+        // MDE2 (Main Dome Exit 2) -> CHI6, CHI7, CHI8
+        ['MDE2', 'CHI6'],
+
+        // MBWW (Main Building West Wing) -> MDI2, WWE1, WWE2, WWE3
+        ['MBWW', 'WWE1'],
+        ['MBWW', 'WWE2'],
+        ['MBWW', 'WWE3'],
+        ['MBWW', 'MDI2'],
+
+        // WWE1 (West Wing Exit 1) -> MBWW, WWE2, WWE3, WWI1, WWI2, SB
+        ['WWE1', 'WWE2'],
+        ['WWE1', 'WWE3'],
+        ['WWE1', 'WWI1'],
+        ['WWE1', 'WWI2'],
+        ['WWE1', 'SB'],
+
+        // WWE2 (West Wing Exit 2) -> MBWW, WWE1, WWI2, TMBI2, PS
+        ['WWE2', 'WWI2'],
+        ['WWE2', 'TMBI2'],
+        ['WWE2', 'PS'],
+
+        // WWE3 (West Wing Exit 3) -> MBWW, WWE1, WWI1, SWI3, PS
+        ['WWE3', 'WWI1'],
+        ['WWE3', 'SWI3'],
+        ['WWE3', 'PS'],
+
+        // PS (PUP Pumping Station) -> WWI1, SWI3, WWE3
+        ['PS', 'WWI1'],
+        ['PS', 'SWI3'],
+
+        // SWI3 (South Wing Intersection 3) -> PS, WWE3, WWI1, SWI2
+        ['SWI3', 'WWI1'],
+        ['SWI3', 'SWI2'],
+
+        // SWI2 (South Wing Intersection 2) -> SWE1, SWI1, SWE2
+        ['SWI2', 'SWE1'],
+        ['SWI2', 'SWI1'],
+        ['SWI2', 'SWE2'],
+
+        // SWE1 (South Wing Exit 1) -> SWI2, SWI4
+        ['SWE1', 'SWI4'],
+
+        // SWI4 (South Wing Intersection 4) -> SWE1, SWI5, SWI9
+        ['SWI4', 'SWI5'],
+        ['SWI4', 'SWI9'],
+
+        // SWI5 (South Wing Intersection 5) -> SWI4, SWI8
+        ['SWI5', 'SWI8'],
+        
+        // SWI8 (South Wing Intersection 8) -> SWI5, SWI6, MDI1, MBSW
+        ['SWI8', 'SWI6'],
+        ['SWI8', 'MDI1'],
+        ['SWI8', 'MBSW'],
+
+        // MBSW (Main Building South Wing) -> SWI8, SWI9
+        ['MBSW', 'SWI9'],
+
+        // SWI9 (South Wing Intersection 9) -> SWI4, MBSW, SWI7
+        ['SWI9', 'SWI7'],
+
+        // SWI7 (South Wing Intersection 7) -> SWI6, SWI9, SWE2
+        ['SWI7', 'SWI6'],
+        ['SWI7', 'SWE2'],
+        
+        // SWI6 (South Wing Intersection 6) -> SWI7, SWI8
+
+        // SWE2 (South Wing Exit 2) -> SWI7, SWI2, SWI1
+        ['SWE2', 'SWI1'],
+
         // B1E: GI3, Gate2
         ['B1E', 'Gate2'],
 
@@ -620,6 +833,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ['TMBI2', 'TMBI1'],
         ['TMBI2', 'WWI2'],
 
+        
+
+
         // PS: WWI1, SWI3, SWI2
         ['PS', 'WWI1'],
         ['PS', 'SWI3'],
@@ -727,9 +943,111 @@ document.addEventListener('DOMContentLoaded', () => {
     // Test the main function
     console.log(campus_map.printCampusMap());
     
+    var blueIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [32, 51],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var goldIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [31, 47],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var orangeIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var yellowIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var violetIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var greyIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
+    var blackIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
     // Markers for nodes
     vertices.forEach(vertice => {
-        var current = L.marker([vertice.latitude, vertice.longitude]);
-        current.addTo(map).bindPopup(vertice.name);
+        if (vertice.class==="bn") {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: redIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        }
+        else if (vertice.class==="en")
+        {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: violetIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        }
+        else if (vertice.class==="dn") 
+        {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: blueIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        } else if (vertice.class==="gn") {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: greenIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        } else if (vertice.class==="lin" || vertice.class==="min") {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: greyIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        } else {
+            var current = L.marker([vertice.latitude, vertice.longitude], {icon: blackIcon});
+            current.addTo(map).bindPopup(vertice.name);
+        }
     })
 });
