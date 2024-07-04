@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Main Building: North Wing (Under Construction)
         {id: 'NWI1', name: "North Wing Intersection 1", latitude: 14.597159, longitude: 121.010624}, // Intersection around Lagoon
         {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789}, // Intersection around Lagoon
+        {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789},
+
 
         // To Main Building
         {id: 'TMBI1', name: "Intersection to Main Building 1", latitude: 14.597119, longitude: 121.010298}, // Intersection near Auditorium from I25
@@ -189,20 +191,39 @@ document.addEventListener('DOMContentLoaded', () => {
         {id: 'CHI8', name: "Chapel Intersection 8", latitude: 14.597316, longitude: 121.011151}, // Intersection around PUP Chapel, near North Wing
         {id: 'CHI9', name: "Chapel Intersection 9", latitude: 14.59745, longitude: 121.011341}, // Intersection around PUP Chapel, near Main Dome
         {id: 'CHI10', name: "Chapel Intersection 10", latitude: 14.596739, longitude: 121.011408}, // Intersection around PUP Chapel, near East Wing
+        {id: 'CHC1', name: "Chapel Center 1", latitude: 14.597136, longitude: 121.011442}, // Intersection around PUP Chapel, near East Wing
+
+        // Main Building: Main Dome
+        {id: 'MDI1', name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749},
+        {id: 'MDI2', name: "Main Dome Intersection 2", latitude: 14.596993, longitude: 121.010778},
+        {id: 'MDI3', name: "Main Dome Intersection 3", latitude: 14.596982, longitude: 121.01068},
+        {id: 'MDI4', name: "Main Dome Intersection 4", latitude: 14.597081, longitude: 121.010709}, // Intersection to NWI1
+        {id: 'MDI5', name: "Main Dome Intersection 5", latitude: 14.597112, longitude: 121.010809},
+        {id: 'MDI2', name: "Main Dome Intersection 6", latitude: 14.597001, longitude: 121.010895}, // Intersection to CHI7
+        {id: 'MDI2', name: "Main Dome Intersection 7", latitude: 14.597661, longitude: 121.010949},
 
         // Main Building: East Wing
         {id: 'EWI1', name: "East Wing Intersection 1", latitude: 14.596641, longitude: 121.011419}, // Intersection near East Wing
         {id: 'EWI2', name: "East Wing Intersection 2", latitude: 14.596572, longitude: 121.011379}, // Intersection near East Wing
+        {id: 'EWE1', name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301}, // Exit from MDI7
 
         // Main Building: South Wing
         {id: 'SWI1', name: "South Wing Intersection 1", latitude: 14.596248, longitude: 121.011029}, // Intersection between South and East Wing
         {id: 'SWI2', name: "South Wing Intersection 2", latitude: 14.596443, longitude: 121.010309}, // Intersection southwest corner of South Wing
         {id: 'SWI3', name: "South Wing Intersection 3", latitude: 14.596589, longitude: 121.010247}, // Intersection between South and West Wing
+        {id: 'SWE1', name: "South Wing Exit/Entrance 1", latitude: 14.596523, longitude: 121.010396},
+        {id: 'SWE2', name: "South Wing Exit/Entrance 2", latitude: 14.59669, longitude: 121.01044},
+        {id: 'SWW1', name: "South Wing Walkway 1", latitude: 14.596633, longitude: 121.010689},
+        {id: 'SWE3', name: "South Wing Exit/Entrance 3", latitude: 14.596565, longitude: 121.01093},
+        {id: 'SWE4', name: "South Wing Exit/Entrance 4", latitude: 14.596402, longitude: 121.010888},
+        {id: 'SWW2', name: "South Wing Walkway 2", latitude: 14.596545, longitude: 121.010663},
+        {id: 'SWW3', name: "South Wing Walkway 3", latitude: 14.596465, longitude: 121.010644},
 
         // Main Building: West Wing
         {id: 'WWI1', name: "West Wing Intersection 1", latitude: 14.59677, longitude: 121.010064}, // Intersection near West Wing
         {id: 'WWI2', name: "West Wing Intersection 2", latitude: 14.596958, longitude: 121.010001}, // Intersection near Student Canteen to PUP Auditorium
         {id: 'WWI3', name: "West Wing Intersection 3", latitude: 14.597032, longitude: 121.00998}, // Intersection near Student Canteen to PUP Auditorium
+        {id: 'WWE1', name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101},
 
         // Court Intersection
         {id: 'CI1', name: "Court Intersection 1", latitude: 14.598488, longitude: 121.010958}, // Intersection inside courts 
