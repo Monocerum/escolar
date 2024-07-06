@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // A* Search Algorithm
     function aStarSearch(origin, destination) {
+        // Monitor exploration with two lists: priority queue for nodes to explore and set for explored nodes.
         var toExplore = new PriorityQueue();
         var explored = new Set();
 
@@ -137,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize the h-score of the origin node to destination node.
         origin.hscore = heuristic(origin, destination);
 
+        // Enqueue/Add the origin and destination node to nodes to explore.
         toExplore.enqueue(origin, destination);
 
         // While set of nodes to explore is not empty...
@@ -146,34 +148,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // If destination node has been reached...
             if (current === destination) {
+                // Draw the path found by the algorithm
                 return drawPath(current);
             }
             
             // Current node is added to list of explored nodes
             explored.add(current);
 
-            // Do this for all adjacent nodes to current node...
+            // For all nodes adjacent to each current node...
             current.adjacent.forEach((distanceCost, vulnerabilityLevel, adjacency) => {
                 // If adjacent node has already been explored, skip node and proceed to next.
                 if (explored.has(adjacency)) {
                     return;
                 }
 
-                // g-score must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
+                // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
                 let temp = current.gscore + distanceCost + vulnerabilityLevel;
 
+                // If the current g-score is less than the adjacent node's g-score...
                 if (temp < adjacency.gscore) {
+                    // Current node will become the parent node of the adjacent node.
                     adjacency.parent = current;
+                    // Compute g-score of adjacent node.
                     adjacency.gscore = temp;
+                    // Compute the h-score of adjacent node.
                     adjacency.hscore = heuristic(adjacency, goal);
 
+                    // Check if heuristic is admissible.
                     if (adjacency.hscore > adjacency.gscore) {
                         alert("Heuristic is not admissible! Heuristic function overestimates the actual cost.");
                     }
 
+                    // Compute the f-score of adjacent node.
                     adjacency.fscore = adjacency.gscore + adjacency.fscore;
 
+                    // If the adjacent node of current node is not yet in the list of nodes to be explored...
                     if (!toExplore.nodes.find(node => node.node === adjacency)) {
+                        // Add the adjacent node to list of nodes to explore.
                         toExplore.enqueue(adjacency, adjacency.fscore);
                     }
                 }
