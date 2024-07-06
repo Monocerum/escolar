@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Leaflet
-    // Define northeast and southwest lat and long to limit viewable area
+    // Define northeast and southwest lat and long to limit viewable areag
     var ne = L.latLng(14.599792, 121.015320);
     var sw = L.latLng(14.595800, 121.008200);
     var bounds = L.latLngBounds(ne, sw);
@@ -39,14 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Graph Data Structure, class that contains main functions for the development of the graph
     class Campus {
-        // Passes the number of nodes as a parameter to the constructor method
-        constructor(nodesNum) {
-            // Parameter is assigned to this constructors' nodesNum
-            this.nodesNum = nodesNum;
-            // Creates new map object as adjacency list
+        // Passes the number of node as a parameter to the constructor method
+        constructor(nodeNum, vulnerability) {
+            // Parameter is assigned to this constructors' id
+            this.id = nodeNum;
+            // Creates new map object as adjacency list (list of neighbors)
             this.adjacent = new Map();
             // Creates new map object for vertex information
             this.vertexInfo = new Map();
+            // g(n) - actual cost from start to current node
+            this.gscore = Infinity;
+            // h(n) - heuristic cost from current node to goal node
+            this.hscore = 0;
+            // f(n) = g(n) + h(n)
+            this.fscore = Infinity;
+            // parent node
+            this.parent = null;
+            // vulnerability level
+            this.vulnerabilityLevel = vulnerability;
         }
 
         // Adds vertex to graph data structure
@@ -77,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(i + "->" + conc);
             }
         }
+
+        
     }
 
     // Convert latitude and longitude to x and y; See: https://stackoverflow.com/questions/2103924/mercator-longitude-and-latitude-calculations-to-x-and-y-on-a-cropped-map-of-the
@@ -101,6 +113,86 @@ document.addEventListener('DOMContentLoaded', () => {
         return edge;
     }
 
+    // Heuristic function (h(n))
+    function heuristic(a, b) {
+        // 1 weights ensure that vulnerability level and distance cost are 'balanced' and are treated with equal priority
+        var vulnerability = a.vulnerabilityLevel * 1;
+        var distanceCost = calculateEdge(a.x, a.y, b.x, b.y, 2) * 1;
+        var heuristicCost = distanceCost + vulnerability;
+
+        return heuristicCost;
+    }
+
+    // A* Search Algorithm
+    function aStar(origin, destination) {
+        var toExplore = new PriorityQueue();
+        var explored = new Set();
+
+        // Specify vulnerability and distance weight (level of prioritization is equal); also ensures that the heuristic cost never overestimates the actual cost.
+        let vw = 1;
+        let dw = 1;
+
+        // Initializes the g-score of the origin node to 0, as distance from itself to itself is always 0.
+        origin.gscore = 0;
+        // Initialize the h-score of the origin node to destination node.
+        origin.hscore = heuristic(origin, destination);
+
+        toExplore.enqueue(origin, destination);
+
+        // While set of nodes to explore is not empty...
+        while (!toExplore.isEmpty()) {
+            // Dequeue the first item in the queue and make it current node to explore.
+            let current = toExplore.dequeue();
+
+            // If destination node has been reached...
+            if (current === destination) {
+                return drawPath(current);
+            }
+            
+            // Current node is added to list of explored nodes
+            explored.add(current);
+
+            // Do this for all adjacent nodes to current node...
+            current.adjacent.forEach((distanceCost, vulnerabilityLevel, adjacency) => {
+                // If adjacent node has already been explored, skip node and proceed to next.
+                if (explored.has(adjacency)) {
+                    return;
+                }
+
+                // g-score must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
+                let temp = current.gscore + distanceCost + vulnerabilityLevel;
+
+                if (temp < adjacency.gscore) {
+                    adjacency.parent = current;
+                    adjacency.gscore = temp;
+                    adjacency.hscore = heuristic(adjacency, goal);
+
+                    if (adjacency.hscore > adjacency.gscore) {
+                        alert("Heuristic is not admissible! Heuristic function overestimates the actual cost.");
+                    }
+
+                    adjacency.fscore = adjacency.gscore + adjacency.fscore;
+
+                    if (!toExplore.nodes.find(node => node.node === adjacency)) {
+                        toExplore.enqueue(adjacency, adjacency.fscore);
+                    }
+                }
+            })
+        }
+
+        return [];
+    }
+
+    function drawPath(node) {
+        let path = [];
+        while (node) {
+            path.push(node);
+            node = node.parent;
+        }
+
+        return path.reverse();
+    }
+
     // Initializes left longitude, right longitude, bottom latitude
     const leftLong = 121.008200;
     const rightLong = 121.015320;
@@ -108,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initializes new campus_map using the Campus() class
     var campus_map = new Campus();
-""
+
     // Vertices
     var vertices = [
         {id: 'Oval', class: "dn", name: "Oval", latitude: 14.598115, longitude: 121.012039},  // Buildings / Areas
@@ -188,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         {id: 'NWE1', class: "en", name: "North Wing Exit 1", latitude: 14.597659, longitude: 121.010951},
         {id: 'NWE2', class: "en", name: "North Wing Exit 2", latitude: 14.597658, longitude: 121.010845},
         {id: 'NWE3', class: "en", name: "North Wing Exit 3", latitude: 14.597618, longitude: 121.011047},
-
 
         // Gates
         {id: 'MainGate', class: "gn", name: "Main Gate", latitude: 14.599127, longitude: 121.011823},
@@ -942,6 +1033,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Test the main function
     console.log(campus_map.printCampusMap());
+
+    // A* Search Algorithm
+
     
     var blueIcon = new L.Icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
