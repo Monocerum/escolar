@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // A* Search Algorithm
-    function aStar(origin, destination) {
+    function aStarSearch(origin, destination) {
         var toExplore = new PriorityQueue();
         var explored = new Set();
 
