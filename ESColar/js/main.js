@@ -203,241 +203,241 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Vertices
     var vertices = [
-        {id: 'Oval', class: "dn", name: "Oval", latitude: 14.598115, longitude: 121.012039},  // Buildings / Areas
-        {id: 'Grandstand', class: "bn", name: "Grandstand", latitude: 14.598021, longitude: 121.011524},
-        {id: 'CommunityBuilding', class: "bn", name: "Community Building", latitude: 14.598094, longitude: 121.012484},
-        {id: 'InfoCenter', class: "bn", name: "Information Center", latitude: 14.599077, longitude: 121.011583},
-        {id: 'BCourt', class: "bn", name: "Court", latitude: 14.598635, longitude: 121.010821},
-        {id: 'CommunityBuilding', class: "bn", name: "Grandstand", latitude: 14.598094, longitude: 121.012484},
-        {id: 'B1', class: "bn", name: "Building 1", latitude: 14.599585, longitude: 121.011070},
-        {id: 'Gymnasium', class: "bn", name: "PUP Gymnasium", latitude: 14.599237, longitude: 121.010743},
-        {id: 'Pool', class: "bn", name: "Swimming Pool Area", latitude: 14.5989, longitude: 121.010211},
-        {id: 'Souvenir', class: "bn", name: "PUP Souvenir Shop", latitude: 14.598428, longitude: 121.011235},
-        {id: 'AMShrine', class: "bn", name: "Apolinario Mabini Shrine", latitude: 14.598195, longitude: 121.011151},
-        {id: 'AMMuseum', class: "bn", name: "Apolinario Mabini Museum", latitude: 14.597905, longitude: 121.01122},
-        {id: 'PE', class: "bn", name: "PE Building", latitude: 14.598451, longitude: 121.010134},
-        {id: 'TahananAlumni', class: "bn", name: "Tahanan ng Alumni", latitude: 14.598507, longitude: 121.010171},
-        {id: 'B2', class: "bn", name: "Building 2", latitude: 14.598326, longitude: 121.009626},
-        {id: 'MT', class: "bn", name: "Millenium Tower", latitude: 14.597809, longitude: 121.009356},
-        {id: 'LaboratoryHS', class: "bn", name: "PUP Laboratory High School", latitude: 14.597237, longitude: 121.009122},
-        {id: 'PBMO', class: "bn", name: "Property Building and Motorpool Office", latitude: 14.597385, longitude: 121.00857},
-        {id: 'PO', class: "bn", name: "Printing Office", latitude: 14.597303, longitude: 121.008731},
-        {id: 'SB', class: "bn", name: "Sampaguita Building", latitude: 14.596827, longitude: 121.009862},
-        {id: 'PS', class: "bn", name: "PUP Pumping Station", latitude: 14.596573, longitude: 121.010136},
-        {id: 'NALRC', class: "bn", name: "Ninoy Aquino Learning Resource Center", latitude: 14.597884, longitude: 121.009761},
-        {id: 'PK', class: "bn", name: "PUP Kasarianlan", latitude: 14.597123, longitude: 121.009754},
-        {id: 'SC', class: "bn", name: "Student Canteen", latitude: 14.596962, longitude: 121.009806},
-        {id: 'MBMD', class: "bn", name: "Main Building Main Dome", latitude: 14.596993, longitude: 121.010778},
-        {id: 'MBWW', class: "bn", name: "Main Building West Wing", latitude: 14.596908, longitude: 121.010397},
-        {id: 'MBEW', class: "bn", name: "Main Building East Wing", latitude: 14.596726, longitude: 121.011082},
-        {id: 'MBNW', class: "bn", name: "Main Building North Wing", latitude: 14.597362, longitude: 121.010881},
-        {id: 'MBSW', class: "bn", name: "Main Building South Wing", latitude: 14.596545, longitude: 121.010663},
-        {id: 'CH', class: "bn", name: "Interfaith Ecumenical Chapel", latitude: 14.597136, longitude: 121.011442}, // Intersection around PUP Chapel, near East Wing
-        {id: 'NFSB', class: "bn", name: "Nutrition and Food Science Building", latitude: 14.596877, longitude: 121.011693}, 
-        {id: 'CDM', class: "bn", name: "Campus Development and Maintenance", latitude: 14.596368, longitude: 121.011199},
+        {id: 'Oval', class: "dn", name: "Oval", latitude: 14.598115, longitude: 121.012039, vulnerability: 1},  // Buildings / Areas
+        {id: 'Grandstand', class: "bn", name: "Grandstand", latitude: 14.598021, longitude: 121.011524, vulnerability: 1.67},
+        {id: 'CommunityBuilding', class: "bn", name: "Community Building", latitude: 14.598094, longitude: 121.012484, vulnerability: 1.67},
+        {id: 'InfoCenter', class: "bn", name: "Information Center", latitude: 14.599077, longitude: 121.011583, vulnerability: 1.33},
+        {id: 'BCourt', class: "bn", name: "Court", latitude: 14.598635, longitude: 121.010821, vulnerability: 1},
+        {id: 'CommunityBuilding', class: "bn", name: "Grandstand", latitude: 14.598094, longitude: 121.012484, vulnerability: 1.67},
+        {id: 'B1', class: "bn", name: "Building 1", latitude: 14.599585, longitude: 121.011070, vulnerability: 1},
+        {id: 'Gymnasium', class: "bn", name: "PUP Gymnasium", latitude: 14.599237, longitude: 121.010743, vulnerability: 1.33},
+        {id: 'Pool', class: "bn", name: "Swimming Pool Area", latitude: 14.5989, longitude: 121.010211, vulnerability: 1.67},
+        {id: 'Souvenir', class: "bn", name: "PUP Souvenir Shop", latitude: 14.598428, longitude: 121.011235, vulnerability: 1},
+        {id: 'AMShrine', class: "bn", name: "Apolinario Mabini Shrine", latitude: 14.598195, longitude: 121.011151, vulnerability: 1.67},
+        {id: 'AMMuseum', class: "bn", name: "Apolinario Mabini Museum", latitude: 14.597905, longitude: 121.01122, vulnerability: 1.67},
+        {id: 'PE', class: "bn", name: "PE Building", latitude: 14.598451, longitude: 121.010134, vulnerability: 1.67},
+        {id: 'TahananAlumni', class: "bn", name: "Tahanan ng Alumni", latitude: 14.598507, longitude: 121.010171, vulnerability: 2},
+        {id: 'B2', class: "bn", name: "Building 2", latitude: 14.598326, longitude: 121.009626, vulnerability: 1.67},
+        {id: 'MT', class: "bn", name: "Millenium Tower", latitude: 14.597809, longitude: 121.009356, vulnerability: 1.67},
+        {id: 'LaboratoryHS', class: "bn", name: "PUP Laboratory High School", latitude: 14.597237, longitude: 121.009122, vulnerability: 2},
+        {id: 'PBMO', class: "bn", name: "Property Building and Motorpool Office", latitude: 14.597385, longitude: 121.00857, vulnerability: 1.67},
+        {id: 'PO', class: "bn", name: "Printing Office", latitude: 14.597303, longitude: 121.008731, vulnerability: 1.67},
+        {id: 'SB', class: "bn", name: "Sampaguita Building", latitude: 14.596827, longitude: 121.009862, vulnerability: 1.67},
+        {id: 'PS', class: "bn", name: "PUP Pumping Station", latitude: 14.596573, longitude: 121.010136, vulnerability: 1.67},
+        {id: 'NALRC', class: "bn", name: "Ninoy Aquino Learning Resource Center", latitude: 14.597884, longitude: 121.009761, vulnerability: 2.33},
+        {id: 'PK', class: "bn", name: "PUP Kasarianlan", latitude: 14.597123, longitude: 121.009754, vulnerability: 2},
+        {id: 'SC', class: "bn", name: "Student Canteen", latitude: 14.596962, longitude: 121.009806, vulnerability: 2},
+        {id: 'MBMD', class: "bn", name: "Main Building Main Dome", latitude: 14.596993, longitude: 121.010778, vulnerability: 2.67},
+        {id: 'MBWW', class: "bn", name: "Main Building West Wing", latitude: 14.596908, longitude: 121.010397, vulnerability: 2.67},
+        {id: 'MBEW', class: "bn", name: "Main Building East Wing", latitude: 14.596726, longitude: 121.011082, vulnerability: 2.67},
+        {id: 'MBNW', class: "bn", name: "Main Building North Wing", latitude: 14.597362, longitude: 121.010881, vulnerability: 2.67},
+        {id: 'MBSW', class: "bn", name: "Main Building South Wing", latitude: 14.596545, longitude: 121.010663, vulnerability: 2.67},
+        {id: 'CH', class: "bn", name: "Interfaith Ecumenical Chapel", latitude: 14.597136, longitude: 121.011442, vulnerability: 2}, // Intersection around PUP Chapel, near East Wing
+        {id: 'NFSB', class: "bn", name: "Nutrition and Food Science Building", latitude: 14.596877, longitude: 121.011693, vulnerability: 1.67}, 
+        {id: 'CDM', class: "bn", name: "Campus Development and Maintenance", latitude: 14.596368, longitude: 121.011199, vulnerability: 1.67},
 
         // Exits
-        {id: 'OvalE1', class: "en", name: "Oval Exit/Entrance 1", latitude: 14.598949, longitude: 121.011719},
-        {id: 'OvalE2', class: "en", name: "Oval Exit/Entrance 2", latitude: 14.597432, longitude: 121.011698},
-        {id: 'B1E', class: "en", name: "B1 Exit", latitude: 14.599458, longitude: 121.011202},
-        {id: 'GE1', class: "en", name: "Gymnasium Exit 1", latitude: 14.599438, longitude: 121.010976},
-        {id: 'GE2', class: "en", name: "Gymnasium Exit 2", latitude: 14.599181, longitude: 121.010991},
-        {id: 'GE3', class: "en", name: "Gymnasium Exit 3", latitude: 14.598992, longitude: 121.010778},
-        {id: 'AMSE', class: "en", name: "Shrine Exit", latitude: 14.598091, longitude: 121.01112},
-        {id: 'AMME', class: "en", name: "Museum Exit", latitude: 14.597875, longitude: 121.01118},
-        {id: 'AME', class: "en", name: "Apolinario Mabini Museum Exit", latitude: 14.597942, longitude: 121.011037},
-        {id: 'SE', class: "en", name: "Swimming Pool Exit", latitude: 14.598515, longitude: 121.0102777},
+        {id: 'OvalE1', class: "en", name: "Oval Exit/Entrance 1", latitude: 14.598949, longitude: 121.011719, vulnerability: 1},
+        {id: 'OvalE2', class: "en", name: "Oval Exit/Entrance 2", latitude: 14.597432, longitude: 121.011698, vulnerability: 1},
+        {id: 'B1E', class: "en", name: "B1 Exit", latitude: 14.599458, longitude: 121.011202, vulnerability: 1.67},
+        {id: 'GE1', class: "en", name: "Gymnasium Exit 1", latitude: 14.599438, longitude: 121.010976, vulnerability: 1.67},
+        {id: 'GE2', class: "en", name: "Gymnasium Exit 2", latitude: 14.599181, longitude: 121.010991, vulnerability: 1.67},
+        {id: 'GE3', class: "en", name: "Gymnasium Exit 3", latitude: 14.598992, longitude: 121.010778, vulnerability: 1.67},
+        {id: 'AMSE', class: "en", name: "Shrine Exit", latitude: 14.598091, longitude: 121.01112, vulnerability: 1.67},
+        {id: 'AMME', class: "en", name: "Museum Exit", latitude: 14.597875, longitude: 121.01118, vulnerability: 1.67},
+        {id: 'AME', class: "en", name: "Apolinario Mabini Museum Exit", latitude: 14.597942, longitude: 121.011037, vulnerability: 2},
+        {id: 'SE', class: "en", name: "Swimming Pool Exit", latitude: 14.598515, longitude: 121.0102777, vulnerability: 2},
 
-        {id: 'LAGE1', class: "en", name: "Lagoon Exit 1", latitude: 14.597946, longitude: 121.010655},
-        {id: 'LAGE2', class: "en", name: "Lagoon Exit 2", latitude: 14.597332, longitude: 121.010008},
+        {id: 'LAGE1', class: "en", name: "Lagoon Exit 1", latitude: 14.597946, longitude: 121.010655, vulnerability: 1.5},
+        {id: 'LAGE2', class: "en", name: "Lagoon Exit 2", latitude: 14.597332, longitude: 121.010008, vulnerability: 1.5},
 
-        {id: 'NALRCE', class: "en", name: "Ninoy Aquino Learning Resource Center Exit", latitude: 14.597726, longitude: 121.009692},
+        {id: 'NALRCE', class: "en", name: "Ninoy Aquino Learning Resource Center Exit", latitude: 14.597726, longitude: 121.009692, vulnerability: 2.33},
         
-        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
-        {id: 'SCE', class: "en", name: "Student Canteen Exit", latitude: 14.59699, longitude: 121.009926},
-        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878},
+        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878, vulnerability: 2},
+        {id: 'SCE', class: "en", name: "Student Canteen Exit", latitude: 14.59699, longitude: 121.009926, vulnerability: 2},
+        {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878, vulnerability: 2},
 
-        {id: 'LHSE1', class: "en", name: "Laboratory High School Exit 1", latitude: 14.597524, longitude: 121.008955},
-        {id: 'LHSE2', class: "en", name: "Laboratory High School Exit 2", latitude: 14.597394, longitude: 121.009122},
-        {id: 'LHSE3', class: "en", name: "Laboratory High School Exit 3", latitude: 14.597344, longitude: 121.009164},
-        {id: 'LHSE4', class: "en", name: "Laboratory High School Exit 4", latitude: 14.59738, longitude: 121.009305},
-        {id: 'LHSE5', class: "en", name: "Laboratory High School Exit 5", latitude: 14.597173, longitude: 121.009289},
+        {id: 'LHSE1', class: "en", name: "Laboratory High School Exit 1", latitude: 14.597524, longitude: 121.008955, vulnerability: 2},
+        {id: 'LHSE2', class: "en", name: "Laboratory High School Exit 2", latitude: 14.597394, longitude: 121.009122, vulnerability: 2},
+        {id: 'LHSE3', class: "en", name: "Laboratory High School Exit 3", latitude: 14.597344, longitude: 121.009164, vulnerability: 2},
+        {id: 'LHSE4', class: "en", name: "Laboratory High School Exit 4", latitude: 14.59738, longitude: 121.009305, vulnerability: 2},
+        {id: 'LHSE5', class: "en", name: "Laboratory High School Exit 5", latitude: 14.597173, longitude: 121.009289, vulnerability: 2},
 
-        {id: 'MDE1', class: "en", name: "Main Dome Exit 1", latitude: 14.597148, longitude: 121.010641},
-        {id: 'MDE2', class: "en", name: "Main Dome Exit 2", latitude: 14.597024, longitude: 121.010981},
+        {id: 'MDE1', class: "en", name: "Main Dome Exit 1", latitude: 14.597148, longitude: 121.010641, vulnerability: 2.67},
+        {id: 'MDE2', class: "en", name: "Main Dome Exit 2", latitude: 14.597024, longitude: 121.010981, vulnerability: 2.67},
 
-        {id: 'EWE1', class: "en", name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301}, // Exit from MDI7
-        {id: 'EWE2', class: "en", name: "East Wing Exit 2", latitude: 14.596469, longitude: 121.01119},
-        {id: 'EWE3', class: "en", name: "East Wing Exit 3", latitude: 14.596622, longitude: 121.011352},
+        {id: 'EWE1', class: "en", name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301, vulnerability: 2.67}, // Exit from MDI7
+        {id: 'EWE2', class: "en", name: "East Wing Exit 2", latitude: 14.596469, longitude: 121.01119, vulnerability: 2.67},
+        {id: 'EWE3', class: "en", name: "East Wing Exit 3", latitude: 14.596622, longitude: 121.011352, vulnerability: 2.67},
 
-        {id: 'SWE1', class: "en", name: "South Wing Exit 1", latitude: 14.596476, longitude: 121.01038},
-        {id: 'SWE2', class: "en", name: "South Wing Exit 2", latitude: 14.596351, longitude: 121.010872},
+        {id: 'SWE1', class: "en", name: "South Wing Exit 1", latitude: 14.596476, longitude: 121.01038, vulnerability: 2.67},
+        {id: 'SWE2', class: "en", name: "South Wing Exit 2", latitude: 14.596351, longitude: 121.010872, vulnerability: 2.67},
 
-        {id: 'WWE1', class: "en", name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101},
-        {id: 'WWE2', class: "en", name: "West Wing Exit 2", latitude: 14.596936, longitude: 121.010114},
-        {id: 'WWE3', class: "en", name: "West Wing Exit 3", latitude: 14.596734, longitude: 121.010175},
+        {id: 'WWE1', class: "en", name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101, vulnerability: 2.67},
+        {id: 'WWE2', class: "en", name: "West Wing Exit 2", latitude: 14.596936, longitude: 121.010114, vulnerability: 2.67},
+        {id: 'WWE3', class: "en", name: "West Wing Exit 3", latitude: 14.596734, longitude: 121.010175, vulnerability: 2.67},
 
-        {id: 'NWE1', class: "en", name: "North Wing Exit 1", latitude: 14.597659, longitude: 121.010951},
-        {id: 'NWE2', class: "en", name: "North Wing Exit 2", latitude: 14.597658, longitude: 121.010845},
-        {id: 'NWE3', class: "en", name: "North Wing Exit 3", latitude: 14.597618, longitude: 121.011047},
+        {id: 'NWE1', class: "en", name: "North Wing Exit 1", latitude: 14.597659, longitude: 121.010951, vulnerability: 3},
+        {id: 'NWE2', class: "en", name: "North Wing Exit 2", latitude: 14.597658, longitude: 121.010845, vulnerability: 3},
+        {id: 'NWE3', class: "en", name: "North Wing Exit 3", latitude: 14.597618, longitude: 121.011047, vulnerability: 3},
 
         // Gates
-        {id: 'MainGate', class: "gn", name: "Main Gate", latitude: 14.599127, longitude: 121.011823},
-        {id: 'Gate2', class: "gn", name: "Gate 2", latitude: 14.5995, longitude: 121.011406},
+        {id: 'MainGate', class: "gn", name: "Main Gate", latitude: 14.599127, longitude: 121.011823, vulnerability: 1.5},
+        {id: 'Gate2', class: "gn", name: "Gate 2", latitude: 14.5995, longitude: 121.011406, vulnerability: 1.5},
 
         // Paths / Intersections
-        {id: 'I1', class: "in", name: "Intersection 1", latitude: 14.598854, longitude: 121.011538}, // Intersection to Gym and main path, near entrance
-        {id: 'I2', class: "in", name: "Intersection 2", latitude: 14.598218, longitude: 121.011368}, // Intersection to PUP Chapel
-        {id: 'I3', class: "in", name: "Intersection 3", latitude: 14.59786, longitude: 121.011368}, // Intersection to PUP Chapel
+        {id: 'I1', class: "in", name: "Intersection 1", latitude: 14.598854, longitude: 121.011538, vulnerability: 1}, // Intersection to Gym and main path, near entrance
+        {id: 'I2', class: "in", name: "Intersection 2", latitude: 14.598218, longitude: 121.011368, vulnerability: 1}, // Intersection to PUP Chapel
+        {id: 'I3', class: "in", name: "Intersection 3", latitude: 14.59786, longitude: 121.011368, vulnerability: 1}, // Intersection to PUP Chapel
         
         // Main Building: North Wing (Under Construction)
-        {id: 'NWI1', name: "North Wing Intersection 1", latitude: 14.597159, longitude: 121.010624}, // Intersection around Lagoon
-        {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789}, // Intersection around Lagoon
-        {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789},
+        {id: 'NWI1', name: "North Wing Intersection 1", latitude: 14.597159, longitude: 121.010624, vulnerability: 2}, // Intersection around Lagoon
+        {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789, vulnerability: 2}, // Intersection around Lagoon
+        {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789, vulnerability: 2},
 
         // To Main Building
-        {id: 'TMBI1', name: "Intersection to Main Building 1", latitude: 14.597119, longitude: 121.010298}, // Intersection near Auditorium from I25
-        {id: 'TMBI2', name: "Intersection to Main Building 2", latitude: 14.597074, longitude: 121.010397}, // Intersection near Auditorium from I24
-        {id: 'TMBI3', name: "Intersection to Main Building 3", latitude: 14.597243, longitude: 121.010119}, // Intersection near Auditorium
+        {id: 'TMBI1', name: "Intersection to Main Building 1", latitude: 14.597119, longitude: 121.010298, vulnerability: 1.5}, // Intersection near Auditorium from I25
+        {id: 'TMBI2', name: "Intersection to Main Building 2", latitude: 14.597074, longitude: 121.010397, vulnerability: 1.5}, // Intersection near Auditorium from I24
+        {id: 'TMBI3', name: "Intersection to Main Building 3", latitude: 14.597243, longitude: 121.010119, vulnerability: 1.5}, // Intersection near Auditorium
 
         // Chapel
-        {id: 'CHI1', name: "Chapel Intersection 1", latitude: 14.597427, longitude: 121.011589}, // Intersection to PUP Chapel
-        {id: 'CHI2', name: "Chapel Intersection 2", latitude: 14.597342, longitude: 121.011693}, // Intersection around PUP Chapel
-        {id: 'CHI3', name: "Chapel Intersection 3", latitude: 14.597206, longitude: 121.011758}, // Intersection around PUP Chapel
-        {id: 'CHI4', name: "Chapel Intersection 4", latitude: 14.59698, longitude: 121.011718}, // Intersection around PUP Chapel
-        {id: 'CHI5', name: "Chapel Intersection 5", latitude: 14.59684, longitude: 121.011536}, // Intersection around PUP Chapel
-        {id: 'CHI6', name: "Chapel Intersection 6", latitude: 14.596846, longitude: 121.011302}, // Intersection around PUP Chapel, to around East Wing
-        {id: 'CHI7', name: "Chapel Intersection 7", latitude: 14.597053, longitude: 121.011109}, // Intersection around PUP Chapel, near Main Dome
-        {id: 'CHI8', name: "Chapel Intersection 8", latitude: 14.597316, longitude: 121.011151}, // Intersection around PUP Chapel, near North Wing
-        {id: 'CHI9', name: "Chapel Intersection 9", latitude: 14.59745, longitude: 121.011341}, // Intersection around PUP Chapel, near Main Dome
-        {id: 'CHI10', name: "Chapel Intersection 10", latitude: 14.596739, longitude: 121.011408}, // Intersection around PUP Chapel, near East Wing
+        {id: 'CHI1', name: "Chapel Intersection 1", latitude: 14.597427, longitude: 121.011589, vulnerability: 1}, // Intersection to PUP Chapel
+        {id: 'CHI2', name: "Chapel Intersection 2", latitude: 14.597342, longitude: 121.011693, vulnerability: 1}, // Intersection around PUP Chapel
+        {id: 'CHI3', name: "Chapel Intersection 3", latitude: 14.597206, longitude: 121.011758, vulnerability: 1}, // Intersection around PUP Chapel
+        {id: 'CHI4', name: "Chapel Intersection 4", latitude: 14.59698, longitude: 121.011718, vulnerability: 1}, // Intersection around PUP Chapel
+        {id: 'CHI5', name: "Chapel Intersection 5", latitude: 14.59684, longitude: 121.011536, vulnerability: 1}, // Intersection around PUP Chapel
+        {id: 'CHI6', name: "Chapel Intersection 6", latitude: 14.596846, longitude: 121.011302, vulnerability: 1.5}, // Intersection around PUP Chapel, to around East Wing
+        {id: 'CHI7', name: "Chapel Intersection 7", latitude: 14.597053, longitude: 121.011109, vulnerability: 1.5}, // Intersection around PUP Chapel, near Main Dome
+        {id: 'CHI8', name: "Chapel Intersection 8", latitude: 14.597316, longitude: 121.011151, vulnerability: 1.5}, // Intersection around PUP Chapel, near North Wing
+        {id: 'CHI9', name: "Chapel Intersection 9", latitude: 14.59745, longitude: 121.011341, vulnerability: 1.5}, // Intersection around PUP Chapel, near Main Dome
+        {id: 'CHI10', name: "Chapel Intersection 10", latitude: 14.596739, longitude: 121.011408, vulnerability: 1.5}, // Intersection around PUP Chapel, near East Wing
 
         // Main Building: Main Dome
-        {id: 'MDI1', class: "min", name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749},
-        {id: 'MDI2', class: "min", name: "Main Dome Intersection 2", latitude: 14.596982, longitude: 121.01068},
-        {id: 'MDI3', class: "min", name: "Main Dome Intersection 3", latitude: 14.597081, longitude: 121.010709}, // Intersection to NWI1
-        {id: 'MDI4', class: "min", name: "Main Dome Intersection 4", latitude: 14.597112, longitude: 121.010809},
-        {id: 'MDI5', class: "min", name: "Main Dome Intersection 5", latitude: 14.597001, longitude: 121.010895}, // Intersection to CHI7
-        {id: 'MDI6', class: "min", name: "Main Dome Intersection 6", latitude: 14.596934, longitude: 121.010868},
+        {id: 'MDI1', class: "min", name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749, vulnerability: 2.67},
+        {id: 'MDI2', class: "min", name: "Main Dome Intersection 2", latitude: 14.596982, longitude: 121.01068, vulnerability: 2.67},
+        {id: 'MDI3', class: "min", name: "Main Dome Intersection 3", latitude: 14.597081, longitude: 121.010709, vulnerability: 2.67}, // Intersection to NWI1
+        {id: 'MDI4', class: "min", name: "Main Dome Intersection 4", latitude: 14.597112, longitude: 121.010809, vulnerability: 2.67},
+        {id: 'MDI5', class: "min", name: "Main Dome Intersection 5", latitude: 14.597001, longitude: 121.010895, vulnerability: 2.67}, // Intersection to CHI7
+        {id: 'MDI6', class: "min", name: "Main Dome Intersection 6", latitude: 14.596934, longitude: 121.010868, vulnerability: 2.67},
 
         // Main Building: East Wing
-        {id: 'EWI1', name: "East Wing Intersection 1", latitude: 14.596641, longitude: 121.011419}, // Intersection near East Wing
-        {id: 'EWI2', name: "East Wing Intersection 2", latitude: 14.596572, longitude: 121.011379}, // Intersection near East Wing
+        {id: 'EWI1', name: "East Wing Intersection 1", latitude: 14.596641, longitude: 121.011419, vulnerability: 2.67}, // Intersection near East Wing
+        {id: 'EWI2', name: "East Wing Intersection 2", latitude: 14.596572, longitude: 121.011379, vulnerability: 2.67}, // Intersection near East Wing
         
         // Main Building: South Wing
-        {id: 'SWI1', name: "South Wing Intersection 1", latitude: 14.596248, longitude: 121.011029}, // Intersection between South and East Wing
-        {id: 'SWI2', name: "South Wing Intersection 2", latitude: 14.596443, longitude: 121.010309}, // Intersection southwest corner of South Wing
-        {id: 'SWI3', name: "South Wing Intersection 3", latitude: 14.596589, longitude: 121.010247}, // Intersection between South and West Wing
-        {id: 'SWI4', class: "min", name: "South Wing Intersection 4", latitude: 14.596523, longitude: 121.010396},
-        {id: 'SWI5', class: "min", name: "South Wing Intersection 5", latitude: 14.59669, longitude: 121.01044},
-        {id: 'SWI6', class: "min", name: "South Wing Intersection 6", latitude: 14.596565, longitude: 121.01093},
-        {id: 'SWI7', class: "min", name: "South Wing Intersection 7", latitude: 14.596402, longitude: 121.010888},
-        {id: 'SWI8', class: "min", name: "South Wing Intersection 8", latitude: 14.596633, longitude: 121.010689},
-        {id: 'SWI9', class: "min", name: "South Wing Intersection 9", latitude: 14.596465, longitude: 121.010644},
+        {id: 'SWI1', name: "South Wing Intersection 1", latitude: 14.596248, longitude: 121.011029, vulnerability: 2.67}, // Intersection between South and East Wing
+        {id: 'SWI2', name: "South Wing Intersection 2", latitude: 14.596443, longitude: 121.010309, vulnerability: 2.67}, // Intersection southwest corner of South Wing
+        {id: 'SWI3', name: "South Wing Intersection 3", latitude: 14.596589, longitude: 121.010247, vulnerability: 2.67}, // Intersection between South and West Wing
+        {id: 'SWI4', class: "min", name: "South Wing Intersection 4", latitude: 14.596523, longitude: 121.010396, vulnerability: 2.67},
+        {id: 'SWI5', class: "min", name: "South Wing Intersection 5", latitude: 14.59669, longitude: 121.01044, vulnerability: 2.67},
+        {id: 'SWI6', class: "min", name: "South Wing Intersection 6", latitude: 14.596565, longitude: 121.01093, vulnerability: 2.67},
+        {id: 'SWI7', class: "min", name: "South Wing Intersection 7", latitude: 14.596402, longitude: 121.010888, vulnerability: 2.67},
+        {id: 'SWI8', class: "min", name: "South Wing Intersection 8", latitude: 14.596633, longitude: 121.010689, vulnerability: 2.67},
+        {id: 'SWI9', class: "min", name: "South Wing Intersection 9", latitude: 14.596465, longitude: 121.010644, vulnerability: 2.67},
 
         // Main Building: West Wing
-        {id: 'WWI1', name: "West Wing Intersection 1", latitude: 14.59677, longitude: 121.010064}, // Intersection near West Wing
-        {id: 'WWI2', name: "West Wing Intersection 2", latitude: 14.596958, longitude: 121.010001}, // Intersection near Student Canteen to PUP Auditorium
-        {id: 'WWI3', name: "West Wing Intersection 3", latitude: 14.597032, longitude: 121.00998}, // Intersection near Student Canteen to PUP Auditorium
+        {id: 'WWI1', name: "West Wing Intersection 1", latitude: 14.59677, longitude: 121.010064, vulnerability: 2.67}, // Intersection near West Wing
+        {id: 'WWI2', name: "West Wing Intersection 2", latitude: 14.596958, longitude: 121.010001, vulnerability: 2.67}, // Intersection near Student Canteen to PUP Auditorium
+        {id: 'WWI3', name: "West Wing Intersection 3", latitude: 14.597032, longitude: 121.00998, vulnerability: 2.67}, // Intersection near Student Canteen to PUP Auditorium
         
         // Court Intersection
-        {id: 'CI1', name: "Court Intersection 1", latitude: 14.598488, longitude: 121.010958}, // Intersection inside courts 
-        {id: 'CI2', name: "Court Intersection 2", latitude: 14.598787, longitude: 121.011261}, // Intersection in Tennis Court
+        {id: 'CI1', name: "Court Intersection 1", latitude: 14.598488, longitude: 121.010958, vulnerability: 1}, // Intersection inside courts 
+        {id: 'CI2', name: "Court Intersection 2", latitude: 14.598787, longitude: 121.011261, vulnerability: 1}, // Intersection in Tennis Court
         
         // Intersection near Gym
-        {id: 'GI1', name: "Gym Intersection 1", latitude: 14.59881, longitude: 121.01066}, // Intersection to Gym
-        {id: 'GI2', name: "Gym Intersection 2", latitude: 14.599128, longitude: 121.010386}, // Intersection near Gym
-        {id: 'GI3', name: "Gym Intersection 3", latitude: 14.599252, longitude: 121.011148}, // Intersection near Gym
+        {id: 'GI1', name: "Gym Intersection 1", latitude: 14.59881, longitude: 121.01066, vulnerability: 2}, // Intersection to Gym
+        {id: 'GI2', name: "Gym Intersection 2", latitude: 14.599128, longitude: 121.010386, vulnerability: 2}, // Intersection near Gym
+        {id: 'GI3', name: "Gym Intersection 3", latitude: 14.599252, longitude: 121.011148, vulnerability: 2}, // Intersection near Gym
 
         // Intersection near PE Building
-        {id: 'PEI1', name: "PE Building Intersection 1", latitude: 14.598391, longitude: 121.010362}, // Intersection to PE Building and Swimming Pool
-        {id: 'PEI2', name: "PE Building Intersection 2", latitude: 14.598386, longitude: 121.010231}, // Intersection near PE Building
-        {id: 'PEI3', name: "PE Building Intersection 3", latitude: 14.598485, longitude: 121.010338}, // Intersection near Swimmming Pool
+        {id: 'PEI1', name: "PE Building Intersection 1", latitude: 14.598391, longitude: 121.010362, vulnerability: 2}, // Intersection to PE Building and Swimming Pool
+        {id: 'PEI2', name: "PE Building Intersection 2", latitude: 14.598386, longitude: 121.010231, vulnerability: 2}, // Intersection near PE Building
+        {id: 'PEI3', name: "PE Building Intersection 3", latitude: 14.598485, longitude: 121.010338, vulnerability: 2}, // Intersection near Swimmming Pool
 
         // Pool
-        {id: 'SPI1', name: "Swimming Pool Intersection 1", latitude: 14.599029, longitude: 121.01044}, // Intersection inside Pool Area
-        {id: 'SPI2', name: "Swimming Pool Intersection 2", latitude: 14.598832, longitude: 121.010608}, // Intersection inside Pool Area
-        {id: 'SPI3', name: "Swimming Pool Intersection 3", latitude: 14.598532, longitude: 121.010252}, // Intersection inside Pool Area
-        {id: 'SPI4', name: "Swimming Pool Intersection 4", latitude: 14.598731, longitude: 121.010074}, // Intersection inside Pool Area
+        {id: 'SPI1', name: "Swimming Pool Intersection 1", latitude: 14.599029, longitude: 121.01044, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'SPI2', name: "Swimming Pool Intersection 2", latitude: 14.598832, longitude: 121.010608, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'SPI3', name: "Swimming Pool Intersection 3", latitude: 14.598532, longitude: 121.010252, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'SPI4', name: "Swimming Pool Intersection 4", latitude: 14.598731, longitude: 121.010074, vulnerability: 2}, // Intersection inside Pool Area
 
         // PUP Obelisk
-        {id: 'OBL1', name: "Obelisk Intersection 1", latitude: 14.598053, longitude: 121.010771}, // Intersection, Lagoon
-        {id: 'OBL2', name: "Obelisk Intersection 2", latitude: 14.598068, longitude: 121.010644}, // Intersection around PUP Obelisk
-        {id: 'OBL3', name: "Obelisk Intersection 3", latitude: 14.597988, longitude: 121.010778}, // Intersection around PUP Obelisk
-        {id: 'OBL4', name: "Obelisk Intersection 4", latitude: 14.598126, longitude: 121.010929}, // Intersection around PUP Obelisk
-        {id: 'OBL5', name: "Obelisk Intersection 5", latitude: 14.598304, longitude: 121.01075}, // Intersection around PUP Obelisk
-        {id: 'OBL6', name: "Obelisk Intersection 6", latitude: 14.598231, longitude: 121.010633}, // Intersection around PUP Obelisk
-        {id: 'OBL7', name: "Obelisk Intersection 7", latitude: 14.598254, longitude: 121.010892}, // Intersection near PUP Obelisk
-        {id: 'OBL8', name: "Obelisk Intersection 8", latitude: 14.598265, longitude: 121.010565}, // Intersection to PE Building
+        {id: 'OBL1', name: "Obelisk Intersection 1", latitude: 14.598053, longitude: 121.010771, vulnerability: 1}, // Intersection, Lagoon
+        {id: 'OBL2', name: "Obelisk Intersection 2", latitude: 14.598068, longitude: 121.010644, vulnerability: 1}, // Intersection around PUP Obelisk
+        {id: 'OBL3', name: "Obelisk Intersection 3", latitude: 14.597988, longitude: 121.010778, vulnerability: 1}, // Intersection around PUP Obelisk
+        {id: 'OBL4', name: "Obelisk Intersection 4", latitude: 14.598126, longitude: 121.010929, vulnerability: 1}, // Intersection around PUP Obelisk
+        {id: 'OBL5', name: "Obelisk Intersection 5", latitude: 14.598304, longitude: 121.01075, vulnerability: 1}, // Intersection around PUP Obelisk
+        {id: 'OBL6', name: "Obelisk Intersection 6", latitude: 14.598231, longitude: 121.010633, vulnerability: 1}, // Intersection around PUP Obelisk
+        {id: 'OBL7', name: "Obelisk Intersection 7", latitude: 14.598254, longitude: 121.010892, vulnerability: 1.5}, // Intersection near PUP Obelisk
+        {id: 'OBL8', name: "Obelisk Intersection 8", latitude: 14.598265, longitude: 121.010565, vulnerability: 1}, // Intersection to PE Building
 
         // lagoon
-        {id: 'LAGI1', class: "lin", name: "Lagoon Intersection 1", latitude: 14.597364, longitude: 121.010034}, // Intersection, Lagoon
-        {id: 'LAGI2', class: "lin", name: "Lagoon Intersection 2", latitude: 14.597351, longitude: 121.010055}, // Intersection, Lagoon
-        {id: 'LAGI3', class: "lin", name: "Lagoon Intersection 3", latitude: 14.597257, longitude: 121.010186}, // Intersection, Lagoon
-        {id: 'LAGI4', class: "lin", name: "Lagoon Intersection 4", latitude: 14.597222, longitude: 121.010239}, // Intersection, Lagoon
-        {id: 'LAGI5', class: "lin", name: "Lagoon Intersection 5", latitude: 14.597149, longitude: 121.010378}, // Intersection, Lagoon
-        {id: 'LAGI6', class: "lin", name: "Lagoon Intersection 6", latitude: 14.597192, longitude: 121.010541}, // Intersection, Lagoon
-        {id: 'LAGI7', class: "lin", name: "Lagoon Intersection 7", latitude: 14.597322, longitude: 121.0106}, // Intersection, Lagoon
-        {id: 'LAGI8', class: "lin", name: "Lagoon Intersection 8", latitude: 14.597709, longitude: 121.01071}, // Intersection, Lagoon
-        {id: 'LAGI9a', class: "lin", name: "Lagoon Intersection 9A", latitude: 14.597865, longitude: 121.010689}, // Intersection, Lagoon
-        {id: 'LAGI9b', class: "lin", name: "Lagoon Intersection 9B", latitude: 14.597924, longitude: 121.010633}, // Intersection, Lagoon
-        {id: 'LAGI10', class: "lin", name: "Lagoon Intersection 10", latitude: 14.598001, longitude: 121.010561}, // Intersection, Lagoon
-        {id: 'LAGI11', class: "lin", name: "Lagoon Intersection 11", latitude: 14.598132, longitude: 121.010452}, // Intersection, Lagoon
-        {id: 'LAGI12', class: "lin", name: "Lagoon Intersection 12", latitude: 14.5981, longitude: 121.01036}, // Intersection, Lagoon
-        {id: 'LAGI13', class: "lin", name: "Lagoon Intersection 13", latitude: 14.598052, longitude: 121.010216}, // Intersection, Lagoon
-        {id: 'LAGI14', class: "lin", name: "Lagoon Intersection 14", latitude: 14.598018, longitude: 121.010123}, // Intersection, Lagoon
-        {id: 'LAGI15', class: "lin", name: "Lagoon Intersection 15", latitude: 14.597901, longitude: 121.010073}, // Intersection, Lagoon
-        {id: 'LAGI16', class: "lin", name: "Lagoon Intersection 16", latitude: 14.597838, longitude: 121.010142}, // Intersection, Lagoon
-        {id: 'LAGI17', class: "lin", name: "Lagoon Intersection 17", latitude: 14.597789, longitude: 121.010239}, // Intersection, Lagoon
-        {id: 'LAGI18', class: "lin", name: "Lagoon Intersection 18", latitude: 14.597707, longitude: 121.010229}, // Intersection, Lagoon
-        {id: 'LAGI19', class: "lin", name: "Lagoon Intersection 19", latitude: 14.597598, longitude: 121.010154}, // Intersection, Lagoon
-        {id: 'LAGI20', class: "lin", name: "Lagoon Intersection 20", latitude: 14.597471, longitude: 121.010162}, // Intersection, Lagoon
-        {id: 'LAGI21', class: "lin", name: "Lagoon Intersection 21", latitude: 14.597367, longitude: 121.01028}, // Intersection, Lagoon
-        {id: 'LAGI22', class: "lin", name: "Lagoon Intersection 22", latitude: 14.597422, longitude: 121.010392}, // Intersection, Lagoon
-        {id: 'LAGI23', class: "lin", name: "Lagoon Intersection 23", latitude: 14.597354, longitude: 121.010519}, // Intersection, Lagoon
-        {id: 'LAGI24', class: "lin", name: "Lagoon Intersection 24", latitude: 14.597371, longitude: 121.01054}, // Intersection, Lagoon
-        {id: 'LAGI25', class: "lin", name: "Lagoon Intersection 25", latitude: 14.597362, longitude: 121.010569}, // Intersection, Lagoon
-        {id: 'LAGI26', class: "lin", name: "Lagoon Intersection 26", latitude: 14.597336, longitude: 121.010573}, // Intersection, Lagoon
-        {id: 'LAGI27', class: "lin", name: "Lagoon Intersection 27", latitude: 14.59751, longitude: 121.010544}, // Intersection, Lagoon
-        {id: 'LAGI28', class: "lin", name: "Lagoon Intersection 28", latitude: 14.597683, longitude: 121.010605}, // Intersection, Lagoon
-        {id: 'LAGI29', class: "lin", name: "Lagoon Intersection 29", latitude: 14.597706, longitude: 121.010609}, // Intersection, Lagoon
-        {id: 'LAGI30', class: "lin", name: "Lagoon Intersection 30", latitude: 14.597727, longitude: 121.010613}, // Intersection, Lagoon
-        {id: 'LAGI31', class: "lin", name: "Lagoon Intersection 31", latitude: 14.597763, longitude: 121.010462}, // Intersection, Lagoon
-        {id: 'LAGI32', class: "lin", name: "Lagoon Intersection 32", latitude: 14.597644, longitude: 121.010446}, // Intersection, Lagoon
-        {id: 'LAGI33', class: "lin", name: "Lagoon Intersection 33", latitude: 14.597726, longitude: 121.010426}, // Intersection, Lagoon
-        {id: 'LAGI34', class: "lin", name: "Lagoon Intersection 34", latitude: 14.597846, longitude: 121.010549}, // Intersection, Lagoon
-        {id: 'LAGI35', class: "lin", name: "Lagoon Intersection 35", latitude: 14.597883, longitude: 121.010373}, // Intersection, Lagoon
-        {id: 'LAGI36', class: "lin", name: "Lagoon Intersection 36", latitude: 14.597951, longitude: 121.010372}, // Intersection, Lagoon
-        {id: 'LAGI37', class: "lin", name: "Lagoon Intersection 37", latitude: 14.597927, longitude: 121.010484}, // Intersection, Lagoon
-        {id: 'LAGI38', class: "lin", name: "Lagoon Intersection 38", latitude: 14.597988, longitude: 121.01045}, // Intersection, Lagoon
-        {id: 'LAGI39', class: "lin", name: "Lagoon Intersection 39", latitude: 14.598011, longitude: 121.010357}, // Intersection, Lagoon
-        {id: 'LAGI40', class: "lin", name: "Lagoon Intersection 40", latitude: 14.598044, longitude: 121.0103}, // Intersection, Lagoon
+        {id: 'LAGI1', class: "lin", name: "Lagoon Intersection 1", latitude: 14.597364, longitude: 121.010034, vulnerability: 2.5}, // Intersection, Lagoon
+        {id: 'LAGI2', class: "lin", name: "Lagoon Intersection 2", latitude: 14.597351, longitude: 121.010055, vulnerability: 2.5}, // Intersection, Lagoon
+        {id: 'LAGI3', class: "lin", name: "Lagoon Intersection 3", latitude: 14.597257, longitude: 121.010186, vulnerability: 2.5}, // Intersection, Lagoon
+        {id: 'LAGI4', class: "lin", name: "Lagoon Intersection 4", latitude: 14.597222, longitude: 121.010239, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI5', class: "lin", name: "Lagoon Intersection 5", latitude: 14.597149, longitude: 121.010378, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI6', class: "lin", name: "Lagoon Intersection 6", latitude: 14.597192, longitude: 121.010541, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI7', class: "lin", name: "Lagoon Intersection 7", latitude: 14.597322, longitude: 121.0106, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI8', class: "lin", name: "Lagoon Intersection 8", latitude: 14.597709, longitude: 121.01071, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI9a', class: "lin", name: "Lagoon Intersection 9A", latitude: 14.597865, longitude: 121.010689, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI9b', class: "lin", name: "Lagoon Intersection 9B", latitude: 14.597924, longitude: 121.010633, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI10', class: "lin", name: "Lagoon Intersection 10", latitude: 14.598001, longitude: 121.010561, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI11', class: "lin", name: "Lagoon Intersection 11", latitude: 14.598132, longitude: 121.010452, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI12', class: "lin", name: "Lagoon Intersection 12", latitude: 14.5981, longitude: 121.01036, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI13', class: "lin", name: "Lagoon Intersection 13", latitude: 14.598052, longitude: 121.010216, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI14', class: "lin", name: "Lagoon Intersection 14", latitude: 14.598018, longitude: 121.010123, vulnerability: 1.5}, // Intersection, Lagoon
+        {id: 'LAGI15', class: "lin", name: "Lagoon Intersection 15", latitude: 14.597901, longitude: 121.010073, vulnerability: 1.5}, // Intersection, Lagoon
+        {id: 'LAGI16', class: "lin", name: "Lagoon Intersection 16", latitude: 14.597838, longitude: 121.010142, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI17', class: "lin", name: "Lagoon Intersection 17", latitude: 14.597789, longitude: 121.010239, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI18', class: "lin", name: "Lagoon Intersection 18", latitude: 14.597707, longitude: 121.010229, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI19', class: "lin", name: "Lagoon Intersection 19", latitude: 14.597598, longitude: 121.010154, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI20', class: "lin", name: "Lagoon Intersection 20", latitude: 14.597471, longitude: 121.010162, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI21', class: "lin", name: "Lagoon Intersection 21", latitude: 14.597367, longitude: 121.01028, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI22', class: "lin", name: "Lagoon Intersection 22", latitude: 14.597422, longitude: 121.010392, vulnerability: 1.5}, // Intersection, Lagoon
+        {id: 'LAGI23', class: "lin", name: "Lagoon Intersection 23", latitude: 14.597354, longitude: 121.010519, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI24', class: "lin", name: "Lagoon Intersection 24", latitude: 14.597371, longitude: 121.01054, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI25', class: "lin", name: "Lagoon Intersection 25", latitude: 14.597362, longitude: 121.010569, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI26', class: "lin", name: "Lagoon Intersection 26", latitude: 14.597336, longitude: 121.010573, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI27', class: "lin", name: "Lagoon Intersection 27", latitude: 14.59751, longitude: 121.010544, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI28', class: "lin", name: "Lagoon Intersection 28", latitude: 14.597683, longitude: 121.010605, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI29', class: "lin", name: "Lagoon Intersection 29", latitude: 14.597706, longitude: 121.010609, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI30', class: "lin", name: "Lagoon Intersection 30", latitude: 14.597727, longitude: 121.010613, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI31', class: "lin", name: "Lagoon Intersection 31", latitude: 14.597763, longitude: 121.010462, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI32', class: "lin", name: "Lagoon Intersection 32", latitude: 14.597644, longitude: 121.010446, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI33', class: "lin", name: "Lagoon Intersection 33", latitude: 14.597726, longitude: 121.010426, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI34', class: "lin", name: "Lagoon Intersection 34", latitude: 14.597846, longitude: 121.010549, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI35', class: "lin", name: "Lagoon Intersection 35", latitude: 14.597883, longitude: 121.010373, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI36', class: "lin", name: "Lagoon Intersection 36", latitude: 14.597951, longitude: 121.010372, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI37', class: "lin", name: "Lagoon Intersection 37", latitude: 14.597927, longitude: 121.010484, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI38', class: "lin", name: "Lagoon Intersection 38", latitude: 14.597988, longitude: 121.01045, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI39', class: "lin", name: "Lagoon Intersection 39", latitude: 14.598011, longitude: 121.010357, vulnerability: 2}, // Intersection, Lagoon
+        {id: 'LAGI40', class: "lin", name: "Lagoon Intersection 40", latitude: 14.598044, longitude: 121.0103, vulnerability: 2}, // Intersection, Lagoon
 
         // Ninoy Aquino LRC
-        {id: 'NALRCI1', name: "Ninoy Aquino LRC Intersection 1", latitude: 14.597423, longitude: 121.009847}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI2', name: "Ninoy Aquino LRC Intersection 2", latitude: 14.597647, longitude: 121.009776}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI3', name: "Ninoy Aquino LRC Intersection 3", latitude: 14.597744, longitude: 121.009572}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI4', name: "Ninoy Aquino LRC Intersection 4", latitude: 14.597665, longitude: 121.009366}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI5', name: "Ninoy Aquino LRC Intersection 5", latitude: 14.597743, longitude: 121.009183}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI6', name: "Ninoy Aquino LRC Intersection 6", latitude: 14.597545, longitude: 121.009604}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI7', name: "Ninoy Aquino LRC Intersection 7", latitude: 14.598183, longitude: 121.009381}, // Intersection, Ninoy Aquino LRC
-        {id: 'NALRCI8', name: "Ninoy Aquino LRC Intersection 8", latitude: 14.598121, longitude: 121.010128}, // Intersection near PE Building
-        {id: 'NALRCI9', name: "Ninoy Aquino LRC Intersection 9", latitude: 14.598246, longitude: 121.010087}, // Intersection near PE Building
-        {id: 'NALRCI10', name: "Ninoy Aquino LRC Intersection 10", latitude: 14.598351, longitude: 121.009847}, // Intersection near PE Building
-        {id: 'NALRCI11', name: "Ninoy Aquino LRC Intersection 11", latitude: 14.598036, longitude: 121.009696}, // Intersection near PE Building
+        {id: 'NALRCI1', name: "Ninoy Aquino LRC Intersection 1", latitude: 14.597423, longitude: 121.009847, vulnerability: 1.5}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI2', name: "Ninoy Aquino LRC Intersection 2", latitude: 14.597647, longitude: 121.009776, vulnerability: 2}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI3', name: "Ninoy Aquino LRC Intersection 3", latitude: 14.597744, longitude: 121.009572, vulnerability: 2}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI4', name: "Ninoy Aquino LRC Intersection 4", latitude: 14.597665, longitude: 121.009366, vulnerability: 1.5}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI5', name: "Ninoy Aquino LRC Intersection 5", latitude: 14.597743, longitude: 121.009183, vulnerability: 1}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI6', name: "Ninoy Aquino LRC Intersection 6", latitude: 14.597545, longitude: 121.009604, vulnerability: 1}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI7', name: "Ninoy Aquino LRC Intersection 7", latitude: 14.598183, longitude: 121.009381, vulnerability: 2}, // Intersection, Ninoy Aquino LRC
+        {id: 'NALRCI8', name: "Ninoy Aquino LRC Intersection 8", latitude: 14.598121, longitude: 121.010128, vulnerability: 1}, // Intersection near PE Building
+        {id: 'NALRCI9', name: "Ninoy Aquino LRC Intersection 9", latitude: 14.598246, longitude: 121.010087, vulnerability: 2}, // Intersection near PE Building
+        {id: 'NALRCI10', name: "Ninoy Aquino LRC Intersection 10", latitude: 14.598351, longitude: 121.009847, vulnerability: 2}, // Intersection near PE Building
+        {id: 'NALRCI11', name: "Ninoy Aquino LRC Intersection 11", latitude: 14.598036, longitude: 121.009696, vulnerability: 2}, // Intersection near PE Building
 
         // Laboratory High School
-        {id: 'LHSI1', name: "LHS Intersection 1", latitude: 14.597097, longitude: 121.009061}, // Intersection inside Pool Area
-        {id: 'LHSI2', name: "LHS Intersection 2", latitude: 14.597192, longitude: 121.009399}, // Intersection inside Pool Area
-        {id: 'LHSI3', name: "LHS Intersection 3", latitude: 14.597411, longitude: 121.009336}, // Intersection inside Pool Area
-        {id: 'LHSI4', name: "LHS Intersection 4", latitude: 14.597366, longitude: 121.009158}, // Intersection inside Pool Area
-        {id: 'LHSI5', name: "LHS Intersection 5", latitude: 14.5977, longitude: 121.009061}, // Intersection inside Pool Area
+        {id: 'LHSI1', name: "LHS Intersection 1", latitude: 14.597097, longitude: 121.009061, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'LHSI2', name: "LHS Intersection 2", latitude: 14.597192, longitude: 121.009399, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'LHSI3', name: "LHS Intersection 3", latitude: 14.597411, longitude: 121.009336, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'LHSI4', name: "LHS Intersection 4", latitude: 14.597366, longitude: 121.009158, vulnerability: 2}, // Intersection inside Pool Area
+        {id: 'LHSI5', name: "LHS Intersection 5", latitude: 14.5977, longitude: 121.009061, vulnerability: 1}, // Intersection inside Pool Area
 
         // Property Building and Motorpool Office
-        {id: 'PBMOI1', name: "PBMO Intersection 1", latitude: 14.597686, longitude: 121.008966}, // Intersection to Property Building and Motorpool Office
-        {id: 'PBMOI2', name: "PBMO Intersection 2", latitude: 14.597419, longitude: 121.008734}, // Intersection near Property Building and Motorpool Office
+        {id: 'PBMOI1', name: "PBMO Intersection 1", latitude: 14.597686, longitude: 121.008966, vulnerability: 1}, // Intersection to Property Building and Motorpool Office
+        {id: 'PBMOI2', name: "PBMO Intersection 2", latitude: 14.597419, longitude: 121.008734, vulnerability: 2}, // Intersection near Property Building and Motorpool Office
     ];
-
+    
     // Edges
     var edges = [
         // Oval: Grandstand, CommunityBuilding, OvalE1, OvalE2
