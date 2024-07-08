@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<!-- for font import and css linking-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+
+<!-- for header-->
+  <header class="header">
+    <div class="logo">
+      <img src="compass.png">
+    </div>
+    <div class="headtitle">
+      <h1>EMERGENCY</h1>
+    </div>
+  </header>
+
+<!-- for emergency content-->
+  <div class="content" id="emergency">
+    <h2 class="earthquake">EARTHQUAKE</h2>
+    <h3 class="emHotlines">Emergency Hotlines</h3>
+
+  <!--911-->
+  <div style="width: 100%; height: 100%; position: relative">
+    <div class="num1"; style="width: 261px; left: 94px; top: 9px; position: absolute; color: #E1E1E1; font-size: 15px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">
+      National Emergency Hotline (911)
+    </div>
+    <button style="width: 36px; height: 36px; left: 44px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+      <img src="call.png" alt="Call Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+    </button>
+    <button style="width: 36px; height: 36px; left: 0px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+      <img src="message.png" alt="Message Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+  </button>
+  </div>
+  
+    <!--NDRRMC-->
+    <div style="width: 100%; height: 100%; position: relative">
+      <div class="num1"; style="width: 261px; left: 12px; top: 9px; position: absolute; color: #E1E1E1; font-size: 15px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">
+        NDRRMC
+      </div>
+      <button style="width: 36px; height: 36px; left: 44px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+        <img src="call.png" alt="Call Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+      </button>
+      <button style="width: 36px; height: 36px; left: 0px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+        <img src="message.png" alt="Message Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+      </button>
+    </div>
+    
+  <!--Red Cross-->
+  <div style="width: 100%; height: 100%; position: relative">
+    <div class="num1"; style="width: 261px; left: 16px; top: 9px; position: absolute; color: #E1E1E1; font-size: 15px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">
+      Red Cross
+    </div>
+    <button style="width: 36px; height: 36px; left: 44px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+      <img src="call.png" alt="Call Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+    </button>
+    <button style="width: 36px; height: 36px; left: 0px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+      <img src="message.png" alt="Message Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+  </button>
+  </div>
+
+    <!--Bureau of Fire Protection -->
+    <div style="width: 100%; height: 100%; position: relative">
+      <div class="num1"; style="width: 261px; left: 70px; top: 9px; position: absolute; color: #E1E1E1; font-size: 15px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">
+        Bureau of Fire Protection
+      </div>
+      <button style="width: 36px; height: 36px; left: 44px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+        <img src="call.png" alt="Call Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+      </button>
+      <button style="width: 36px; height: 36px; left: 0px; top: 0px; position: absolute; background: #1C8EDB; border-radius: 9999px;">
+        <img src="message.png" alt="Message Button" style="width: 100%; height: 100%; left: 10; right: 9px;">
+      </button>
+    </div>
+      
+
+
+</div>
+    
+  
+<!-- for the navigation bar-->
+  <div class="navigation">
+    <div class="menuToggle">
+      <img src="compass.png" id="navigate-img">
+    </div>
+    <div class="menu">
+      <ul>
+        <li id="home-li" style="--i:0.1s;"><a href="index.html" id="home-link"><ion-icon name="home"></ion-icon>Home</a></li>
+        <li id="info-li" style="--i:0.2s;"><a href="information.html" id="info-link"><ion-icon name="information-circle"></ion-icon>Information</a></li>
+        <li id="navigate-li" style="--i:0.3s;"><a href="navigate.html" id="navigate-link"><ion-icon name="/"></ion-icon>Navigate</a></li>
+        <li id="hotline-li" style="--i:0.4s;"><a href="hotline.html" id="hotline-link"><ion-icon name="call"></ion-icon>Hotline</a></li>
+        <li id="emergency-li" style="--i:0.5s;"><a href="emergency.html" id="emergency-link"><ion-icon name="megaphone"></ion-icon>Emergency</a></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- for the icon and linking to js-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>

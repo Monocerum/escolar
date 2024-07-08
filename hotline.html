@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<!-- for font import and css linking-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+
+<!-- for header-->
+  <header class="header">
+    <div class="logo">
+      <img src="compass.png">
+    </div>
+    <div class="headtitle">
+      <h1>HOTLINE</h1>
+    </div>
+  </header>
+
+<!-- for hotline content-->
+  <div class="content" id="hotline">
+    <h1>EARTHQUAKE</h1>
+    <h2>Emergency Hotline</h2>
+    
+    <p class="purpose">*for immediate assistance</p>
+    <p class="hotlinename">National Emergency Hotline:</p>
+    <p class="hotlinenum">• 911</p>
+    <p class="purpose">*for disaster response</p>
+    <p class="hotlinename">National Disaster and Risk Reduction and Management Council (NDRRMC):</p>
+    <p class="hotlinenum">• (02) 911-1406 <br>• (02) 912-2665 <br>• (02) 912-5668</p>
+    <p class="purpose">*for medical assistance</p>
+    <p class="hotlinename">Red Cross:</p>
+    <p class="hotlinenum">• +63 42 660 544 60 <br>• (02) 911-1876 <br>• 143</p>
+    <p class="purpose">*for rescure operations</p>
+    <p class="hotlinename">Bureau of Fire Protection:</p>
+    <p class="hotlinenum">• (02) 8426-0219 <br>• (02) 8426-3812</p>
+  </div>
+  
+<!-- for the navigation bar-->
+  <div class="navigation">
+    <div class="menuToggle">
+      <img src="compass.png" id="navigate-img">
+    </div>
+    <div class="menu">
+      <ul>
+        <li id="home-li" style="--i:0.1s;"><a href="index.html" id="home-link"><ion-icon name="home"></ion-icon>Home</a></li>
+        <li id="info-li" style="--i:0.2s;"><a href="information.html" id="info-link"><ion-icon name="information-circle"></ion-icon>Information</a></li>
+        <li id="navigate-li" style="--i:0.3s;"><a href="navigate.html" id="navigate-link"><ion-icon name="/"></ion-icon>Navigate</a></li>
+        <li id="hotline-li" style="--i:0.4s;"><a href="hotline.html" id="hotline-link"><ion-icon name="call"></ion-icon>Hotline</a></li>
+        <li id="emergency-li" style="--i:0.5s;"><a href="emergency.html" id="emergency-link"><ion-icon name="megaphone"></ion-icon>Emergency</a></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- for the icon and linking to js-->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
