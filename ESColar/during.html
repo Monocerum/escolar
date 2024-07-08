@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>ESColar</title>
+
+    <!-- for font import and css linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      .during.clicked {
+        background-image: linear-gradient(to right, #0f4c75, #1c8edb);
+        border: none;
+        padding: 8px 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="info-main">
+    <header class="header">
+      <div class="logo">
+        <img src="assets/compass.png" />
+      </div>
+      <div class="headtitle">
+        <h1>INFORMATION</h1>
+      </div>
+    </header>
+    <div class="buttonsinfo">
+      <div class="buttons">
+        <div>
+          <button class="before" data-page="before">Before</button>
+          <button class="during clicked" data-page="during">During</button>
+          <button class="after" data-page="after">After</button>
+        </div>
+      </div>
+    </div>
+
+    <!--Information During Button-->
+    <div class="container">
+      <div class="beforeContent contents">
+        <div class="content-container during-content-container">
+            <div class="during-header">
+                <h2 class="during-text-header">RESPONSE</h3>
+                <p class="during-content-subheader">DURING THE SHAKING</p>
+            </div>
+            <div class="during-content-1">
+                <div class="left-during">
+                    <h3 class="left-text-during">IF INSIDE:</h3>
+                </div>
+                <div class="center-during">
+                    <img src="assets/during1.png" alt="Drop, Cover, and Hold on." class="center-during-img">
+                </div>
+                <div class="right-during">
+                    <p class="right-text-during">or stay in safer part of the room.</p>
+                </div>
+            </div>
+            <hr />
+            <div class="content-list during-content-list">
+                <div class="content-left during-content">
+                    <img src="assets/during2.png" class="content-img" />
+                    <h3 class="list-header">IF OUTSIDE:</h3>
+                    <p class="list-content">Move to open area.</p>
+                </div>
+                <div class="content-right during-content">
+                    <img src="assets/during3.png" class="content-img" />
+                    <h3 class="list-header">IF NEAR SHORE:</h3>
+                    <p class="list-content">Move quickly to higher grounds.</p>
+                </div>
+            </div>
+            <hr />
+            <div class="content-list during-content-list">
+                <div class="content-left during-content">
+                    <img src="assets/during4.png" class="content-img" />
+                    <h3 class="list-header">MOVE AWAY</h3>
+                    <p class="list-content">from steep slopes.</p>
+                </div>
+                <div class="content-right during-content">
+                    <img src="assets/during5.png" class="content-img" />
+                    <h3 class="list-header">STOP</h3>
+                    <p class="list-content">if inside a moving vehicle.</p>
+                </div>
+            </div>
+            <hr />
+            <div class="content-list during-content-list">
+                <div class="content-left during-content">
+                    <img src="assets/during6.png" class="content-img" />
+                    <h3 class="list-header">DO NOT CROSS</h3>
+                    <p class="list-content">bridges, overpasses, or flyovers.</p>
+                </div>
+                <div class="content-right during-content">
+                    <h3 class="list-header">STAY CALM and ALERT</h3>
+                    <p class="list-content">Watch out for falling objects, glass windows, shelves, cabinets, and other heavy objects that may cause injury.</p>
+                </div>
+            </div>
+            <hr />
+            <div class="content-footer">
+                <p class="bigger-text">EARTHQUAKE Preparedness Practices</p>
+                <p class="smaller-text">according to PHIVOLCS-DOST</p>  
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- for the navigation bar-->
+    <div class="navigation">
+      <div class="menuToggle">
+        <img src="assets/compass.png" id="navigate-img" />
+      </div>
+      <div class="menu">
+        <ul>
+          <li id="home-li" style="--i: 0.1s">
+            <a href="index.html" id="home-link"
+              ><ion-icon name="home"></ion-icon>Home</a
+            >
+          </li>
+          <li id="info-li" style="--i: 0.2s">
+            <a href="information.html" id="info-link"
+              ><ion-icon name="information-circle"></ion-icon>Information</a
+            >
+          </li>
+          <li id="navigate-li" style="--i: 0.3s">
+            <a href="navigate.html" id="navigate-link"
+              ><ion-icon name="/"></ion-icon>Navigate</a
+            >
+          </li>
+          <li id="hotline-li" style="--i: 0.4s">
+            <a href="hotline.html" id="hotline-link"
+              ><ion-icon name="call"></ion-icon>Hotline</a
+            >
+          </li>
+          <li id="emergency-li" style="--i: 0.5s">
+            <a href="emergency.html" id="emergency-link"
+              ><ion-icon name="megaphone"></ion-icon>Emergency</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+</main>
+    <!-- for the icon and linking to js-->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
