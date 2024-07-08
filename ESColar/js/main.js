@@ -219,20 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.log("To Explore:");
 
-      if (toExplore && toExplore.nodes) {
-        console.log("To Explore:");
-        console.log(toExplore.nodes.map((n) => n.node));
-      } else {
-        console.log("To Explore is undefined or does not have nodes property");
-      }
-
-      console.log("Explored:");
-      if (explored && typeof explored[Symbol.iterator] === "function") {
-        console.log([...explored].map((n) => n));
-      } else {
-        console.log("explored is undefined or not iterable");
-      }
-
       console.log("Current:", current);
 
       // If destination node has been reached...
@@ -276,7 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
               // If the current g-score is less than the adjacent node's g-score...
               if (temp < campus_map.gscore.get(adjacency)) {
                 // Current node will become the parent node of the adjacent node.
-                console.log("Test function.")
                 campus_map.parent.set(adjacency, current);
                 console.log(campus_map.parent.get(adjacency));
                 // Compute g-score of adjacent node.
@@ -328,8 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const { latitude, longitude } = nodeInfo; // Extract latitude and longitude correctly
-        
-        console.log(latitude + " " + longitude);
         path.push([latitude, longitude]); // Push the latitude and longitude as an array
         node = campus_map.parent.get(node);
     }
@@ -1326,7 +1309,7 @@ var vertices = [
     map.fitBounds(polyline.getBounds()); // Adjust the map view to fit the polyline
 }
 
-  const path = aStarSearch(campus_map, 'SWI1', 'Oval');
+  const path = aStarSearch(campus_map, 'CH', 'Oval');
   console.log("Path found:", path);
   visualizePath(path);
 });
