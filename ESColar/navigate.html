@@ -32,13 +32,13 @@
 
 <div class="box-above-navbar">
   <div class="navigate-info">
-    <button class="navigateButton" onclick="startNavigation()" style="display: none">START NAVIGATION</button>
+    <button class="navigateButton" onclick="startNavigation()">START NAVIGATION</button>
   </div>
-  <div id="navigate-content" >
+  <div id="navigate-content"  style="display: none">
       <div class="navigate-div">
         <div class="information-div">
           <div class="origin-div">
-            <label for="origin" class="navigate-label">ORIGIN:</label>
+            <label for="origin" class="navigate-label" >ORIGIN:</label>
             <input type="text" id="origin" name="origin" disabled>
           </div>
           <div class="destination-div">
@@ -71,6 +71,7 @@
 
 <!-- Leaflet JS File -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
 <script type="module" src="js/main.js"></script>
 <!-- for the icon and linking to js -->
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -78,10 +79,19 @@
 
 <script>
   function startNavigation() {
-    document.querySelector('.box-above-navbar .navigateButton').style.display = 'none';
-    document.getElementById('navigate-content').style.display = 'block';
-    document.querySelector('.nav-info').style.display = 'none';
-    document.getElementById('map').style.display = 'none';
+    var navigateContent = document.querySelector("#navigate-content");
+    navigateContent.style.display = "block"; // Show the navigation content
+
+    var navigateButton = document.querySelector(".navigate-info");
+    navigateButton.style.display = "none"; // Hide the navigation content
+  }
+  
+  function resetNavigation() {
+    var navigateContent = document.querySelector("#navigate-content");
+    navigateContent.style.display = "none"; // Hide the navigation content
+
+    var navigateButton = document.querySelector(".navigate-info");
+    navigateButton.style.display = "block"; // Hide the navigation content
   }
 </script>
 

@@ -769,3 +769,8 @@ hr {
   display: flex;
   align-items: flex-end;
 }
+
+.box-above-navbar {
+  display: flex;
+  justify-content: center;
+}

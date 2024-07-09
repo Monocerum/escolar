@@ -23,17 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Not included in actual application, defines popup from popup method in Leaflet
   var popup = L.popup();
 
-  // Not included in actual application, shows latitude and longitude of clicked area; assists in development
-  function onMapClick(e) {
-    popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(map);
-  }
-
-  // Activates the onMapClick function upon clicking the map
-  map.on("click", onMapClick);
-
   // Defines mapWidth and mapHeight by dynamically getting the width and height of the map
   const mapWidth = document.getElementById("map").offsetWidth;
   const mapHeight = document.getElementById("map").offsetHeight;
@@ -194,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Heuristic function (h(n))
   function heuristic(node, destination, vertexInfo) {
     // 1 weights ensure that vulnerability level and distance cost are 'balanced' and are treated with equal priority
-    const vw = 1;
+    const vw = 10;
     const dw = 1;
 
     let a = vertexInfo.get(node);
@@ -209,10 +198,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // A* Search Algorithm
   function aStarSearch(campus_map, origin, destination) {
-    console.log("Starting A* search from SWI1 to Oval");
     // Monitor exploration with two lists: priority queue for nodes to explore and set for explored nodes.
     var toExplore = new PriorityQueue();
     var explored = new Set();
+
+    const vw = 10;
+    const dw = 1;
 
     // Initializes the g-score of the origin node to 0, as distance from itself to itself is always 0.
     campus_map.gscore.set(origin, 0);
@@ -248,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Current node is added to list of explored nodes
       explored.add(current);
-      console.log("Current node: ", current);
 
       let adjacencyList = campus_map.adjacent.get(current);
       if (!adjacencyList) {
@@ -256,8 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("No adjacency list found for node:", current);
         continue;
       }
-
-      console.log("Adjacency list:", adjacencyList);
 
       if (campus_map.adjacent.has(current)) {
         // 1
@@ -295,23 +283,20 @@ document.addEventListener("DOMContentLoaded", () => {
               next_node.y,
               2
             ) +
-            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
+            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
           // Only update the path to adjacent node only if it is shorter than previous paths.
           // If the current g-score is less than the adjacent node's g-score...
           if (temp < campus_map.gscore.get(adjacency)) {
             // Current node will become the parent node of the adjacent node.
             campus_map.parent.set(adjacency, current);
-            console.log(campus_map.parent.get(adjacency));
             // Compute g-score of adjacent node.
             campus_map.gscore.set(adjacency, temp);
-            console.log(campus_map.gscore.get(adjacency));
             // Compute the h-score of adjacent node.
             campus_map.hscore.set(
               adjacency,
               heuristic(adjacency, destination, campus_map.vertexInfo)
             );
-            console.log(campus_map.hscore.get(adjacency));
 
             let actual_cost =
               calculateEdge(
@@ -320,25 +305,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 destination_node.x,
                 destination_node.y,
                 2
-              ) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
+              ) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
             let actual_cost_from_origin =
               campus_map.gscore.get(adjacency) + actual_cost;
-
-            console.log(
-              "Distance from Current to Goal: ",
-              calculateEdge(
-                next_node.x,
-                next_node.y,
-                destination_node.x,
-                destination_node.y,
-                2
-              )
-            );
-            console.log(
-              "Adjacency Vulnerability: ",
-              campus_map.vertexInfo.get(adjacency).vulnerabilityLevel
-            );
-            console.log(actual_cost);
 
             // Check if heuristic is admissible.
             if (campus_map.hscore.get(adjacency) > actual_cost) {
@@ -353,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
-              console.log("Heuristic is not admissible! (FSCORE)");
+              console.log("Heuristic is not admissible!");
             }
 
             // If the adjacent node of current node is not yet in the list of nodes to be explored...
@@ -435,14 +404,6 @@ document.addEventListener("DOMContentLoaded", () => {
       latitude: 14.598635,
       longitude: 121.010821,
       vulnerabilityLevel: 1,
-    },
-    {
-      id: "CommunityBuilding",
-      class: "bn",
-      name: "Grandstand",
-      latitude: 14.598094,
-      longitude: 121.012484,
-      vulnerabilityLevel: 1.67,
     },
     {
       id: "B1",
@@ -2471,9 +2432,6 @@ document.addEventListener("DOMContentLoaded", () => {
     campus_map.addEdge(a, b, edge_cost);
   }
 
-  // // Test the main function
-  // console.log(campus_map.printCampusMap());
-
   // A* Search Algorithm
 
   var blueIcon = new L.Icon({
@@ -2482,17 +2440,6 @@ document.addEventListener("DOMContentLoaded", () => {
     shadowUrl:
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
     iconSize: [32, 51],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  var goldIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
-    shadowUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-    iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
@@ -2512,28 +2459,6 @@ document.addEventListener("DOMContentLoaded", () => {
   var greenIcon = new L.Icon({
     iconUrl:
       "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-    shadowUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  var orangeIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png",
-    shadowUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  var yellowIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
     shadowUrl:
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
     iconSize: [25, 41],
@@ -2577,45 +2502,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Markers for nodes
   vertices.forEach((vertice) => {
-    if (vertice.class === "bn") {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: redIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
-    } else if (vertice.class === "en") {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: violetIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
-    } else if (vertice.class === "dn") {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: blueIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
-    } else if (vertice.class === "gn") {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: greenIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
-    } else if (vertice.class === "lin" || vertice.class === "min") {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: greyIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
-    } else {
-      var current = L.marker([vertice.latitude, vertice.longitude], {
-        icon: blackIcon,
-      });
-      current.addTo(map).bindPopup(vertice.name);
+    let icon;
+    switch (vertice.class) {
+        case "bn":
+            icon = redIcon;
+            break;
+        case "en":
+            icon = violetIcon;
+            break;
+        case "dn":
+            icon = blueIcon;
+            break;
+        case "gn":
+            icon = greenIcon;
+            break;
+        case "lin":
+        case "min":
+            icon = greyIcon;
+            break;
+        default:
+            icon = blackIcon;
+            break;
     }
-  });
+
+    var current = L.marker([vertice.latitude, vertice.longitude], { icon: icon })
+        .addTo(map)
+        .bindPopup(vertice.name)
+        .on('click', function () {
+            // Set the origin to the clicked marker's ID or coordinates
+            setOrigin(vertice.id); // Assuming vertice.id is the ID of the marker
+        });
+});
+
+function setOrigin(originId) {
+  console.log('Origin set to:', originId);
+  // Perform actions to update the origin for pathfinding
+  // For example, you can store the originId in a variable
+  originNode = originId;
+}
 
   function visualizePath(path) {
-    var polyline = L.polyline(path, { color: "red" }).addTo(map);
+    var polyline = L.polyline(path, { color: "red", weight: 7 }).addTo(map);
     map.fitBounds(polyline.getBounds()); // Adjust the map view to fit the polyline
   }
 
-  const path = aStarSearch(campus_map, "CH", "Oval");
+  const path = aStarSearch(campus_map, "LAGI7", "Oval");
   console.log("Path found:", path);
   visualizePath(path);
+
+  document.getElementById("origin").value = originNode;
 });
