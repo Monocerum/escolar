@@ -479,8 +479,6 @@ body {
 }
 
 .reset{
-  right: 18px; 
-  bottom: 45px;
   color: #E1E1E1;
   text-align: center;
   font-family: "Inria Serif";
@@ -488,7 +486,6 @@ body {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  position: absolute;
   width: 85px;
   height: 43px;
   flex-shrink: 0;
@@ -727,6 +724,48 @@ hr {
   margin-top: 20px;
 }
 
+#navigate-content {
+  display: flex;
 
+}
 
- 
+.navigate-label {
+  color: #0F4C75; font-size: 17px; font-family: Inria Serif; padding-right: 20px;
+}
+
+#origin {
+  height: 22px; padding: 8px; background: none; border: 1px solid #1B262C; border-radius: 5px;
+}
+
+#navigate-content {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.origin-div, .destination-div {
+  display: flex;
+  align-items: flex-start;
+}
+
+.destination-label {
+  color: #0F4C75; font-size: 17px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word; padding-right: 10px;
+}
+
+#destname {
+  color: #0F4C75; font-size: 13px; font-family: 'Inria Serif', serif; font-weight: 700; word-wrap: break-word; padding-right: 10px;
+}
+
+.navigate-div {
+  display: flex;
+  justify-content: center;
+}
+
+.information-div {
+  padding-right: 5%;
+}
+
+.navigate-btn-container {
+  display: flex;
+  align-items: flex-end;
+}

@@ -30,34 +30,27 @@
 <div id="map"></div>
 
 
-
-<!-- Additional Navigate Content -->
-<div id="navigate-content" style="display: none;">
-  <div class="content" id="navigate">
-    <div style="width: 100%; height: 100%; position: relative">
-      <!-- Label and Input for Origin -->
-      <label for="origin" style="left: 18px; bottom: 75px; position: absolute; color: #0F4C75; font-size: 17px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word; padding-right: 20px;">
-        ORIGIN:
-      </label>
-      <input type="text" id="origin" name="origin" style="left: 90px; bottom: 75px; height: 22px; width: 200px; position: absolute; padding: 8px; background: none; border: 1px solid #1B262C; border-radius: 5px;">
-
-      <!-- Label and Input for Destination -->
-      <label for="destination" style="left: 18px; bottom: 40px; position: absolute; color: #0F4C75; font-size: 17px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word; padding-right: 20px;">
-        DESTINATION:
-      </label>
-
-      <label id="destname" style="left: 134px; bottom: 40px; position: absolute; color: #0F4C75; font-size: 13px; font-family: 'Inria Serif', serif; font-weight: 700; word-wrap: break-word; padding-right: 20px;">
-        PUP Track and Football Oval
-      </label>
-
-      <button class="reset" onclick="resetNavigation()">RESET</button>
-    </div>
-  </div>
-</div>
-
-<!-- Box above navbar -->
 <div class="box-above-navbar">
-  <button class="navigateButton" onclick="startNavigation()">START NAVIGATION</button>
+  <div class="navigate-info">
+    <button class="navigateButton" onclick="startNavigation()" style="display: none">START NAVIGATION</button>
+  </div>
+  <div id="navigate-content" >
+      <div class="navigate-div">
+        <div class="information-div">
+          <div class="origin-div">
+            <label for="origin" class="navigate-label">ORIGIN:</label>
+            <input type="text" id="origin" name="origin" disabled>
+          </div>
+          <div class="destination-div">
+            <label for="destination" class="destination-label">DESTINATION:</label>
+            <label id="destname" >PUP Track and Football Oval</label>
+          </div>
+        </div>
+        <div class="navigate-btn-container">
+          <button class="reset" onclick="resetNavigation()">RESET</button>
+        </div>
+      </div>
+  </div>
 </div>
 
 <!-- for the navigation bar -->

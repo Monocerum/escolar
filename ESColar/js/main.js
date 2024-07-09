@@ -120,7 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const x = (longitude - leftLong) * (width / long);
     const y =
       height -
-      ((mapWidth / 2) * Math.log((1 + Math.sin(radLat)) / (1 - Math.sin(radLat))) -
+      ((mapWidth / 2) *
+        Math.log((1 + Math.sin(radLat)) / (1 - Math.sin(radLat))) -
         offsetY);
 
     return { x, y };
@@ -137,49 +138,59 @@ document.addEventListener("DOMContentLoaded", () => {
     return edge;
   }
 
-
   class PriorityQueue {
     constructor() {
       this.nodes = []; // Initialize nodes as an instance variable
     }
 
+    // Inserts the node and its f-score (priority) to the priority queue.
+    // The node with the lowest priority is sorted to the front of the priority queue,
+    // so, we are always exploring the node with the lowest f-score (estimated value
+    // from the current node to the destination node) first to find the optimal path.
     enqueue(node, priority) {
+      // O(n)
       if (this.isEmpty()) {
-        this.nodes.push([node, priority]);
+        // 1
+        this.nodes.push([node, priority]); // 1
       } else {
-        let added = false;
+        let added = false; // 1
         for (let i = 0; i < this.nodes.length; i++) {
+          // n (length of nodes)
           if (priority < this.nodes[i][1]) {
-            // Checking priorities
-            this.nodes.splice(i, 0, [node, priority]);
+            // n (length of nodes)
+            this.nodes.splice(i, 0, [node, priority]); // n - i
             added = true;
             break;
           }
         }
         if (!added) {
-          this.nodes.push([node, priority]);
+          this.nodes.push([node, priority]); // 1
         }
       }
     }
 
     dequeue() {
-      const value = this.nodes.shift();
+      // O(n)
+      const value = this.nodes.shift(); // nodes have to be shifted n times
       return value ? value[0] : undefined; // Return the element, or undefined if nodes is empty
     }
 
     front() {
+      // O(1)
       return this.nodes[0];
     }
 
     size() {
+      // O(1)
       return this.nodes.length;
     }
 
     isEmpty() {
+      // O(1)
       return this.nodes.length === 0;
     }
   }
-  
+
   // Heuristic function (h(n))
   function heuristic(node, destination, vertexInfo) {
     // 1 weights ensure that vulnerability level and distance cost are 'balanced' and are treated with equal priority
@@ -206,9 +217,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initializes the g-score of the origin node to 0, as distance from itself to itself is always 0.
     campus_map.gscore.set(origin, 0);
     // Initialize the h-score of the origin node to destination node.
-    campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));
-    campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));
-    
+    campus_map.hscore.set(
+      origin,
+      heuristic(origin, destination, campus_map.vertexInfo)
+    );
+    campus_map.fscore.set(
+      origin,
+      campus_map.gscore.get(origin) + campus_map.hscore.get(origin)
+    );
+
     // Enqueue/Add the origin and destination node to nodes to explore.
     toExplore.enqueue(origin, campus_map.fscore.get(origin));
 
@@ -217,87 +234,136 @@ document.addEventListener("DOMContentLoaded", () => {
       // Dequeue the first item in the queue and make it current node to explore.
       let current = toExplore.dequeue();
 
-      console.log("To Explore:");
-
-      console.log("Current:", current);
-
       // If destination node has been reached...
       if (current === destination) {
+        // 1
         // Draw the path found by the algorithm
-        const path = drawPath(campus_map, current, campus_map.vertexInfo.get(current).id);
+        const path = drawPath(
+          campus_map,
+          current,
+          campus_map.vertexInfo.get(current).id
+        );
         return path;
       }
 
       // Current node is added to list of explored nodes
       explored.add(current);
-      console.log("Current node:", current);
+      console.log("Current node: ", current);
 
-    let adjacencyList = campus_map.adjacent.get(current);
-    if (!adjacencyList) {
+      let adjacencyList = campus_map.adjacent.get(current);
+      if (!adjacencyList) {
+        // If adjacent node has no adjacent nodes, skip.
         console.log("No adjacency list found for node:", current);
-        continue; // Skip if no adjacency list found
-    }
+        continue;
+      }
 
-    console.log("Adjacency list:", adjacencyList);
+      console.log("Adjacency list:", adjacencyList);
 
       if (campus_map.adjacent.has(current)) {
+        // 1
         adjacencyList.forEach(({ node: adjacency, edge_cost }) => {
-                console.log("Processing adjacency:", adjacency, "with edge cost:", edge_cost);
-              // If adjacent node has already been explored, skip node and proceed to next.
-              if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
-                console.log("Adjacency has already been explored.")
-                return;
-              }
-              // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
-              
-              
-              let current_node = campus_map.vertexInfo.get(current);
-              let origin_node = campus_map.vertexInfo.get(origin);
-              let next_node = campus_map.vertexInfo.get(adjacency);
-              let destination_node = campus_map.vertexInfo.get(adjacency);
-
-
-              let temp = campus_map.gscore.get(current) + calculateEdge(origin_node.x, origin_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
-    
-              // If the current g-score is less than the adjacent node's g-score...
-              if (temp < campus_map.gscore.get(adjacency)) {
-                // Current node will become the parent node of the adjacent node.
-                campus_map.parent.set(adjacency, current);
-                console.log(campus_map.parent.get(adjacency));
-                // Compute g-score of adjacent node.
-                campus_map.gscore.set(adjacency, temp);
-                console.log(campus_map.gscore.get(adjacency));
-                // Compute the h-score of adjacent node.
-                campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));
-                console.log(campus_map.hscore.get(adjacency));
-
-                let actual_cost = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, destination_node.x, destination_node.y) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
-                console.log(actual_cost);
-    
-                // Check if heuristic is admissible.
-                if (campus_map.hscore.get(adjacency) > actual_cost) {
-                  alert(
-                    "Heuristic is not admissible!"
-                  );
-                }
-
-
-    
-                // Compute the f-score of adjacent node.
-                campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));
-    
-                // If the adjacent node of current node is not yet in the list of nodes to be explored...
-                if (!toExplore.nodes.find((node) => node.node === adjacency)) {
-                  console.log("Test function.")
-                  // Add the adjacent node to list of nodes to explore.
-                  toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));
-                }
-              }
-            }
+          // m (nodes in adjacency list)                                             // n (number of nodes in adjacency list)
+          console.log(
+            "Processing adjacency:",
+            adjacency,
+            "with edge cost:",
+            edge_cost
           );
+          // If adjacent node has already been explored, skip node and proceed to next.
+          if (
+            explored.has(adjacency) ||
+            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3
+          ) {
+            // 1
+            // If adjacency has already been explored or all adjacent nodes are highly vulnerable, skip.
+            console.log("Adjacency has already been explored.");
+            return;
+          }
+
+          let current_node = campus_map.vertexInfo.get(current);
+          let origin_node = campus_map.vertexInfo.get(origin);
+          let next_node = campus_map.vertexInfo.get(adjacency);
+          let destination_node = campus_map.vertexInfo.get(destination);
+
+          // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
+          let temp =
+            campus_map.gscore.get(current) +
+            calculateEdge(
+              current_node.x,
+              current_node.y,
+              next_node.x,
+              next_node.y,
+              2
+            ) +
+            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
+
+          // Only update the path to adjacent node only if it is shorter than previous paths.
+          // If the current g-score is less than the adjacent node's g-score...
+          if (temp < campus_map.gscore.get(adjacency)) {
+            // Current node will become the parent node of the adjacent node.
+            campus_map.parent.set(adjacency, current);
+            console.log(campus_map.parent.get(adjacency));
+            // Compute g-score of adjacent node.
+            campus_map.gscore.set(adjacency, temp);
+            console.log(campus_map.gscore.get(adjacency));
+            // Compute the h-score of adjacent node.
+            campus_map.hscore.set(
+              adjacency,
+              heuristic(adjacency, destination, campus_map.vertexInfo)
+            );
+            console.log(campus_map.hscore.get(adjacency));
+
+            let actual_cost =
+              calculateEdge(
+                next_node.x,
+                next_node.y,
+                destination_node.x,
+                destination_node.y,
+                2
+              ) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel;
+            let actual_cost_from_origin =
+              campus_map.gscore.get(adjacency) + actual_cost;
+
+            console.log(
+              "Distance from Current to Goal: ",
+              calculateEdge(
+                next_node.x,
+                next_node.y,
+                destination_node.x,
+                destination_node.y,
+                2
+              )
+            );
+            console.log(
+              "Adjacency Vulnerability: ",
+              campus_map.vertexInfo.get(adjacency).vulnerabilityLevel
+            );
+            console.log(actual_cost);
+
+            // Check if heuristic is admissible.
+            if (campus_map.hscore.get(adjacency) > actual_cost) {
+              console.log("Heuristic is not admissible!");
+            }
+
+            // Compute the f-score of adjacent node.
+            campus_map.fscore.set(
+              adjacency,
+              campus_map.gscore.get(adjacency) +
+                campus_map.hscore.get(adjacency)
+            );
+
+            if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
+              console.log("Heuristic is not admissible! (FSCORE)");
+            }
+
+            // If the adjacent node of current node is not yet in the list of nodes to be explored...
+            if (!toExplore.nodes.find((node) => node.node === adjacency)) {
+              // Add the adjacent node to list of nodes to explore.
+              toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));
+            }
+          }
+        });
       }
-      // For all nodes adjacent to each current node...
-      
     }
 
     return [];
@@ -307,17 +373,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let path = [];
     while (node) {
       const nodeInfo = campus_map.vertexInfo.get(node);
-        if (!nodeInfo) {
-            console.error(`No vertex info found for node ID: ${node}`);
-            break;
-        }
+      if (!nodeInfo) {
+        console.error(`No vertex info found for node ID: ${node}`);
+        break;
+      }
 
-        const { latitude, longitude } = nodeInfo; // Extract latitude and longitude correctly
-        path.push([latitude, longitude]); // Push the latitude and longitude as an array
-        node = campus_map.parent.get(node);
+      const { latitude, longitude } = nodeInfo; // Extract latitude and longitude correctly
+      path.push([latitude, longitude]); // Push the latitude and longitude as an array
+      node = campus_map.parent.get(node);
     }
     return path.reverse(); // Reverse the path to start from the origin
-}
+  }
 
   // Initializes left longitude, right longitude, bottom latitude
   const leftLong = 121.0082;
@@ -328,242 +394,1482 @@ document.addEventListener("DOMContentLoaded", () => {
   var campus_map = new Campus(186);
 
   // Vertices
-// Vertices
-var vertices = [
-  {id: 'Oval', class: "dn", name: "Oval", latitude: 14.598115, longitude: 121.012039, vulnerabilityLevel: 1},  // Buildings / Areas
-  {id: 'Grandstand', class: "bn", name: "Grandstand", latitude: 14.598021, longitude: 121.011524, vulnerabilityLevel: 1.67},
-  {id: 'CommunityBuilding', class: "bn", name: "Community Building", latitude: 14.598094, longitude: 121.012484, vulnerabilityLevel: 1.67},
-  {id: 'InfoCenter', class: "bn", name: "Information Center", latitude: 14.599077, longitude: 121.011583, vulnerabilityLevel: 1.33},
-  {id: 'BCourt', class: "bn", name: "Court", latitude: 14.598635, longitude: 121.010821, vulnerabilityLevel: 1},
-  {id: 'CommunityBuilding', class: "bn", name: "Grandstand", latitude: 14.598094, longitude: 121.012484, vulnerabilityLevel: 1.67},
-  {id: 'B1', class: "bn", name: "Building 1", latitude: 14.599585, longitude: 121.011070, vulnerabilityLevel: 1},
-  {id: 'Gymnasium', class: "bn", name: "PUP Gymnasium", latitude: 14.599237, longitude: 121.010743, vulnerabilityLevel: 1.33},
-  {id: 'Pool', class: "bn", name: "Swimming Pool Area", latitude: 14.5989, longitude: 121.010211, vulnerabilityLevel: 1.67},
-  {id: 'Souvenir', class: "bn", name: "PUP Souvenir Shop", latitude: 14.598428, longitude: 121.011235, vulnerabilityLevel: 1},
-  {id: 'AMShrine', class: "bn", name: "Apolinario Mabini Shrine", latitude: 14.598195, longitude: 121.011151, vulnerabilityLevel: 1.67},
-  {id: 'AMMuseum', class: "bn", name: "Apolinario Mabini Museum", latitude: 14.597905, longitude: 121.01122, vulnerabilityLevel: 1.67},
-  {id: 'PE', class: "bn", name: "PE Building", latitude: 14.598451, longitude: 121.010134, vulnerabilityLevel: 1.67},
-  {id: 'TahananAlumni', class: "bn", name: "Tahanan ng Alumni", latitude: 14.598507, longitude: 121.010171, vulnerabilityLevel: 2},
-  {id: 'B2', class: "bn", name: "Building 2", latitude: 14.598326, longitude: 121.009626, vulnerabilityLevel: 1.67},
-  {id: 'MT', class: "bn", name: "Millenium Tower", latitude: 14.597809, longitude: 121.009356, vulnerabilityLevel: 1.67},
-  {id: 'LaboratoryHS', class: "bn", name: "PUP Laboratory High School", latitude: 14.597237, longitude: 121.009122, vulnerabilityLevel: 2},
-  {id: 'PBMO', class: "bn", name: "Property Building and Motorpool Office", latitude: 14.597385, longitude: 121.00857, vulnerabilityLevel: 1.67},
-  {id: 'PO', class: "bn", name: "Printing Office", latitude: 14.597303, longitude: 121.008731, vulnevulnerabilityLevelrability: 1.67},
-  {id: 'SB', class: "bn", name: "Sampaguita Building", latitude: 14.596827, longitude: 121.009862, vulnerabilityLevel: 1.67},
-  {id: 'PS', class: "bn", name: "PUP Pumping Station", latitude: 14.596573, longitude: 121.010136, vulnerability: 1.67},
-  {id: 'NALRC', class: "bn", name: "Ninoy Aquino Learning Resource Center", latitude: 14.597884, longitude: 121.009761, vulnerabilityLevel: 2.33},
-  {id: 'PK', class: "bn", name: "PUP Kasarianlan", latitude: 14.597123, longitude: 121.009754, vulnerabilityLevel: 2},
-  {id: 'SC', class: "bn", name: "Student Canteen", latitude: 14.596962, longitude: 121.009806, vulnerabilityLevel: 2},
-  {id: 'MBMD', class: "bn", name: "Main Building Main Dome", latitude: 14.596993, longitude: 121.010778, vulnerabilityLevel: 2.67},
-  {id: 'MBWW', class: "bn", name: "Main Building West Wing", latitude: 14.596908, longitude: 121.010397, vulnerabilityLevel: 2.67},
-  {id: 'MBEW', class: "bn", name: "Main Building East Wing", latitude: 14.596726, longitude: 121.011082, vulnerabilityLevel: 2.67},
-  {id: 'MBNW', class: "bn", name: "Main Building North Wing", latitude: 14.597362, longitude: 121.010881, vulnerabilityLevel: 2.67},
-  {id: 'MBSW', class: "bn", name: "Main Building South Wing", latitude: 14.596545, longitude: 121.010663, vulnerabilityLevel: 2.67},
-  {id: 'CH', class: "bn", name: "Interfaith Ecumenical Chapel", latitude: 14.597136, longitude: 121.011442, vulnerabilityLevel: 2}, // Intersection around PUP Chapel, near East Wing
-  {id: 'NFSB', class: "bn", name: "Nutrition and Food Science Building", latitude: 14.596877, longitude: 121.011693, vulnerabilityLevel: 1.67}, 
-  {id: 'CDM', class: "bn", name: "Campus Development and Maintenance", latitude: 14.596368, longitude: 121.011199, vulnerabilityLevel: 1.67},
+  // Vertices
+  var vertices = [
+    {
+      id: "Oval",
+      class: "dn",
+      name: "Oval",
+      latitude: 14.598115,
+      longitude: 121.012039,
+      vulnerabilityLevel: 1,
+    }, // Buildings / Areas
+    {
+      id: "Grandstand",
+      class: "bn",
+      name: "Grandstand",
+      latitude: 14.598021,
+      longitude: 121.011524,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "CommunityBuilding",
+      class: "bn",
+      name: "Community Building",
+      latitude: 14.598094,
+      longitude: 121.012484,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "InfoCenter",
+      class: "bn",
+      name: "Information Center",
+      latitude: 14.599077,
+      longitude: 121.011583,
+      vulnerabilityLevel: 1.33,
+    },
+    {
+      id: "BCourt",
+      class: "bn",
+      name: "Court",
+      latitude: 14.598635,
+      longitude: 121.010821,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "CommunityBuilding",
+      class: "bn",
+      name: "Grandstand",
+      latitude: 14.598094,
+      longitude: 121.012484,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "B1",
+      class: "bn",
+      name: "Building 1",
+      latitude: 14.599585,
+      longitude: 121.01107,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "Gymnasium",
+      class: "bn",
+      name: "PUP Gymnasium",
+      latitude: 14.599237,
+      longitude: 121.010743,
+      vulnerabilityLevel: 1.33,
+    },
+    {
+      id: "Pool",
+      class: "bn",
+      name: "Swimming Pool Area",
+      latitude: 14.5989,
+      longitude: 121.010211,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "Souvenir",
+      class: "bn",
+      name: "PUP Souvenir Shop",
+      latitude: 14.598428,
+      longitude: 121.011235,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "AMShrine",
+      class: "bn",
+      name: "Apolinario Mabini Shrine",
+      latitude: 14.598195,
+      longitude: 121.011151,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "AMMuseum",
+      class: "bn",
+      name: "Apolinario Mabini Museum",
+      latitude: 14.597905,
+      longitude: 121.01122,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "PE",
+      class: "bn",
+      name: "PE Building",
+      latitude: 14.598451,
+      longitude: 121.010134,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "TahananAlumni",
+      class: "bn",
+      name: "Tahanan ng Alumni",
+      latitude: 14.598507,
+      longitude: 121.010171,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "B2",
+      class: "bn",
+      name: "Building 2",
+      latitude: 14.598326,
+      longitude: 121.009626,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "MT",
+      class: "bn",
+      name: "Millenium Tower",
+      latitude: 14.597809,
+      longitude: 121.009356,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "LaboratoryHS",
+      class: "bn",
+      name: "PUP Laboratory High School",
+      latitude: 14.597237,
+      longitude: 121.009122,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "PBMO",
+      class: "bn",
+      name: "Property Building and Motorpool Office",
+      latitude: 14.597385,
+      longitude: 121.00857,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "PO",
+      class: "bn",
+      name: "Printing Office",
+      latitude: 14.597303,
+      longitude: 121.008731,
+      vulnevulnerabilityLevelrability: 1.67,
+    },
+    {
+      id: "SB",
+      class: "bn",
+      name: "Sampaguita Building",
+      latitude: 14.596827,
+      longitude: 121.009862,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "PS",
+      class: "bn",
+      name: "PUP Pumping Station",
+      latitude: 14.596573,
+      longitude: 121.010136,
+      vulnerability: 1.67,
+    },
+    {
+      id: "NALRC",
+      class: "bn",
+      name: "Ninoy Aquino Learning Resource Center",
+      latitude: 14.597884,
+      longitude: 121.009761,
+      vulnerabilityLevel: 2.33,
+    },
+    {
+      id: "PK",
+      class: "bn",
+      name: "PUP Kasarianlan",
+      latitude: 14.597123,
+      longitude: 121.009754,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "SC",
+      class: "bn",
+      name: "Student Canteen",
+      latitude: 14.596962,
+      longitude: 121.009806,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "MBMD",
+      class: "bn",
+      name: "Main Building Main Dome",
+      latitude: 14.596993,
+      longitude: 121.010778,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MBWW",
+      class: "bn",
+      name: "Main Building West Wing",
+      latitude: 14.596908,
+      longitude: 121.010397,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MBEW",
+      class: "bn",
+      name: "Main Building East Wing",
+      latitude: 14.596726,
+      longitude: 121.011082,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MBNW",
+      class: "bn",
+      name: "Main Building North Wing",
+      latitude: 14.597362,
+      longitude: 121.010881,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MBSW",
+      class: "bn",
+      name: "Main Building South Wing",
+      latitude: 14.596545,
+      longitude: 121.010663,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "CH",
+      class: "bn",
+      name: "Interfaith Ecumenical Chapel",
+      latitude: 14.597136,
+      longitude: 121.011442,
+      vulnerabilityLevel: 2,
+    }, // Intersection around PUP Chapel, near East Wing
+    {
+      id: "NFSB",
+      class: "bn",
+      name: "Nutrition and Food Science Building",
+      latitude: 14.596877,
+      longitude: 121.011693,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "CDM",
+      class: "bn",
+      name: "Campus Development and Maintenance",
+      latitude: 14.596368,
+      longitude: 121.011199,
+      vulnerabilityLevel: 1.67,
+    },
 
-  // Exits
-  {id: 'OvalE1', class: "en", name: "Oval Exit/Entrance 1", latitude: 14.598949, longitude: 121.011719, vulnerabilityLevel: 1},
-  {id: 'OvalE2', class: "en", name: "Oval Exit/Entrance 2", latitude: 14.597432, longitude: 121.011698, vulnerabilityLevel: 1},
-  {id: 'B1E', class: "en", name: "B1 Exit", latitude: 14.599458, longitude: 121.011202, vulnerabilityLevel: 1.67},
-  {id: 'GE1', class: "en", name: "Gymnasium Exit 1", latitude: 14.599438, longitude: 121.010976, vulnerabilityLevel: 1.67},
-  {id: 'GE2', class: "en", name: "Gymnasium Exit 2", latitude: 14.599181, longitude: 121.010991, vulnerabilityLevel: 1.67},
-  {id: 'GE3', class: "en", name: "Gymnasium Exit 3", latitude: 14.598992, longitude: 121.010778, vulnerabilityLevel: 1.67},
-  {id: 'AMSE', class: "en", name: "Shrine Exit", latitude: 14.598091, longitude: 121.01112, vulnerabilityLevel: 1.67},
-  {id: 'AMME', class: "en", name: "Museum Exit", latitude: 14.597875, longitude: 121.01118, vulnerabilityLevel: 1.67},
-  {id: 'AME', class: "en", name: "Apolinario Mabini Museum Exit", latitude: 14.597942, longitude: 121.011037, vulnerabilityLevel: 2},
-  {id: 'SE', class: "en", name: "Swimming Pool Exit", latitude: 14.598515, longitude: 121.0102777, vulnerabilityLevel: 2},
+    // Exits
+    {
+      id: "OvalE1",
+      class: "en",
+      name: "Oval Exit/Entrance 1",
+      latitude: 14.598949,
+      longitude: 121.011719,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "OvalE2",
+      class: "en",
+      name: "Oval Exit/Entrance 2",
+      latitude: 14.597432,
+      longitude: 121.011698,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "B1E",
+      class: "en",
+      name: "B1 Exit",
+      latitude: 14.599458,
+      longitude: 121.011202,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "GE1",
+      class: "en",
+      name: "Gymnasium Exit 1",
+      latitude: 14.599438,
+      longitude: 121.010976,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "GE2",
+      class: "en",
+      name: "Gymnasium Exit 2",
+      latitude: 14.599181,
+      longitude: 121.010991,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "GE3",
+      class: "en",
+      name: "Gymnasium Exit 3",
+      latitude: 14.598992,
+      longitude: 121.010778,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "AMSE",
+      class: "en",
+      name: "Shrine Exit",
+      latitude: 14.598091,
+      longitude: 121.01112,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "AMME",
+      class: "en",
+      name: "Museum Exit",
+      latitude: 14.597875,
+      longitude: 121.01118,
+      vulnerabilityLevel: 1.67,
+    },
+    {
+      id: "AME",
+      class: "en",
+      name: "Apolinario Mabini Museum Exit",
+      latitude: 14.597942,
+      longitude: 121.011037,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "SE",
+      class: "en",
+      name: "Swimming Pool Exit",
+      latitude: 14.598515,
+      longitude: 121.0102777,
+      vulnerabilityLevel: 2,
+    },
 
-  {id: 'LAGE1', class: "en", name: "Lagoon Exit 1", latitude: 14.597946, longitude: 121.010655, vulnerabilityLevel: 1.5},
-  {id: 'LAGE2', class: "en", name: "Lagoon Exit 2", latitude: 14.597332, longitude: 121.010008, vulnerabilityLevel: 1.5},
+    {
+      id: "LAGE1",
+      class: "en",
+      name: "Lagoon Exit 1",
+      latitude: 14.597946,
+      longitude: 121.010655,
+      vulnerabilityLevel: 1.5,
+    },
+    {
+      id: "LAGE2",
+      class: "en",
+      name: "Lagoon Exit 2",
+      latitude: 14.597332,
+      longitude: 121.010008,
+      vulnerabilityLevel: 1.5,
+    },
 
-  {id: 'NALRCE', class: "en", name: "Ninoy Aquino Learning Resource Center Exit", latitude: 14.597726, longitude: 121.009692, vulnerabilityLevel: 2.33},
-  
-  {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878, vulnerabilityLevel: 2},
-  {id: 'SCE', class: "en", name: "Student Canteen Exit", latitude: 14.59699, longitude: 121.009926, vulnerabilityLevel: 2},
-  {id: 'PKE', class: "en", name: "PUP Kasarianlan Exit", latitude: 14.597168, longitude: 121.009878, vulnerabilityLevel: 2},
+    {
+      id: "NALRCE",
+      class: "en",
+      name: "Ninoy Aquino Learning Resource Center Exit",
+      latitude: 14.597726,
+      longitude: 121.009692,
+      vulnerabilityLevel: 2.33,
+    },
 
-  {id: 'LHSE1', class: "en", name: "Laboratory High School Exit 1", latitude: 14.597524, longitude: 121.008955, vulnerabilityLevel: 2},
-  {id: 'LHSE2', class: "en", name: "Laboratory High School Exit 2", latitude: 14.597394, longitude: 121.009122, vulnerabilityLevel: 2},
-  {id: 'LHSE3', class: "en", name: "Laboratory High School Exit 3", latitude: 14.597344, longitude: 121.009164, vulnerabilityLevel: 2},
-  {id: 'LHSE4', class: "en", name: "Laboratory High School Exit 4", latitude: 14.59738, longitude: 121.009305, vulnerabilityLevel: 2},
-  {id: 'LHSE5', class: "en", name: "Laboratory High School Exit 5", latitude: 14.597173, longitude: 121.009289, vulnerabilityLevel: 2},
+    {
+      id: "PKE",
+      class: "en",
+      name: "PUP Kasarianlan Exit",
+      latitude: 14.597168,
+      longitude: 121.009878,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "SCE",
+      class: "en",
+      name: "Student Canteen Exit",
+      latitude: 14.59699,
+      longitude: 121.009926,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "PKE",
+      class: "en",
+      name: "PUP Kasarianlan Exit",
+      latitude: 14.597168,
+      longitude: 121.009878,
+      vulnerabilityLevel: 2,
+    },
 
-  {id: 'MDE1', class: "en", name: "Main Dome Exit 1", latitude: 14.597148, longitude: 121.010641, vulnerabilityLevel: 2.67},
-  {id: 'MDE2', class: "en", name: "Main Dome Exit 2", latitude: 14.597024, longitude: 121.010981, vulnerabilityLevel: 2.67},
+    {
+      id: "LHSE1",
+      class: "en",
+      name: "Laboratory High School Exit 1",
+      latitude: 14.597524,
+      longitude: 121.008955,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "LHSE2",
+      class: "en",
+      name: "Laboratory High School Exit 2",
+      latitude: 14.597394,
+      longitude: 121.009122,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "LHSE3",
+      class: "en",
+      name: "Laboratory High School Exit 3",
+      latitude: 14.597344,
+      longitude: 121.009164,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "LHSE4",
+      class: "en",
+      name: "Laboratory High School Exit 4",
+      latitude: 14.59738,
+      longitude: 121.009305,
+      vulnerabilityLevel: 2,
+    },
+    {
+      id: "LHSE5",
+      class: "en",
+      name: "Laboratory High School Exit 5",
+      latitude: 14.597173,
+      longitude: 121.009289,
+      vulnerabilityLevel: 2,
+    },
 
-  {id: 'EWE1', class: "en", name: "East Wing Exit 1", latitude: 14.596522, longitude: 121.011301, vulnerabilityLevel: 2.67}, // Exit from MDI7
-  {id: 'EWE2', class: "en", name: "East Wing Exit 2", latitude: 14.596469, longitude: 121.01119, vulnerabilityLevel: 2.67},
-  {id: 'EWE3', class: "en", name: "East Wing Exit 3", latitude: 14.596622, longitude: 121.011352, vulnerabilityLevel: 2.67},
+    {
+      id: "MDE1",
+      class: "en",
+      name: "Main Dome Exit 1",
+      latitude: 14.597148,
+      longitude: 121.010641,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MDE2",
+      class: "en",
+      name: "Main Dome Exit 2",
+      latitude: 14.597024,
+      longitude: 121.010981,
+      vulnerabilityLevel: 2.67,
+    },
 
-  {id: 'SWE1', class: "en", name: "South Wing Exit 1", latitude: 14.596476, longitude: 121.01038, vulnerabilityLevel: 2.67},
-  {id: 'SWE2', class: "en", name: "South Wing Exit 2", latitude: 14.596351, longitude: 121.010872, vulnerabilityLevel: 2.67},
+    {
+      id: "EWE1",
+      class: "en",
+      name: "East Wing Exit 1",
+      latitude: 14.596522,
+      longitude: 121.011301,
+      vulnerabilityLevel: 2.67,
+    }, // Exit from MDI7
+    {
+      id: "EWE2",
+      class: "en",
+      name: "East Wing Exit 2",
+      latitude: 14.596469,
+      longitude: 121.01119,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "EWE3",
+      class: "en",
+      name: "East Wing Exit 3",
+      latitude: 14.596622,
+      longitude: 121.011352,
+      vulnerabilityLevel: 2.67,
+    },
 
-  {id: 'WWE1', class: "en", name: "West Wing Exit 1", latitude: 14.596827, longitude: 121.0101, vulnerabilityLevel: 2.67},
-  {id: 'WWE2', class: "en", name: "West Wing Exit 2", latitude: 14.596936, longitude: 121.010114, vulnerabilityLevel: 2.67},
-  {id: 'WWE3', class: "en", name: "West Wing Exit 3", latitude: 14.596734, longitude: 121.010175, vulnerabilityLevel: 2.67},
+    {
+      id: "SWE1",
+      class: "en",
+      name: "South Wing Exit 1",
+      latitude: 14.596476,
+      longitude: 121.01038,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWE2",
+      class: "en",
+      name: "South Wing Exit 2",
+      latitude: 14.596351,
+      longitude: 121.010872,
+      vulnerabilityLevel: 2.67,
+    },
 
-  {id: 'NWE1', class: "en", name: "North Wing Exit 1", latitude: 14.597659, longitude: 121.010951, vulnerabilityLevel: 3},
-  {id: 'NWE2', class: "en", name: "North Wing Exit 2", latitude: 14.597658, longitude: 121.010845, vulnerabilityLevel: 3},
-  {id: 'NWE3', class: "en", name: "North Wing Exit 3", latitude: 14.597618, longitude: 121.011047, vulnerabilityLevel: 3},
+    {
+      id: "WWE1",
+      class: "en",
+      name: "West Wing Exit 1",
+      latitude: 14.596827,
+      longitude: 121.0101,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "WWE2",
+      class: "en",
+      name: "West Wing Exit 2",
+      latitude: 14.596936,
+      longitude: 121.010114,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "WWE3",
+      class: "en",
+      name: "West Wing Exit 3",
+      latitude: 14.596734,
+      longitude: 121.010175,
+      vulnerabilityLevel: 2.67,
+    },
 
-  // Gates
-  {id: 'MainGate', class: "gn", name: "Main Gate", latitude: 14.599127, longitude: 121.011823, vulnerabilityLevel: 1.5},
-  {id: 'Gate2', class: "gn", name: "Gate 2", latitude: 14.5995, longitude: 121.011406, vulnerabilityLevel: 1.5},
+    {
+      id: "NWE1",
+      class: "en",
+      name: "North Wing Exit 1",
+      latitude: 14.597659,
+      longitude: 121.010951,
+      vulnerabilityLevel: 3,
+    },
+    {
+      id: "NWE2",
+      class: "en",
+      name: "North Wing Exit 2",
+      latitude: 14.597658,
+      longitude: 121.010845,
+      vulnerabilityLevel: 3,
+    },
+    {
+      id: "NWE3",
+      class: "en",
+      name: "North Wing Exit 3",
+      latitude: 14.597618,
+      longitude: 121.011047,
+      vulnerabilityLevel: 3,
+    },
 
-  // Paths / Intersections
-  {id: 'I1', class: "in", name: "Intersection 1", latitude: 14.598854, longitude: 121.011538, vulnerabilityLevel: 1}, // Intersection to Gym and main path, near entrance
-  {id: 'I2', class: "in", name: "Intersection 2", latitude: 14.598218, longitude: 121.011368, vulnerabilityLevel: 1}, // Intersection to PUP Chapel
-  {id: 'I3', class: "in", name: "Intersection 3", latitude: 14.59786, longitude: 121.011368, vulnerabilityLevel: 1}, // Intersection to PUP Chapel
-  
-  // Main Building: North Wing (Under Construction)
-  {id: 'NWI1', name: "North Wing Intersection 1", latitude: 14.597159, longitude: 121.010624, vulnerabilityLevel: 2}, // Intersection around Lagoon
-  {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789, vulnerabilityLevel: 2}, // Intersection around Lagoon
-  {id: 'NWI2', name: "North Wing Intersection 2", latitude: 14.597694, longitude: 121.010789, vulnerabilityLevel: 2},
+    // Gates
+    {
+      id: "MainGate",
+      class: "gn",
+      name: "Main Gate",
+      latitude: 14.599127,
+      longitude: 121.011823,
+      vulnerabilityLevel: 1.5,
+    },
+    {
+      id: "Gate2",
+      class: "gn",
+      name: "Gate 2",
+      latitude: 14.5995,
+      longitude: 121.011406,
+      vulnerabilityLevel: 1.5,
+    },
 
-  // To Main Building
-  {id: 'TMBI1', name: "Intersection to Main Building 1", latitude: 14.597119, longitude: 121.010298, vulnerabilityLevel: 1.5}, // Intersection near Auditorium from I25
-  {id: 'TMBI2', name: "Intersection to Main Building 2", latitude: 14.597074, longitude: 121.010397, vulnerabilityLevel: 1.5}, // Intersection near Auditorium from I24
-  {id: 'TMBI3', name: "Intersection to Main Building 3", latitude: 14.597243, longitude: 121.010119, vulnerabilityLevel: 1.5}, // Intersection near Auditorium
+    // Paths / Intersections
+    {
+      id: "I1",
+      class: "in",
+      name: "Intersection 1",
+      latitude: 14.598854,
+      longitude: 121.011538,
+      vulnerabilityLevel: 1,
+    }, // Intersection to Gym and main path, near entrance
+    {
+      id: "I2",
+      class: "in",
+      name: "Intersection 2",
+      latitude: 14.598218,
+      longitude: 121.011368,
+      vulnerabilityLevel: 1,
+    }, // Intersection to PUP Chapel
+    {
+      id: "I3",
+      class: "in",
+      name: "Intersection 3",
+      latitude: 14.59786,
+      longitude: 121.011368,
+      vulnerabilityLevel: 1,
+    }, // Intersection to PUP Chapel
 
-  // Chapel
-  {id: 'CHI1', name: "Chapel Intersection 1", latitude: 14.597427, longitude: 121.011589, vulnerabilityLevel: 1}, // Intersection to PUP Chapel
-  {id: 'CHI2', name: "Chapel Intersection 2", latitude: 14.597342, longitude: 121.011693, vulnerabilityLevel: 1}, // Intersection around PUP Chapel
-  {id: 'CHI3', name: "Chapel Intersection 3", latitude: 14.597206, longitude: 121.011758, vulnerabilityLevel: 1}, // Intersection around PUP Chapel
-  {id: 'CHI4', name: "Chapel Intersection 4", latitude: 14.59698, longitude: 121.011718, vulnerabilityLevel: 1}, // Intersection around PUP Chapel
-  {id: 'CHI5', name: "Chapel Intersection 5", latitude: 14.59684, longitude: 121.011536, vulnerabilityLevel: 1}, // Intersection around PUP Chapel
-  {id: 'CHI6', name: "Chapel Intersection 6", latitude: 14.596846, longitude: 121.011302, vulnerabilityLevel: 1.5}, // Intersection around PUP Chapel, to around East Wing
-  {id: 'CHI7', name: "Chapel Intersection 7", latitude: 14.597053, longitude: 121.011109, vulnerabilityLevel: 1.5}, // Intersection around PUP Chapel, near Main Dome
-  {id: 'CHI8', name: "Chapel Intersection 8", latitude: 14.597316, longitude: 121.011151, vulnerabilityLevel: 1.5}, // Intersection around PUP Chapel, near North Wing
-  {id: 'CHI9', name: "Chapel Intersection 9", latitude: 14.59745, longitude: 121.011341, vulnerabilityLevel: 1.5}, // Intersection around PUP Chapel, near Main Dome
-  {id: 'CHI10', name: "Chapel Intersection 10", latitude: 14.596739, longitude: 121.011408, vulnerabilityLevel: 1.5}, // Intersection around PUP Chapel, near East Wing
+    // Main Building: North Wing (Under Construction)
+    {
+      id: "NWI1",
+      name: "North Wing Intersection 1",
+      latitude: 14.597159,
+      longitude: 121.010624,
+      vulnerabilityLevel: 2,
+    }, // Intersection around Lagoon
+    {
+      id: "NWI2",
+      name: "North Wing Intersection 2",
+      latitude: 14.597694,
+      longitude: 121.010789,
+      vulnerabilityLevel: 2,
+    }, // Intersection around Lagoon
+    {
+      id: "NWI2",
+      name: "North Wing Intersection 2",
+      latitude: 14.597694,
+      longitude: 121.010789,
+      vulnerabilityLevel: 2,
+    },
 
-  // Main Building: Main Dome
-  {id: 'MDI1', class: "min", name: "Main Dome Intersection 1", latitude: 14.59689, longitude: 121.010749, vulnerabilityLevel: 2.67},
-  {id: 'MDI2', class: "min", name: "Main Dome Intersection 2", latitude: 14.596982, longitude: 121.01068, vulnerabilityLevel: 2.67},
-  {id: 'MDI3', class: "min", name: "Main Dome Intersection 3", latitude: 14.597081, longitude: 121.010709, vulnerabilityLevel: 2.67}, // Intersection to NWI1
-  {id: 'MDI4', class: "min", name: "Main Dome Intersection 4", latitude: 14.597112, longitude: 121.010809, vulnerabilityLevel: 2.67},
-  {id: 'MDI5', class: "min", name: "Main Dome Intersection 5", latitude: 14.597001, longitude: 121.010895, vulnerabilityLevel: 2.67}, // Intersection to CHI7
-  {id: 'MDI6', class: "min", name: "Main Dome Intersection 6", latitude: 14.596934, longitude: 121.010868, vulnerabilityLevel: 2.67},
+    // To Main Building
+    {
+      id: "TMBI1",
+      name: "Intersection to Main Building 1",
+      latitude: 14.597119,
+      longitude: 121.010298,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection near Auditorium from I25
+    {
+      id: "TMBI2",
+      name: "Intersection to Main Building 2",
+      latitude: 14.597074,
+      longitude: 121.010397,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection near Auditorium from I24
+    {
+      id: "TMBI3",
+      name: "Intersection to Main Building 3",
+      latitude: 14.597243,
+      longitude: 121.010119,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection near Auditorium
 
-  // Main Building: East Wing
-  {id: 'EWI1', name: "East Wing Intersection 1", latitude: 14.596641, longitude: 121.011419, vulnerabilityLevel: 2.67}, // Intersection near East Wing
-  {id: 'EWI2', name: "East Wing Intersection 2", latitude: 14.596572, longitude: 121.011379, vulnerabilityLevel: 2.67}, // Intersection near East Wing
-  
-  // Main Building: South Wing
-  {id: 'SWI1', name: "South Wing Intersection 1", latitude: 14.596248, longitude: 121.011029, vulnerabilityLevel: 2.67}, // Intersection between South and East Wing
-  {id: 'SWI2', name: "South Wing Intersection 2", latitude: 14.596443, longitude: 121.010309, vulnerabilityLevel: 2.67}, // Intersection southwest corner of South Wing
-  {id: 'SWI3', name: "South Wing Intersection 3", latitude: 14.596589, longitude: 121.010247, vulnerabilityLevel: 2.67}, // Intersection between South and West Wing
-  {id: 'SWI4', class: "min", name: "South Wing Intersection 4", latitude: 14.596523, longitude: 121.010396, vulnerabilityLevel: 2.67},
-  {id: 'SWI5', class: "min", name: "South Wing Intersection 5", latitude: 14.59669, longitude: 121.01044, vulnerabilityLevel: 2.67},
-  {id: 'SWI6', class: "min", name: "South Wing Intersection 6", latitude: 14.596565, longitude: 121.01093, vulnerabilityLevel: 2.67},
-  {id: 'SWI7', class: "min", name: "South Wing Intersection 7", latitude: 14.596402, longitude: 121.010888, vulnerabilityLevel: 2.67},
-  {id: 'SWI8', class: "min", name: "South Wing Intersection 8", latitude: 14.596633, longitude: 121.010689, vulnerabilityLevel: 2.67},
-  {id: 'SWI9', class: "min", name: "South Wing Intersection 9", latitude: 14.596465, longitude: 121.010644, vulnerabilityLevel: 2.67},
+    // Chapel
+    {
+      id: "CHI1",
+      name: "Chapel Intersection 1",
+      latitude: 14.597427,
+      longitude: 121.011589,
+      vulnerabilityLevel: 1,
+    }, // Intersection to PUP Chapel
+    {
+      id: "CHI2",
+      name: "Chapel Intersection 2",
+      latitude: 14.597342,
+      longitude: 121.011693,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Chapel
+    {
+      id: "CHI3",
+      name: "Chapel Intersection 3",
+      latitude: 14.597206,
+      longitude: 121.011758,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Chapel
+    {
+      id: "CHI4",
+      name: "Chapel Intersection 4",
+      latitude: 14.59698,
+      longitude: 121.011718,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Chapel
+    {
+      id: "CHI5",
+      name: "Chapel Intersection 5",
+      latitude: 14.59684,
+      longitude: 121.011536,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Chapel
+    {
+      id: "CHI6",
+      name: "Chapel Intersection 6",
+      latitude: 14.596846,
+      longitude: 121.011302,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection around PUP Chapel, to around East Wing
+    {
+      id: "CHI7",
+      name: "Chapel Intersection 7",
+      latitude: 14.597053,
+      longitude: 121.011109,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection around PUP Chapel, near Main Dome
+    {
+      id: "CHI8",
+      name: "Chapel Intersection 8",
+      latitude: 14.597316,
+      longitude: 121.011151,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection around PUP Chapel, near North Wing
+    {
+      id: "CHI9",
+      name: "Chapel Intersection 9",
+      latitude: 14.59745,
+      longitude: 121.011341,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection around PUP Chapel, near Main Dome
+    {
+      id: "CHI10",
+      name: "Chapel Intersection 10",
+      latitude: 14.596739,
+      longitude: 121.011408,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection around PUP Chapel, near East Wing
 
-  // Main Building: West Wing
-  {id: 'WWI1', name: "West Wing Intersection 1", latitude: 14.59677, longitude: 121.010064, vulnerabilityLevel: 2.67}, // Intersection near West Wing
-  {id: 'WWI2', name: "West Wing Intersection 2", latitude: 14.596958, longitude: 121.010001, vulnerabilityLevel: 2.67}, // Intersection near Student Canteen to PUP Auditorium
-  {id: 'WWI3', name: "West Wing Intersection 3", latitude: 14.597032, longitude: 121.00998, vulnerabilityLevel: 2.67}, // Intersection near Student Canteen to PUP Auditorium
-  
-  // Court Intersection
-  {id: 'CI1', name: "Court Intersection 1", latitude: 14.598488, longitude: 121.010958, vulnerabilityLevel: 1}, // Intersection inside courts 
-  {id: 'CI2', name: "Court Intersection 2", latitude: 14.598787, longitude: 121.011261, vulnerabilityLevel: 1}, // Intersection in Tennis Court
-  
-  // Intersection near Gym
-  {id: 'GI1', name: "Gym Intersection 1", latitude: 14.59881, longitude: 121.01066, vulnerabilityLevel: 2}, // Intersection to Gym
-  {id: 'GI2', name: "Gym Intersection 2", latitude: 14.599128, longitude: 121.010386, vulnerabilityLevel: 2}, // Intersection near Gym
-  {id: 'GI3', name: "Gym Intersection 3", latitude: 14.599252, longitude: 121.011148, vulnerabilityLevel: 2}, // Intersection near Gym
+    // Main Building: Main Dome
+    {
+      id: "MDI1",
+      class: "min",
+      name: "Main Dome Intersection 1",
+      latitude: 14.59689,
+      longitude: 121.010749,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MDI2",
+      class: "min",
+      name: "Main Dome Intersection 2",
+      latitude: 14.596982,
+      longitude: 121.01068,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MDI3",
+      class: "min",
+      name: "Main Dome Intersection 3",
+      latitude: 14.597081,
+      longitude: 121.010709,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection to NWI1
+    {
+      id: "MDI4",
+      class: "min",
+      name: "Main Dome Intersection 4",
+      latitude: 14.597112,
+      longitude: 121.010809,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "MDI5",
+      class: "min",
+      name: "Main Dome Intersection 5",
+      latitude: 14.597001,
+      longitude: 121.010895,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection to CHI7
+    {
+      id: "MDI6",
+      class: "min",
+      name: "Main Dome Intersection 6",
+      latitude: 14.596934,
+      longitude: 121.010868,
+      vulnerabilityLevel: 2.67,
+    },
 
-  // Intersection near PE Building
-  {id: 'PEI1', name: "PE Building Intersection 1", latitude: 14.598391, longitude: 121.010362, vulnerabilityLevel: 2}, // Intersection to PE Building and Swimming Pool
-  {id: 'PEI2', name: "PE Building Intersection 2", latitude: 14.598386, longitude: 121.010231, vulnerabilityLevel: 2}, // Intersection near PE Building
-  {id: 'PEI3', name: "PE Building Intersection 3", latitude: 14.598485, longitude: 121.010338, vulnerabilityLevel: 2}, // Intersection near Swimmming Pool
+    // Main Building: East Wing
+    {
+      id: "EWI1",
+      name: "East Wing Intersection 1",
+      latitude: 14.596641,
+      longitude: 121.011419,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection near East Wing
+    {
+      id: "EWI2",
+      name: "East Wing Intersection 2",
+      latitude: 14.596572,
+      longitude: 121.011379,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection near East Wing
 
-  // Pool
-  {id: 'SPI1', name: "Swimming Pool Intersection 1", latitude: 14.599029, longitude: 121.01044, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'SPI2', name: "Swimming Pool Intersection 2", latitude: 14.598832, longitude: 121.010608, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'SPI3', name: "Swimming Pool Intersection 3", latitude: 14.598532, longitude: 121.010252, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'SPI4', name: "Swimming Pool Intersection 4", latitude: 14.598731, longitude: 121.010074, vulnerabilityLevel: 2}, // Intersection inside Pool Area
+    // Main Building: South Wing
+    {
+      id: "SWI1",
+      name: "South Wing Intersection 1",
+      latitude: 14.596248,
+      longitude: 121.011029,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection between South and East Wing
+    {
+      id: "SWI2",
+      name: "South Wing Intersection 2",
+      latitude: 14.596443,
+      longitude: 121.010309,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection southwest corner of South Wing
+    {
+      id: "SWI3",
+      name: "South Wing Intersection 3",
+      latitude: 14.596589,
+      longitude: 121.010247,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection between South and West Wing
+    {
+      id: "SWI4",
+      class: "min",
+      name: "South Wing Intersection 4",
+      latitude: 14.596523,
+      longitude: 121.010396,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWI5",
+      class: "min",
+      name: "South Wing Intersection 5",
+      latitude: 14.59669,
+      longitude: 121.01044,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWI6",
+      class: "min",
+      name: "South Wing Intersection 6",
+      latitude: 14.596565,
+      longitude: 121.01093,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWI7",
+      class: "min",
+      name: "South Wing Intersection 7",
+      latitude: 14.596402,
+      longitude: 121.010888,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWI8",
+      class: "min",
+      name: "South Wing Intersection 8",
+      latitude: 14.596633,
+      longitude: 121.010689,
+      vulnerabilityLevel: 2.67,
+    },
+    {
+      id: "SWI9",
+      class: "min",
+      name: "South Wing Intersection 9",
+      latitude: 14.596465,
+      longitude: 121.010644,
+      vulnerabilityLevel: 2.67,
+    },
 
-  // PUP Obelisk
-  {id: 'OBL1', name: "Obelisk Intersection 1", latitude: 14.598053, longitude: 121.010771, vulnerabilityLevel: 1}, // Intersection, Lagoon
-  {id: 'OBL2', name: "Obelisk Intersection 2", latitude: 14.598068, longitude: 121.010644, vulnerabilityLevel: 1}, // Intersection around PUP Obelisk
-  {id: 'OBL3', name: "Obelisk Intersection 3", latitude: 14.597988, longitude: 121.010778, vulnerabilityLevel: 1}, // Intersection around PUP Obelisk
-  {id: 'OBL4', name: "Obelisk Intersection 4", latitude: 14.598126, longitude: 121.010929, vulnerabilityLevel: 1}, // Intersection around PUP Obelisk
-  {id: 'OBL5', name: "Obelisk Intersection 5", latitude: 14.598304, longitude: 121.01075, vulnerabilityLevel: 1}, // Intersection around PUP Obelisk
-  {id: 'OBL6', name: "Obelisk Intersection 6", latitude: 14.598231, longitude: 121.010633, vulnerabilityLevel: 1}, // Intersection around PUP Obelisk
-  {id: 'OBL7', name: "Obelisk Intersection 7", latitude: 14.598254, longitude: 121.010892, vulnerabilityLevel: 1.5}, // Intersection near PUP Obelisk
-  {id: 'OBL8', name: "Obelisk Intersection 8", latitude: 14.598265, longitude: 121.010565, vulnerabilityLevel: 1}, // Intersection to PE Building
+    // Main Building: West Wing
+    {
+      id: "WWI1",
+      name: "West Wing Intersection 1",
+      latitude: 14.59677,
+      longitude: 121.010064,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection near West Wing
+    {
+      id: "WWI2",
+      name: "West Wing Intersection 2",
+      latitude: 14.596958,
+      longitude: 121.010001,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection near Student Canteen to PUP Auditorium
+    {
+      id: "WWI3",
+      name: "West Wing Intersection 3",
+      latitude: 14.597032,
+      longitude: 121.00998,
+      vulnerabilityLevel: 2.67,
+    }, // Intersection near Student Canteen to PUP Auditorium
 
-  // lagoon
-  {id: 'LAGI1', class: "lin", name: "Lagoon Intersection 1", latitude: 14.597364, longitude: 121.010034, vulnerabilityLevel: 2.5}, // Intersection, Lagoon
-  {id: 'LAGI2', class: "lin", name: "Lagoon Intersection 2", latitude: 14.597351, longitude: 121.010055, vulnerabilityLevel: 2.5}, // Intersection, Lagoon
-  {id: 'LAGI3', class: "lin", name: "Lagoon Intersection 3", latitude: 14.597257, longitude: 121.010186, vulnerabilityLevel: 2.5}, // Intersection, Lagoon
-  {id: 'LAGI4', class: "lin", name: "Lagoon Intersection 4", latitude: 14.597222, longitude: 121.010239, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI5', class: "lin", name: "Lagoon Intersection 5", latitude: 14.597149, longitude: 121.010378, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI6', class: "lin", name: "Lagoon Intersection 6", latitude: 14.597192, longitude: 121.010541, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI7', class: "lin", name: "Lagoon Intersection 7", latitude: 14.597322, longitude: 121.0106, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI8', class: "lin", name: "Lagoon Intersection 8", latitude: 14.597709, longitude: 121.01071, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI9a', class: "lin", name: "Lagoon Intersection 9A", latitude: 14.597865, longitude: 121.010689, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI9b', class: "lin", name: "Lagoon Intersection 9B", latitude: 14.597924, longitude: 121.010633, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI10', class: "lin", name: "Lagoon Intersection 10", latitude: 14.598001, longitude: 121.010561, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI11', class: "lin", name: "Lagoon Intersection 11", latitude: 14.598132, longitude: 121.010452, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI12', class: "lin", name: "Lagoon Intersection 12", latitude: 14.5981, longitude: 121.01036, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI13', class: "lin", name: "Lagoon Intersection 13", latitude: 14.598052, longitude: 121.010216, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI14', class: "lin", name: "Lagoon Intersection 14", latitude: 14.598018, longitude: 121.010123, vulnerabilityLevel: 1.5}, // Intersection, Lagoon
-  {id: 'LAGI15', class: "lin", name: "Lagoon Intersection 15", latitude: 14.597901, longitude: 121.010073, vulnerabilityLevel: 1.5}, // Intersection, Lagoon
-  {id: 'LAGI16', class: "lin", name: "Lagoon Intersection 16", latitude: 14.597838, longitude: 121.010142, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI17', class: "lin", name: "Lagoon Intersection 17", latitude: 14.597789, longitude: 121.010239, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI18', class: "lin", name: "Lagoon Intersection 18", latitude: 14.597707, longitude: 121.010229, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI19', class: "lin", name: "Lagoon Intersection 19", latitude: 14.597598, longitude: 121.010154, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI20', class: "lin", name: "Lagoon Intersection 20", latitude: 14.597471, longitude: 121.010162, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI21', class: "lin", name: "Lagoon Intersection 21", latitude: 14.597367, longitude: 121.01028, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI22', class: "lin", name: "Lagoon Intersection 22", latitude: 14.597422, longitude: 121.010392, vulnerabilityLevel: 1.5}, // Intersection, Lagoon
-  {id: 'LAGI23', class: "lin", name: "Lagoon Intersection 23", latitude: 14.597354, longitude: 121.010519, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI24', class: "lin", name: "Lagoon Intersection 24", latitude: 14.597371, longitude: 121.01054, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI25', class: "lin", name: "Lagoon Intersection 25", latitude: 14.597362, longitude: 121.010569, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI26', class: "lin", name: "Lagoon Intersection 26", latitude: 14.597336, longitude: 121.010573, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI27', class: "lin", name: "Lagoon Intersection 27", latitude: 14.59751, longitude: 121.010544, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI28', class: "lin", name: "Lagoon Intersection 28", latitude: 14.597683, longitude: 121.010605, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI29', class: "lin", name: "Lagoon Intersection 29", latitude: 14.597706, longitude: 121.010609, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI30', class: "lin", name: "Lagoon Intersection 30", latitude: 14.597727, longitude: 121.010613, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI31', class: "lin", name: "Lagoon Intersection 31", latitude: 14.597763, longitude: 121.010462, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI32', class: "lin", name: "Lagoon Intersection 32", latitude: 14.597644, longitude: 121.010446, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI33', class: "lin", name: "Lagoon Intersection 33", latitude: 14.597726, longitude: 121.010426, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI34', class: "lin", name: "Lagoon Intersection 34", latitude: 14.597846, longitude: 121.010549, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI35', class: "lin", name: "Lagoon Intersection 35", latitude: 14.597883, longitude: 121.010373, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI36', class: "lin", name: "Lagoon Intersection 36", latitude: 14.597951, longitude: 121.010372, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI37', class: "lin", name: "Lagoon Intersection 37", latitude: 14.597927, longitude: 121.010484, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI38', class: "lin", name: "Lagoon Intersection 38", latitude: 14.597988, longitude: 121.01045, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI39', class: "lin", name: "Lagoon Intersection 39", latitude: 14.598011, longitude: 121.010357, vulnerabilityLevel: 2}, // Intersection, Lagoon
-  {id: 'LAGI40', class: "lin", name: "Lagoon Intersection 40", latitude: 14.598044, longitude: 121.0103, vulnerabilityLevel: 2}, // Intersection, Lagoon
+    // Court Intersection
+    {
+      id: "CI1",
+      name: "Court Intersection 1",
+      latitude: 14.598488,
+      longitude: 121.010958,
+      vulnerabilityLevel: 1,
+    }, // Intersection inside courts
+    {
+      id: "CI2",
+      name: "Court Intersection 2",
+      latitude: 14.598787,
+      longitude: 121.011261,
+      vulnerabilityLevel: 1,
+    }, // Intersection in Tennis Court
 
-  // Ninoy Aquino LRC
-  {id: 'NALRCI1', name: "Ninoy Aquino LRC Intersection 1", latitude: 14.597423, longitude: 121.009847, vulnerabilityLevel: 1.5}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI2', name: "Ninoy Aquino LRC Intersection 2", latitude: 14.597647, longitude: 121.009776, vulnerabilityLevel: 2}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI3', name: "Ninoy Aquino LRC Intersection 3", latitude: 14.597744, longitude: 121.009572, vulnerabilityLevel: 2}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI4', name: "Ninoy Aquino LRC Intersection 4", latitude: 14.597665, longitude: 121.009366, vulnerabilityLevel: 1.5}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI5', name: "Ninoy Aquino LRC Intersection 5", latitude: 14.597743, longitude: 121.009183, vulnerabilityLevel: 1}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI6', name: "Ninoy Aquino LRC Intersection 6", latitude: 14.597545, longitude: 121.009604, vulnerabilityLevel: 1}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI7', name: "Ninoy Aquino LRC Intersection 7", latitude: 14.598183, longitude: 121.009381, vulnerabilityLevel: 2}, // Intersection, Ninoy Aquino LRC
-  {id: 'NALRCI8', name: "Ninoy Aquino LRC Intersection 8", latitude: 14.598121, longitude: 121.010128, vulnerabilityLevel: 1}, // Intersection near PE Building
-  {id: 'NALRCI9', name: "Ninoy Aquino LRC Intersection 9", latitude: 14.598246, longitude: 121.010087, vulnerabilityLevel: 2}, // Intersection near PE Building
-  {id: 'NALRCI10', name: "Ninoy Aquino LRC Intersection 10", latitude: 14.598351, longitude: 121.009847, vulnerabilityLevel: 2}, // Intersection near PE Building
-  {id: 'NALRCI11', name: "Ninoy Aquino LRC Intersection 11", latitude: 14.598036, longitude: 121.009696, vulnerabilityLevel: 2}, // Intersection near PE Building
+    // Intersection near Gym
+    {
+      id: "GI1",
+      name: "Gym Intersection 1",
+      latitude: 14.59881,
+      longitude: 121.01066,
+      vulnerabilityLevel: 2,
+    }, // Intersection to Gym
+    {
+      id: "GI2",
+      name: "Gym Intersection 2",
+      latitude: 14.599128,
+      longitude: 121.010386,
+      vulnerabilityLevel: 2,
+    }, // Intersection near Gym
+    {
+      id: "GI3",
+      name: "Gym Intersection 3",
+      latitude: 14.599252,
+      longitude: 121.011148,
+      vulnerabilityLevel: 2,
+    }, // Intersection near Gym
 
-  // Laboratory High School
-  {id: 'LHSI1', name: "LHS Intersection 1", latitude: 14.597097, longitude: 121.009061, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'LHSI2', name: "LHS Intersection 2", latitude: 14.597192, longitude: 121.009399, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'LHSI3', name: "LHS Intersection 3", latitude: 14.597411, longitude: 121.009336, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'LHSI4', name: "LHS Intersection 4", latitude: 14.597366, longitude: 121.009158, vulnerabilityLevel: 2}, // Intersection inside Pool Area
-  {id: 'LHSI5', name: "LHS Intersection 5", latitude: 14.5977, longitude: 121.009061, vulnerabilityLevel: 1}, // Intersection inside Pool Area
+    // Intersection near PE Building
+    {
+      id: "PEI1",
+      name: "PE Building Intersection 1",
+      latitude: 14.598391,
+      longitude: 121.010362,
+      vulnerabilityLevel: 2,
+    }, // Intersection to PE Building and Swimming Pool
+    {
+      id: "PEI2",
+      name: "PE Building Intersection 2",
+      latitude: 14.598386,
+      longitude: 121.010231,
+      vulnerabilityLevel: 2,
+    }, // Intersection near PE Building
+    {
+      id: "PEI3",
+      name: "PE Building Intersection 3",
+      latitude: 14.598485,
+      longitude: 121.010338,
+      vulnerabilityLevel: 2,
+    }, // Intersection near Swimmming Pool
 
-  // Property Building and Motorpool Office
-  {id: 'PBMOI1', name: "PBMO Intersection 1", latitude: 14.597686, longitude: 121.008966, vulnerabilityLevel: 1}, // Intersection to Property Building and Motorpool Office
-  {id: 'PBMOI2', name: "PBMO Intersection 2", latitude: 14.597419, longitude: 121.008734, vulnerabilityLevel: 2}, // Intersection near Property Building and Motorpool Office
-];
+    // Pool
+    {
+      id: "SPI1",
+      name: "Swimming Pool Intersection 1",
+      latitude: 14.599029,
+      longitude: 121.01044,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "SPI2",
+      name: "Swimming Pool Intersection 2",
+      latitude: 14.598832,
+      longitude: 121.010608,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "SPI3",
+      name: "Swimming Pool Intersection 3",
+      latitude: 14.598532,
+      longitude: 121.010252,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "SPI4",
+      name: "Swimming Pool Intersection 4",
+      latitude: 14.598731,
+      longitude: 121.010074,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+
+    // PUP Obelisk
+    {
+      id: "OBL1",
+      name: "Obelisk Intersection 1",
+      latitude: 14.598053,
+      longitude: 121.010771,
+      vulnerabilityLevel: 1,
+    }, // Intersection, Lagoon
+    {
+      id: "OBL2",
+      name: "Obelisk Intersection 2",
+      latitude: 14.598068,
+      longitude: 121.010644,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Obelisk
+    {
+      id: "OBL3",
+      name: "Obelisk Intersection 3",
+      latitude: 14.597988,
+      longitude: 121.010778,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Obelisk
+    {
+      id: "OBL4",
+      name: "Obelisk Intersection 4",
+      latitude: 14.598126,
+      longitude: 121.010929,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Obelisk
+    {
+      id: "OBL5",
+      name: "Obelisk Intersection 5",
+      latitude: 14.598304,
+      longitude: 121.01075,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Obelisk
+    {
+      id: "OBL6",
+      name: "Obelisk Intersection 6",
+      latitude: 14.598231,
+      longitude: 121.010633,
+      vulnerabilityLevel: 1,
+    }, // Intersection around PUP Obelisk
+    {
+      id: "OBL7",
+      name: "Obelisk Intersection 7",
+      latitude: 14.598254,
+      longitude: 121.010892,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection near PUP Obelisk
+    {
+      id: "OBL8",
+      name: "Obelisk Intersection 8",
+      latitude: 14.598265,
+      longitude: 121.010565,
+      vulnerabilityLevel: 1,
+    }, // Intersection to PE Building
+
+    // lagoon
+    {
+      id: "LAGI1",
+      class: "lin",
+      name: "Lagoon Intersection 1",
+      latitude: 14.597364,
+      longitude: 121.010034,
+      vulnerabilityLevel: 2.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI2",
+      class: "lin",
+      name: "Lagoon Intersection 2",
+      latitude: 14.597351,
+      longitude: 121.010055,
+      vulnerabilityLevel: 2.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI3",
+      class: "lin",
+      name: "Lagoon Intersection 3",
+      latitude: 14.597257,
+      longitude: 121.010186,
+      vulnerabilityLevel: 2.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI4",
+      class: "lin",
+      name: "Lagoon Intersection 4",
+      latitude: 14.597222,
+      longitude: 121.010239,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI5",
+      class: "lin",
+      name: "Lagoon Intersection 5",
+      latitude: 14.597149,
+      longitude: 121.010378,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI6",
+      class: "lin",
+      name: "Lagoon Intersection 6",
+      latitude: 14.597192,
+      longitude: 121.010541,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI7",
+      class: "lin",
+      name: "Lagoon Intersection 7",
+      latitude: 14.597322,
+      longitude: 121.0106,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI8",
+      class: "lin",
+      name: "Lagoon Intersection 8",
+      latitude: 14.597709,
+      longitude: 121.01071,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI9a",
+      class: "lin",
+      name: "Lagoon Intersection 9A",
+      latitude: 14.597865,
+      longitude: 121.010689,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI9b",
+      class: "lin",
+      name: "Lagoon Intersection 9B",
+      latitude: 14.597924,
+      longitude: 121.010633,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI10",
+      class: "lin",
+      name: "Lagoon Intersection 10",
+      latitude: 14.598001,
+      longitude: 121.010561,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI11",
+      class: "lin",
+      name: "Lagoon Intersection 11",
+      latitude: 14.598132,
+      longitude: 121.010452,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI12",
+      class: "lin",
+      name: "Lagoon Intersection 12",
+      latitude: 14.5981,
+      longitude: 121.01036,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI13",
+      class: "lin",
+      name: "Lagoon Intersection 13",
+      latitude: 14.598052,
+      longitude: 121.010216,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI14",
+      class: "lin",
+      name: "Lagoon Intersection 14",
+      latitude: 14.598018,
+      longitude: 121.010123,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI15",
+      class: "lin",
+      name: "Lagoon Intersection 15",
+      latitude: 14.597901,
+      longitude: 121.010073,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI16",
+      class: "lin",
+      name: "Lagoon Intersection 16",
+      latitude: 14.597838,
+      longitude: 121.010142,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI17",
+      class: "lin",
+      name: "Lagoon Intersection 17",
+      latitude: 14.597789,
+      longitude: 121.010239,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI18",
+      class: "lin",
+      name: "Lagoon Intersection 18",
+      latitude: 14.597707,
+      longitude: 121.010229,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI19",
+      class: "lin",
+      name: "Lagoon Intersection 19",
+      latitude: 14.597598,
+      longitude: 121.010154,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI20",
+      class: "lin",
+      name: "Lagoon Intersection 20",
+      latitude: 14.597471,
+      longitude: 121.010162,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI21",
+      class: "lin",
+      name: "Lagoon Intersection 21",
+      latitude: 14.597367,
+      longitude: 121.01028,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI22",
+      class: "lin",
+      name: "Lagoon Intersection 22",
+      latitude: 14.597422,
+      longitude: 121.010392,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI23",
+      class: "lin",
+      name: "Lagoon Intersection 23",
+      latitude: 14.597354,
+      longitude: 121.010519,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI24",
+      class: "lin",
+      name: "Lagoon Intersection 24",
+      latitude: 14.597371,
+      longitude: 121.01054,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI25",
+      class: "lin",
+      name: "Lagoon Intersection 25",
+      latitude: 14.597362,
+      longitude: 121.010569,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI26",
+      class: "lin",
+      name: "Lagoon Intersection 26",
+      latitude: 14.597336,
+      longitude: 121.010573,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI27",
+      class: "lin",
+      name: "Lagoon Intersection 27",
+      latitude: 14.59751,
+      longitude: 121.010544,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI28",
+      class: "lin",
+      name: "Lagoon Intersection 28",
+      latitude: 14.597683,
+      longitude: 121.010605,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI29",
+      class: "lin",
+      name: "Lagoon Intersection 29",
+      latitude: 14.597706,
+      longitude: 121.010609,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI30",
+      class: "lin",
+      name: "Lagoon Intersection 30",
+      latitude: 14.597727,
+      longitude: 121.010613,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI31",
+      class: "lin",
+      name: "Lagoon Intersection 31",
+      latitude: 14.597763,
+      longitude: 121.010462,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI32",
+      class: "lin",
+      name: "Lagoon Intersection 32",
+      latitude: 14.597644,
+      longitude: 121.010446,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI33",
+      class: "lin",
+      name: "Lagoon Intersection 33",
+      latitude: 14.597726,
+      longitude: 121.010426,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI34",
+      class: "lin",
+      name: "Lagoon Intersection 34",
+      latitude: 14.597846,
+      longitude: 121.010549,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI35",
+      class: "lin",
+      name: "Lagoon Intersection 35",
+      latitude: 14.597883,
+      longitude: 121.010373,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI36",
+      class: "lin",
+      name: "Lagoon Intersection 36",
+      latitude: 14.597951,
+      longitude: 121.010372,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI37",
+      class: "lin",
+      name: "Lagoon Intersection 37",
+      latitude: 14.597927,
+      longitude: 121.010484,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI38",
+      class: "lin",
+      name: "Lagoon Intersection 38",
+      latitude: 14.597988,
+      longitude: 121.01045,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI39",
+      class: "lin",
+      name: "Lagoon Intersection 39",
+      latitude: 14.598011,
+      longitude: 121.010357,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+    {
+      id: "LAGI40",
+      class: "lin",
+      name: "Lagoon Intersection 40",
+      latitude: 14.598044,
+      longitude: 121.0103,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Lagoon
+
+    // Ninoy Aquino LRC
+    {
+      id: "NALRCI1",
+      name: "Ninoy Aquino LRC Intersection 1",
+      latitude: 14.597423,
+      longitude: 121.009847,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI2",
+      name: "Ninoy Aquino LRC Intersection 2",
+      latitude: 14.597647,
+      longitude: 121.009776,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI3",
+      name: "Ninoy Aquino LRC Intersection 3",
+      latitude: 14.597744,
+      longitude: 121.009572,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI4",
+      name: "Ninoy Aquino LRC Intersection 4",
+      latitude: 14.597665,
+      longitude: 121.009366,
+      vulnerabilityLevel: 1.5,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI5",
+      name: "Ninoy Aquino LRC Intersection 5",
+      latitude: 14.597743,
+      longitude: 121.009183,
+      vulnerabilityLevel: 1,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI6",
+      name: "Ninoy Aquino LRC Intersection 6",
+      latitude: 14.597545,
+      longitude: 121.009604,
+      vulnerabilityLevel: 1,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI7",
+      name: "Ninoy Aquino LRC Intersection 7",
+      latitude: 14.598183,
+      longitude: 121.009381,
+      vulnerabilityLevel: 2,
+    }, // Intersection, Ninoy Aquino LRC
+    {
+      id: "NALRCI8",
+      name: "Ninoy Aquino LRC Intersection 8",
+      latitude: 14.598121,
+      longitude: 121.010128,
+      vulnerabilityLevel: 1,
+    }, // Intersection near PE Building
+    {
+      id: "NALRCI9",
+      name: "Ninoy Aquino LRC Intersection 9",
+      latitude: 14.598246,
+      longitude: 121.010087,
+      vulnerabilityLevel: 2,
+    }, // Intersection near PE Building
+    {
+      id: "NALRCI10",
+      name: "Ninoy Aquino LRC Intersection 10",
+      latitude: 14.598351,
+      longitude: 121.009847,
+      vulnerabilityLevel: 2,
+    }, // Intersection near PE Building
+    {
+      id: "NALRCI11",
+      name: "Ninoy Aquino LRC Intersection 11",
+      latitude: 14.598036,
+      longitude: 121.009696,
+      vulnerabilityLevel: 2,
+    }, // Intersection near PE Building
+
+    // Laboratory High School
+    {
+      id: "LHSI1",
+      name: "LHS Intersection 1",
+      latitude: 14.597097,
+      longitude: 121.009061,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "LHSI2",
+      name: "LHS Intersection 2",
+      latitude: 14.597192,
+      longitude: 121.009399,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "LHSI3",
+      name: "LHS Intersection 3",
+      latitude: 14.597411,
+      longitude: 121.009336,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "LHSI4",
+      name: "LHS Intersection 4",
+      latitude: 14.597366,
+      longitude: 121.009158,
+      vulnerabilityLevel: 2,
+    }, // Intersection inside Pool Area
+    {
+      id: "LHSI5",
+      name: "LHS Intersection 5",
+      latitude: 14.5977,
+      longitude: 121.009061,
+      vulnerabilityLevel: 1,
+    }, // Intersection inside Pool Area
+
+    // Property Building and Motorpool Office
+    {
+      id: "PBMOI1",
+      name: "PBMO Intersection 1",
+      latitude: 14.597686,
+      longitude: 121.008966,
+      vulnerabilityLevel: 1,
+    }, // Intersection to Property Building and Motorpool Office
+    {
+      id: "PBMOI2",
+      name: "PBMO Intersection 2",
+      latitude: 14.597419,
+      longitude: 121.008734,
+      vulnerabilityLevel: 2,
+    }, // Intersection near Property Building and Motorpool Office
+  ];
 
   // Edges
   var edges = [
@@ -1305,11 +2611,11 @@ var vertices = [
   });
 
   function visualizePath(path) {
-    var polyline = L.polyline(path, { color: 'red' }).addTo(map);
+    var polyline = L.polyline(path, { color: "red" }).addTo(map);
     map.fitBounds(polyline.getBounds()); // Adjust the map view to fit the polyline
-}
+  }
 
-  const path = aStarSearch(campus_map, 'CH', 'Oval');
+  const path = aStarSearch(campus_map, "CH", "Oval");
   console.log("Path found:", path);
   visualizePath(path);
 });
