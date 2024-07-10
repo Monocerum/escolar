@@ -29,27 +29,26 @@
 <!-- for navigate content -->
 <div id="map"></div>
 
-
 <div class="box-above-navbar">
   <div class="navigate-info">
-    <button class="navigateButton" onclick="startNavigation()">START NAVIGATION</button>
+    <button id="start-navigation" class="navigateButton" onclick="startNavigation()" disabled>START NAVIGATION</button>
   </div>
-  <div id="navigate-content"  style="display: none">
-      <div class="navigate-div">
-        <div class="information-div">
-          <div class="origin-div">
-            <label for="origin" class="navigate-label" >ORIGIN:</label>
-            <input type="text" id="origin" name="origin" disabled>
-          </div>
-          <div class="destination-div">
-            <label for="destination" class="destination-label">DESTINATION:</label>
-            <label id="destname" >PUP Track and Football Oval</label>
-          </div>
+  <div id="navigate-content" style="display: none">
+    <div class="navigate-div">
+      <div class="information-div">
+        <div class="origin-div">
+          <label for="origin" class="navigate-label">ORIGIN:</label>
+          <input type="text" id="origin" name="origin" disabled>
         </div>
-        <div class="navigate-btn-container">
-          <button class="reset" onclick="resetNavigation()">RESET</button>
+        <div class="destination-div">
+          <label for="destination" class="destination-label">DESTINATION:</label>
+          <label id="destname">PUP Track and Football Oval</label>
         </div>
       </div>
+      <div class="navigate-btn-container">
+        <button class="reset" onclick="resetNavigation()">RESET</button>
+      </div>
+    </div>
   </div>
 </div>
 
