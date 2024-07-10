@@ -24,10 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Not included in actual application, defines popup from popup method in Leaflet
   var popup = L.popup();
 
-  map.on('click', function(e) {
-    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
-});
-
   // Defines mapWidth and mapHeight by dynamically getting the width and height of the map
   const mapWidth = document.getElementById("map").offsetWidth;
   const mapHeight = document.getElementById("map").offsetHeight;
