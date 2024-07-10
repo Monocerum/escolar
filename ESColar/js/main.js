@@ -1869,6 +1869,9 @@ function aStarSearch(campus_map, origin, destination) {
     ["CHI1", "I5"],
     ["I3", "I5"],
 
+    // BCourt (Court) -> CI1
+    ["BCourt", "CI1"],
+
     // CHI1 (Chapel Intersection 1) -> CH, I3, CHI9, OvalE2, CHI2
     ["CHI1", "CHI9"],
     ["CHI1", "OvalE2"],
@@ -2088,8 +2091,9 @@ function aStarSearch(campus_map, origin, destination) {
     ["GI3", "B1E"],
     ["GI3", "I1"],
 
-    // CI2: CI1
+    // CI2: CI1, I1
     ["CI2", "CI1"],
+    ["CI2", "I1"],
 
     // CI1: OBL5, OBL7, CI2
     ["CI1", "OBL5"],
@@ -2355,6 +2359,7 @@ function aStarSearch(campus_map, origin, destination) {
     ["NALRCI1", "PKE"],
     ["NALRCI1", "WWI3"],
     ["NALRCI1", "LAGE2"],
+    ["NALRCI1", "NALRCI2"],
 
     // NALRCI9: NALRCI10, NALRCI8
     ["NALRCI9", "NALRCI8"],
