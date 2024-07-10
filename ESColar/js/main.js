@@ -1987,6 +1987,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ["NWI1", "LAGI6"],
     ["NWI1", "TMBI2"],
 
+    // MDE1 (Main Dome Exit 1) -> MDI3, NWI1
+    ["MDI3", "MDE1"],
+
     // MDE2 (Main Dome Exit 2) -> CHI6, CHI7, CHI8
     ["MDE2", "CHI6"],
 
