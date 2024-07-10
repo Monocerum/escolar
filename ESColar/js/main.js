@@ -208,129 +208,133 @@ function heuristic(node, destination, vertexInfo) {
 }
 
   // A* Search Algorithm
-function aStarSearch(campus_map, origin, destination) {
-  const penalty = 100;                                                        // Adds 'penalty' to nodes that are included in the generated path to make them less desirable
+  function aStarSearch(campus_map, origin, destination) {
+    const penalty = 100;                                                        // Adds 'penalty' to nodes that are included in the generated path to make them less desirable
 
-  // Function to find a path with optional penalties for certain nodes
-  function findPath(avoidNodes = new Set()) {                                 // findPath() function finds path and takes in a parameter of avoidNodes, which is the set of nodes that have already been generated in previous path
-    var toExplore = new PriorityQueue();                                      // Initialization of new PriorityQueue()
-    var explored = new Set();                                                 // Initalization of new Set()
+    // Function to find a path with optional penalties for certain nodes
+    function findPath(avoidNodes = new Set()) {                                 // findPath() function finds path and takes in a parameter of avoidNodes, which is the set of nodes that have already been generated in previous path
+      var toExplore = new PriorityQueue();                                      // Initialization of new PriorityQueue()
+      var explored = new Set();                                                 // Initalization of new Set()
 
-    for (let id of campus_map.vertexInfo.keys()) {                            // Iterate through all nodes in campus_map and re-initialize/initialize the values of g-score, f-score, h-score, and parent
-      campus_map.gscore.set(id, Infinity);                                    // Initializes g-score as infinity
-      campus_map.fscore.set(id, Infinity);                                    // Initializes f-score as infinity
-      campus_map.hscore.set(id, 0);                                           // Initializes h-score as 0
-      campus_map.parent.set(id, Infinity);                                    // Initializes parent node as Infinity
+      for (let id of campus_map.vertexInfo.keys()) {                            // Iterate through all nodes in campus_map and re-initialize/initialize the values of g-score, f-score, h-score, and parent
+        campus_map.gscore.set(id, Infinity);                                    // Initializes g-score as infinity
+        campus_map.fscore.set(id, Infinity);                                    // Initializes f-score as infinity
+        campus_map.hscore.set(id, 0);                                           // Initializes h-score as 0
+        campus_map.parent.set(id, Infinity);                                    // Initializes parent node as Infinity
+      }
+
+      const vw = 10;                                                            // Variable assignment
+
+      campus_map.gscore.set(origin, 0);                                                               // Initialize/Set the g-score of the origin node to 0
+      campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));           // Initialize/Set the h-score of the origin node using the heuristic function
+      campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));   // Initialize/Set the f-score of the origin node to the sum of its g-score and h-score
+
+      toExplore.enqueue(origin, campus_map.fscore.get(origin));                 // Enqueue the f-score of the origin node to the toExplore priority queue.
+
+      while (!toExplore.isEmpty()) {                                            // Evaluate if the toExplore priority queue is not empty.
+        let current = toExplore.dequeue();                                      // If it is not empty, the first element in the queue is dequeued and is then assigned as the current node.
+
+        if (current === destination) {                                          // If the current node is the destination node, it means that the algorithm has reached its destination.
+          return drawPath(campus_map, current);                                 // The drawPath() function will then be executed.
+        }
+
+        explored.add(current);                                                  // If the current node is not the destination node, it means that we should continue with our exploration. The current node is added to the explored set.
+
+        let adjacencyList = campus_map.adjacent.get(current);                   // Assign the list of adjacent nodes to the adjacencyList.
+
+        if (!adjacencyList) {                                                   // If there is no adjacency list (or if there are no adjacent nodes for the current node)
+          console.log("No adjacency list found for node:", current);          
+          continue;                                                             // Continue to the next iteration as there is no adjacent nodes to explore for the current node.
+        }
+
+        adjacencyList.forEach(({ node: adjacency }) => {                        // For each adjacent node (adjacency) in the adjacency list of the current node  
+          if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {           // If the adjacency has been explored (or is already in the explored set) OR vulnerability is === 3
+            return;                                                                                                 // Skip this adjacency.
+          }
+
+          let current_node = campus_map.vertexInfo.get(current);                // The vertexInfo of the current node is assigned to current_node
+          let next_node = campus_map.vertexInfo.get(adjacency);                 // The vertexInfo of the adjacency (adjacent node) is assigned to next_node
+          let destination_node = campus_map.vertexInfo.get(destination);        // The vertexInfo of the destination is assigned to destination_node
+
+          // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
+          // Temp will be equal to the g-score of the current node plus the distance between the current node and the next node evaluated using calculateEdge() plus the vulnerabilityLevel of the adjacent node * weight
+          let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
+
+          if (avoidNodes.has(adjacency)) {                                      // If the node is part of the nodes that are already in the first path
+            temp += penalty;                                                    // Add penalty to the value of the temporary variable
+          }
+
+          if (temp < campus_map.gscore.get(adjacency)) {                        // If the value of the temporary variable is less than the g-score of the adjacency
+            campus_map.parent.set(adjacency, current);                          // Set the current node as the parent of the adjacency
+            campus_map.gscore.set(adjacency, temp);                             // Set the temporary variable as the g-score of the adjacency
+            campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));     // Set the h-score of the adjacency to the value evaluated from the heuristic function
+
+            // For admissibility check; to ensure that A* always gets the optimal path and never overestimates the actual cost
+            // Assign the acutal distance from the next node to the destination node evaluated through calculateEdge() and add the vulnerabilityLevel of the adjacency * weight to actual_cost
+            let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
+
+            // Assign the sum of the g-score of the adjacency and the previously acquired actual cost to get the actual cost from the origin
+            let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
+
+            if (campus_map.hscore.get(adjacency) > actual_cost) {               // Check if the heuristic overestimates the actual cost
+              console.log("Heuristic is not admissible!");
+            }
+
+            campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));      // Set the f-score of the adjacency to the sum of the g-score and f-score
+
+            if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {   // Check if the f-score is greater than the actual cost from the origin
+              console.log("Heuristic is not admissible!");
+            }
+
+            if (!toExplore.nodes.find((node) => node.node === adjacency)) {     // Uses find() to check if the adjacent node of current node is not yet in the list of nodes to be explored...
+              toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));   // Enqueue the f-score of the adjacency to the toExplore priority queue.
+            }
+          }
+        });
+      }
+
+      return [];                                                                // Return an empty array if no path is found.
     }
 
-    const vw = 10;                                                            // Variable assignment
+    let optimalPath = findPath();                                               // Find the optimal path using the A* Search Algorithm (findPath() function)
 
-    campus_map.gscore.set(origin, 0);                                                               // Initialize/Set the g-score of the origin node to 0
-    campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));           // Initialize/Set the h-score of the origin node using the heuristic function
-    campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));   // Initialize/Set the f-score of the origin node to the sum of its g-score and h-score
-
-    toExplore.enqueue(origin, campus_map.fscore.get(origin));                 // Enqueue the f-score of the origin node to the toExplore priority queue.
-
-    while (!toExplore.isEmpty()) {                                            // Evaluate if the toExplore priority queue is not empty.
-      let current = toExplore.dequeue();                                      // If it is not empty, the first element in the queue is dequeued and is then assigned as the current node.
-
-      if (current === destination) {                                          // If the current node is the destination node, it means that the algorithm has reached its destination.
-        return drawPath(campus_map, current);                                 // The drawPath() function will then be executed.
-      }
-
-      explored.add(current);                                                  // If the current node is not the destination node, it means that we should continue with our exploration. The current node is added to the explored set.
-
-      let adjacencyList = campus_map.adjacent.get(current);                   // Assign the list of adjacent nodes to the adjacencyList.
-
-      if (!adjacencyList) {                                                   // If there is no adjacency list (or if there are no adjacent nodes for the current node)
-        console.log("No adjacency list found for node:", current);          
-        continue;                                                             // Continue to the next iteration as there is no adjacent nodes to explore for the current node.
-      }
-
-      adjacencyList.forEach(({ node: adjacency }) => {
-        if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
-          return;
-        }
-
-        let current_node = campus_map.vertexInfo.get(current);
-        let next_node = campus_map.vertexInfo.get(adjacency);
-        let destination_node = campus_map.vertexInfo.get(destination);
-
-        let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
-
-        // Apply penalty if the node is part of the penalty nodes
-        if (avoidNodes.has(adjacency)) {
-          temp += penalty;
-        }
-
-        if (temp < campus_map.gscore.get(adjacency)) {
-          campus_map.parent.set(adjacency, current);
-          campus_map.gscore.set(adjacency, temp);
-          campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));
-
-          let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
-          let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
-
-          if (campus_map.hscore.get(adjacency) > actual_cost) {
-            console.log("Heuristic is not admissible!");
-          }
-
-          campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));
-
-          if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
-            console.log("Heuristic is not admissible!");
-          }
-
-          if (!toExplore.nodes.find((node) => node.node === adjacency)) {
-            toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));
-          }
-        }
-      });
-  }
-
-  return null;
-  }
-
-  // Find the shortest path using the A* Search Algorithm (findPath() function)
-  let shortestPath = findPath();
-
-  if (!shortestPath) {
-    console.error("No path found.");
-    return { shortestPath: [], alternativePath: [] };
-  }
-
-  // The id of each node is found using latitude and longitude (coordinates) of each node in the shortest path
-  let shortestPathNodes = new Set(shortestPath.map(([lat, lon]) => getNodeIdFromCoordinates(lat, lon, campus_map.vertexInfo)));
-
-  // It is necessary to re-initialize the g-score, h-score, f-score, and parent so that there will be no conflict with the values for the alternative path
-  campus_map.gscore = new Map();
-  campus_map.hscore = new Map();
-  campus_map.fscore = new Map();
-  campus_map.parent = new Map();
-
-  // Find the next optimal path using the A* Search Algorithm (findPath() function)
-  let alternativePath = findPath(shortestPathNodes);
-
-  return {
-    shortestPath,
-    alternativePath
-  };
-}
-
-  function drawPath(campus_map, node) {
-    let path = [];
-    while (node) {
-      const nodeInfo = campus_map.vertexInfo.get(node);
-      if (!nodeInfo) {
-        console.error(`No vertex info found for node ID: ${node}`);
-        break;
-      }
-
-      const { latitude, longitude } = nodeInfo;
-      path.push([latitude, longitude]);
-      node = campus_map.parent.get(node);
+    if (!optimalPath) {                                                         // If there is no optimalPath
+      console.error("No path found.");
+      return { optimalPath: [], alternativePath: [] };
     }
-    return path.reverse(); // Reverse the path to start from the origin
+
+    // The id of each node is found using latitude and longitude (coordinates) of each node in the shortest p ath
+    let optimalPathNodes = new Set(optimalPath.map(([lat, lon]) => getID(lat, lon, campus_map.vertexInfo)));
+
+    // It is necessary to re-initialize the g-score, h-score, f-score, and parent so that there will be no conflict with the values for the alternative path
+    campus_map.gscore = new Map();
+    campus_map.hscore = new Map();
+    campus_map.fscore = new Map();
+    campus_map.parent = new Map();
+
+    let alternativePath = findPath(optimalPathNodes);                           // Find the next optimal path using the A* Search Algorithm (findPath() function)
+
+    return {
+      optimalPath,
+      alternativePath
+    };
+  }
+
+  function drawPath(campus_map, node) {                                         
+    let path = [];                                                              // Initialize the path as an empty array
+    while (node) {                                                              // While node evaluates to true
+      const nodeInfo = campus_map.vertexInfo.get(node);                         // Assign the vertexInfo of the given node to nodeInfo
+      if (!nodeInfo) {                                                          // If there is no nodeInfo
+        console.error(`No vertex info found for node ID: ${node}`);             
+        break;                                                                  // End the loop
+      }
+
+      const { latitude, longitude } = nodeInfo;                                 // Get the latitude and longitude from the nodeInfo
+      path.push([latitude, longitude]);                                         // Push the latitude and longitude of the node to the path
+      node = campus_map.parent.get(node);                                       // Get the parent of the current node and assign it to node
+    }
+
+    return path.reverse();                                                      // Reverse the path to the destination from the origin
   }
 
   // Initializes left longitude, right longitude, bottom latitude
@@ -341,7 +345,6 @@ function aStarSearch(campus_map, origin, destination) {
   // Initializes new campus_map using the Campus() class
   var campus_map = new Campus(186);
 
-  // Vertices
   // Vertices
   var vertices = [
     {
@@ -2446,8 +2449,6 @@ function aStarSearch(campus_map, origin, destination) {
     campus_map.addEdge(a, b, edge_cost);
   }
 
-  // A* Search Algorithm
-
   var blueIcon = new L.Icon({
     iconUrl:
       "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
@@ -2514,57 +2515,60 @@ function aStarSearch(campus_map, origin, destination) {
     shadowSize: [41, 41],
   });
 
-let originNode;
-let originNodeName;
-let markers = []; // Store markers to manage click events later
+  let originNode;
+  let originNodeName;
+  let markers = []; // Store markers to manage click events later
 
-// Markers for nodes
-vertices.forEach((vertice) => {
+  // Markers for nodes
+  vertices.forEach((vertice) => {                                   
     let icon;
     switch (vertice.class) {
-        case "bn":
-            icon = redIcon;
-            break;
-        case "en":
-            icon = violetIcon;
-            break;
-        case "dn":
-            icon = blueIcon;
-            break;
-        case "gn":
-            icon = greenIcon;
-            break;
-        case "lin":
-        case "min":
-            icon = greyIcon;
-            break;
-        default:
-            icon = blackIcon;
-            break;
+      case "bn":
+        icon = redIcon;
+        break;
+      case "en":
+        icon = violetIcon;
+        break;
+      case "dn":
+        icon = blueIcon;
+        break;
+      case "gn":
+        icon = greenIcon;
+        break;
+      case "lin":
+        icon = greyIcon;
+        break;
+      case "min":
+        icon = greyIcon;
+        break;
+      default:
+        icon = blackIcon;
+        break;
     }
 
     var current = L.marker([vertice.latitude, vertice.longitude], { icon: icon })
-        .addTo(map)
-        .bindPopup(vertice.name)
-        .on('click', function () {
-            // Set the origin to the clicked marker's ID and name
-            setOrigin(vertice.id, vertice.name);
-            document.querySelector(".reset").style = "display: none";
-            document.getElementById("start-navigation").style = "width: 95px; margin-left: 10px";
-            document.getElementById("start-navigation").innerHTML = "START";
-            document.querySelector(".navigate-info").style = "display: flex; ";
-        });
+      .addTo(map)
+      .bindPopup(vertice.name)
+      .on('click', function () {
+      // Set the origin to the clicked marker's ID and name
+      setOrigin(vertice.id, vertice.name);
+        document.querySelector(".reset").style = "display: none";
+        document.getElementById("start-navigation").style = "width: 95px; margin-left: 10px";
+        document.getElementById("start-navigation").innerHTML = "START";
+        document.querySelector(".navigate-info").style = "display: flex;";
+    });
 
     markers.push(current); // Add the marker to the array
-});
+  });
 
-function setOrigin(originId, originName) {
+  function setOrigin(originId, originName) {
     console.log('Origin set to:', originId);
-    // Perform actions to update the origin for pathfinding
+      
+    // Update the origin for the navigation
     originNode = originId;
     originNodeName = originName;
 
-    // Update the origin input field value and display the name
+    // Show the name of origin in the input box
     document.getElementById("origin").value = originNodeName;
     document.getElementById("origin").disabled = false;
 
@@ -2573,60 +2577,59 @@ function setOrigin(originId, originName) {
 
     // Show the navigate content
     document.getElementById("navigate-content").style.display = "block";
-}
+  }
 
-function getNodeIdFromCoordinates(lat, lon, vertexInfo) {
-    for (let [nodeId, info] of vertexInfo) {
-        if (info.latitude === lat && info.longitude === lon) {
-            return nodeId;
-        }
+  function getID(latitude, longitude, vertexInfo) {                                       
+    for (let [id, info] of vertexInfo) {
+      if (info.latitude === latitude && info.longitude === longitude) {
+        return id;
+      }
     }
+    
     return null;
-}
+  }
 
-function visualizePath(path, color, weight) {
+  function visualizePath(path, color, weight) {
     var polyline = L.polyline(path, { color: color, weight: weight }).addTo(map);
-    map.fitBounds(polyline.getBounds()); // Adjust the map view to fit the polyline
-}
+    map.fitBounds(polyline.getBounds());
+  }
 
-// Navigation function
-function startNavigation() {
+  // Navigation function
+  function startNavigation() {
     if (originNode) {
-        const { shortestPath, alternativePath } = aStarSearch(campus_map, originNode, "Oval");
+      const { optimalPath, alternativePath } = aStarSearch(campus_map, originNode, "Oval");
 
-        console.log("Shortest path found:", shortestPath);
-        console.log("Alternative path found:", alternativePath);
+      console.log("Shortest path found:", optimalPath);
+      console.log("Alternative path found:", alternativePath);
 
-        visualizePath(shortestPath, "red", 7);
-        visualizePath(alternativePath, "purple", 5);
+      visualizePath(optimalPath, "red", 7);
+      visualizePath(alternativePath, "purple", 5);
 
-        document.getElementById("start-navigation").style.display = "none";
-        document.getElementById("navigate-content").className = "active";
+      document.getElementById("start-navigation").style.display = "none";
+      document.getElementById("navigate-content").className = "active";
 
-        // Disable only the click events for setting the origin, keep popups available
-        markers.forEach(marker => {
-            marker.off('click');
-            marker.on('click', function () {
-                this.openPopup();
-            });
+      // Disable only the click events for setting the origin, keep popups available
+      markers.forEach(marker => {
+        marker.off('click');
+        marker.on('click', function () {
+          this.openPopup();
         });
+      });
     } else {
-        console.error("Origin node is not set.");
+      console.error("Origin node is not set.");
     }
 
     document.querySelector(".reset").style = "display: block";
-}
+  }
 
-function resetNavigation() {
+  function resetNavigation() {
     location.reload();
-}
+  }
 
-// Ensure that these functions are available globally if needed
-window.startNavigation = startNavigation;
-window.resetNavigation = resetNavigation;
+  // Ensure that these functions are available globally if needed
+  window.startNavigation = startNavigation;
+  window.resetNavigation = resetNavigation;
 
-// Disable the start navigation button initially
-document.getElementById("start-navigation").disabled = true;
-
-
+  // Disable the start navigation button initially
+  document.getElementById("start-navigation").disabled = true;
 });
