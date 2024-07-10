@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     minZoom: 18,
     zoom: 19,
     maxBounds: bounds,
+    zoomControl: false,
   });
 
   // Set max zoom level
@@ -22,6 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Not included in actual application, defines popup from popup method in Leaflet
   var popup = L.popup();
+
+  map.on('click', function(e) {
+    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+});
 
   // Defines mapWidth and mapHeight by dynamically getting the width and height of the map
   const mapWidth = document.getElementById("map").offsetWidth;
@@ -904,7 +909,22 @@ document.addEventListener("DOMContentLoaded", () => {
       longitude: 121.011368,
       vulnerabilityLevel: 1,
     }, // Intersection to PUP Chapel
-
+    {
+      id: "I4",
+      class: "in",
+      name: "Intersection 4",
+      latitude: 14.59767782936394,
+      longitude: 121.01116787642243,
+      vulnerabilityLevel: 1,
+    },
+    {
+      id: "I5",
+      class: "in",
+      name: "Intersection 5",
+      latitude: 14.597780681006713,
+      longitude: 121.01137440651657,
+      vulnerabilityLevel: 1,
+    },
     // Main Building: North Wing (Under Construction)
     {
       id: "NWI1",
@@ -1828,6 +1848,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // I3: I2, CHI1
     ["I3", "CHI1"],
 
+    ["I4", "I5"],
+    ["I4", "AMME"],
+    ["I4", "NWE1"],
+    ["I4", "NWE3"],
+    ["I4", "CHI8"],
+    ["I4", "CHI9"],
+
+    ["CHI9", "I5"],
+    ["CHI1", "I5"],
+    ["I3", "I5"],
+
     // CHI1 (Chapel Intersection 1) -> CH, I3, CHI9, OvalE2, CHI2
     ["CHI1", "CHI9"],
     ["CHI1", "OvalE2"],
@@ -2288,6 +2319,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ["PS", "SWI3"],
     ["PS", "SWI2"],
 
+    // SC: SCE
+    ["SC", "SCE"],
+
     // SCE: WWI3, WWI2
     ["SCE", "WWI2"],
     ["SCE", "WWI3"],
@@ -2297,6 +2331,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ["SB", "WWI1"],
 
     // WWWI3:
+
+    // PK: PKE
+    ["PK", "PKE"],
 
     // NALRCI1: NALRCI2, NACLRCI6, PKE, WWI3, LAGE2
     ["NALRCI1", "PKE"],
@@ -2573,6 +2610,10 @@ vertices.forEach((vertice) => {
         .on('click', function () {
             // Set the origin to the clicked marker's ID and name
             setOrigin(vertice.id, vertice.name);
+            document.querySelector(".reset").style = "display: none";
+            document.getElementById("start-navigation").style = "width: 95px; margin-left: 10px";
+            document.getElementById("start-navigation").innerHTML = "START";
+            document.querySelector(".navigate-info").style = "display: flex; ";
         });
 });
 
@@ -2609,10 +2650,12 @@ function startNavigation() {
         document.getElementById("start-navigation").style.display = "none";
 
         // Show the navigate content
-        document.getElementById("navigate-content").style.display = "block";
+        document.getElementById("navigate-content").className = "active";
     } else {
         console.error("Origin node is not set.");
     }
+
+    document.querySelector(".reset").style = "display: block";
 }
 
 function resetNavigation() {

@@ -724,9 +724,21 @@ hr {
   margin-top: 20px;
 }
 
+#start-navigation {
+  margin-left: 0;
+}
+
+button .while-onclick {
+  width: auto;
+  margin-right: 15px;
+}
+
 #navigate-content {
   display: flex;
+}
 
+button .inactive {
+  display: none;
 }
 
 .navigate-label {
