@@ -192,128 +192,130 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Heuristic function (h(n))
-  function heuristic(node, destination, vertexInfo) {
-    const vw = 10;
-    const dw = 1;
+// Heuristic function (h(n))
+function heuristic(node, destination, vertexInfo) {
+  const vw = 10;
+  const dw = 1;
 
-    let a = vertexInfo.get(node);
-    let b = vertexInfo.get(destination);
+  let a = vertexInfo.get(node);
+  let b = vertexInfo.get(destination);
 
-    var vulnerabilityLevel = a.vulnerabilityLevel;
-    var distance = calculateEdge(a.x, a.y, b.x, b.y, 2);
-    var heuristicCost = distance * dw + vulnerabilityLevel * vw;
+  var vulnerabilityLevel = a.vulnerabilityLevel;
+  var distance = calculateEdge(a.x, a.y, b.x, b.y, 2);
+  var heuristicCost = distance * dw + vulnerabilityLevel * vw;
 
-    return heuristicCost;
-  }
+  return heuristicCost;
+}
 
   // A* Search Algorithm
-  function aStarSearch(campus_map, origin, destination) {
-    const penalty = 1000; // Adjust this penalty to make shortest path nodes less desirable
+function aStarSearch(campus_map, origin, destination) {
+  const penalty = 100;                                                        // Adds 'penalty' to nodes that are included in the generated path to make them less desirable
 
-    // Function to find a path with optional penalties for certain nodes
-    function findPath(avoidNodes = new Set(), penaltyNodes = new Set()) {
-        var toExplore = new PriorityQueue();
-        var explored = new Set();
+  // Function to find a path with optional penalties for certain nodes
+  function findPath(avoidNodes = new Set()) {                                 // findPath() function finds path and takes in a parameter of avoidNodes, which is the set of nodes that have already been generated in previous path
+    var toExplore = new PriorityQueue();                                      // Initialization of new PriorityQueue()
+    var explored = new Set();                                                 // Initalization of new Set()
 
-        for (let node of campus_map.vertexInfo.keys()) {
-          campus_map.gscore.set(node, Infinity);
-          campus_map.fscore.set(node, Infinity);
-          campus_map.hscore.set(node, 0);
-          campus_map.parent.set(node, Infinity);
+    for (let id of campus_map.vertexInfo.keys()) {                            // Iterate through all nodes in campus_map and re-initialize/initialize the values of g-score, f-score, h-score, and parent
+      campus_map.gscore.set(id, Infinity);                                    // Initializes g-score as infinity
+      campus_map.fscore.set(id, Infinity);                                    // Initializes f-score as infinity
+      campus_map.hscore.set(id, 0);                                           // Initializes h-score as 0
+      campus_map.parent.set(id, Infinity);                                    // Initializes parent node as Infinity
+    }
+
+    const vw = 10;                                                            // Variable assignment
+
+    campus_map.gscore.set(origin, 0);                                                               // Initialize/Set the g-score of the origin node to 0
+    campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));           // Initialize/Set the h-score of the origin node using the heuristic function
+    campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));   // Initialize/Set the f-score of the origin node to the sum of its g-score and h-score
+
+    toExplore.enqueue(origin, campus_map.fscore.get(origin));                 // Enqueue the f-score of the origin node to the toExplore priority queue.
+
+    while (!toExplore.isEmpty()) {                                            // Evaluate if the toExplore priority queue is not empty.
+      let current = toExplore.dequeue();                                      // If it is not empty, the first element in the queue is dequeued and is then assigned as the current node.
+
+      if (current === destination) {                                          // If the current node is the destination node, it means that the algorithm has reached its destination.
+        return drawPath(campus_map, current);                                 // The drawPath() function will then be executed.
       }
 
-        const vw = 10;
+      explored.add(current);                                                  // If the current node is not the destination node, it means that we should continue with our exploration. The current node is added to the explored set.
 
-        campus_map.gscore.set(origin, 0);
-        campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));
-        campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));
+      let adjacencyList = campus_map.adjacent.get(current);                   // Assign the list of adjacent nodes to the adjacencyList.
 
-        toExplore.enqueue(origin, campus_map.fscore.get(origin));
+      if (!adjacencyList) {                                                   // If there is no adjacency list (or if there are no adjacent nodes for the current node)
+        console.log("No adjacency list found for node:", current);          
+        continue;                                                             // Continue to the next iteration as there is no adjacent nodes to explore for the current node.
+      }
 
-        while (!toExplore.isEmpty()) {
-            let current = toExplore.dequeue();
-
-            if (current === destination) {
-                return drawPath(campus_map, current);
-            }
-
-            explored.add(current);
-
-            let adjacencyList = campus_map.adjacent.get(current);
-            if (!adjacencyList) {
-                console.log("No adjacency list found for node:", current);
-                continue;
-            }
-
-            adjacencyList.forEach(({ node: adjacency, edge_cost }) => {
-                if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
-                    return;
-                }
-
-                let current_node = campus_map.vertexInfo.get(current);
-                let next_node = campus_map.vertexInfo.get(adjacency);
-                let destination_node = campus_map.vertexInfo.get(destination);
-
-                let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
-
-                // Apply penalty if the node is part of the penalty nodes
-                if (penaltyNodes.has(adjacency)) {
-                    temp += penalty;
-                }
-
-                if (temp < campus_map.gscore.get(adjacency)) {
-                    campus_map.parent.set(adjacency, current);
-                    campus_map.gscore.set(adjacency, temp);
-                    campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));
-
-                    let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
-                    let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
-
-                    if (campus_map.hscore.get(adjacency) > actual_cost) {
-                        console.log("Heuristic is not admissible!");
-                    }
-
-                    campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));
-
-                    if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
-                        console.log("Heuristic is not admissible!");
-                    }
-
-                    if (!toExplore.nodes.find((node) => node.node === adjacency)) {
-                        toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));
-                    }
-                }
-            });
+      adjacencyList.forEach(({ node: adjacency }) => {
+        if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
+          return;
         }
 
-        return null;
-    }
+        let current_node = campus_map.vertexInfo.get(current);
+        let next_node = campus_map.vertexInfo.get(adjacency);
+        let destination_node = campus_map.vertexInfo.get(destination);
 
-    // Find the shortest path
-    let shortestPath = findPath();
+        let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
-    if (!shortestPath) {
-        console.error("No path found.");
-        return { shortestPath: [], alternativePath: [] };
-    }
+        // Apply penalty if the node is part of the penalty nodes
+        if (avoidNodes.has(adjacency)) {
+          temp += penalty;
+        }
 
-    // Convert the shortest path coordinates to node IDs
-    let shortestPathNodes = new Set(shortestPath.map(([lat, lon]) => getNodeIdFromCoordinates(lat, lon, campus_map.vertexInfo)));
+        if (temp < campus_map.gscore.get(adjacency)) {
+          campus_map.parent.set(adjacency, current);
+          campus_map.gscore.set(adjacency, temp);
+          campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));
 
-    // Find an alternative path by penalizing nodes in the shortest path
-    campus_map.gscore = new Map();
-    campus_map.hscore = new Map();
-    campus_map.fscore = new Map();
-    campus_map.parent = new Map();
+          let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
+          let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
 
-    let alternativePath = findPath(new Set(), shortestPathNodes);
+          if (campus_map.hscore.get(adjacency) > actual_cost) {
+            console.log("Heuristic is not admissible!");
+          }
 
-    return {
-        shortestPath,
-        alternativePath
-    };
+          campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));
+
+          if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
+            console.log("Heuristic is not admissible!");
+          }
+
+          if (!toExplore.nodes.find((node) => node.node === adjacency)) {
+            toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));
+          }
+        }
+      });
   }
+
+  return null;
+  }
+
+  // Find the shortest path using the A* Search Algorithm (findPath() function)
+  let shortestPath = findPath();
+
+  if (!shortestPath) {
+    console.error("No path found.");
+    return { shortestPath: [], alternativePath: [] };
+  }
+
+  // The id of each node is found using latitude and longitude (coordinates) of each node in the shortest path
+  let shortestPathNodes = new Set(shortestPath.map(([lat, lon]) => getNodeIdFromCoordinates(lat, lon, campus_map.vertexInfo)));
+
+  // It is necessary to re-initialize the g-score, h-score, f-score, and parent so that there will be no conflict with the values for the alternative path
+  campus_map.gscore = new Map();
+  campus_map.hscore = new Map();
+  campus_map.fscore = new Map();
+  campus_map.parent = new Map();
+
+  // Find the next optimal path using the A* Search Algorithm (findPath() function)
+  let alternativePath = findPath(shortestPathNodes);
+
+  return {
+    shortestPath,
+    alternativePath
+  };
+}
 
   function drawPath(campus_map, node) {
     let path = [];
@@ -2345,6 +2347,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // PK: PKE
     ["PK", "PKE"],
+    
+    // NALRC: NALRCE
+    ['NALRC', 'NALRCE'],
 
     // NALRCI1: NALRCI2, NACLRCI6, PKE, WWI3, LAGE2
     ["NALRCI1", "PKE"],
