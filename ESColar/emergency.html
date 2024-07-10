@@ -31,64 +31,76 @@
   </header>
 
 <!-- for emergency content-->
-  <div class="content" id="emergency">
-    <div class="emergency-header">
-        <h2 class="earthquake">EARTHQUAKE</h2>
-        <h3 class="emHotlines">Emergency Hotlines</h3>
-    </div>
-    <div class="container">
-        <div class="contents">
-            <div class="hotline-list-content">
-                <div class="hotline-btns">
-                    <button class="hotline-icon">
-                        <img src="assets/call.png" alt="Call Button" id="hotline-btn">
-                      </button>
-                      <button class="hotline-icon">
-                        <img src="assets/message.png" alt="Message Button" id="hotline-btn">
-                    </button>
-                </div>
-                <div class="hotline-name">
-                    <p class="hotline-text">National Emergency Hotline (911)</p>  
-                </div>
-            </div>    
-            <div class="hotline-list-content">
-                <div class="hotline-btns">
-                    <button class="hotline-icon">
-                        <img src="assets/call.png" alt="Call Button" id="hotline-btn">
-                      </button>
-                      <button class="hotline-icon">
-                        <img src="assets/message.png" alt="Message Button" id="hotline-btn">
-                    </button>
-                </div>
-                <div class="hotline-name">
-                    <p class="hotline-text">NDRRMC</p>   
-                </div>
-            </div>    
-            <div class="hotline-list-content">
-                <div class="hotline-btns">
-                    <button class="hotline-icon">
-                        <img src="assets/call.png" alt="Call Button" id="hotline-btn">
-                      </button>
-                      <button class="hotline-icon">
-                        <img src="assets/message.png" alt="Message Button" id="hotline-btn">
-                    </button>
-                </div>
-                <p class="hotline-text">Red Cross</p>  
-            </div>    
-            <div class="hotline-list-content">
-                <div class="hotline-btns">
-                    <button class="hotline-icon">
-                        <img src="assets/call.png" alt="Call Button" id="hotline-btn">
-                      </button>
-                      <button class="hotline-icon">
-                        <img src="assets/message.png" alt="Message Button" id="hotline-btn">
-                    </button>
-                </div>
-                <p class="hotline-text">Bureau of Fire Protection</p>  
-            </div>    
-        </div>
-    </div>
+<div class="content" id="emergency">
+  <div class="emergency-header">
+      <h2 class="earthquake">EARTHQUAKE</h2>
+      <h3 class="emHotlines">Emergency Hotlines</h3>
+  </div>
+  <div class="container">
+      <div class="contents">
+          <div class="hotline-list-content">
+              <div class="hotline-btns">
+                  <button class="hotline-icon" onclick="sendLocation()">
+                      <img src="assets/message.png" alt="Message Button" id="message-btn">
+                  </button>
+              </div>
+              <div class="hotline-name">
+                  <p class="hotline-text">National Emergency Hotline (911)</p>
+              </div>
+          </div>
+          <div class="hotline-list-content">
+              <div class="hotline-btns">
+                  <button class="hotline-icon" onclick="sendLocation()">
+                      <img src="assets/message.png" alt="Message Button" id="message-btn">
+                  </button>
+              </div>
+              <div class="hotline-name">
+                  <p class="hotline-text">NDRRMC</p>
+              </div>
+          </div>
+          <div class="hotline-list-content">
+              <div class="hotline-btns">
+                  <button class="hotline-icon" onclick="sendLocation()">
+                      <img src="assets/message.png" alt="Message Button" id="message-btn">
+                  </button>
+              </div>
+              <p class="hotline-text">Red Cross</p>
+          </div>
+          <div class="hotline-list-content">
+              <div class="hotline-btns">
+                  <button class="hotline-icon" onclick="sendLocation()">
+                      <img src="assets/message.png" alt="Message Button" id="message-btn">
+                  </button>
+              </div>
+              <p class="hotline-text">Bureau of Fire Protection</p>
+          </div>
+      </div>
+  </div>
 </div>
+
+<script>
+  function sendLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              const email = 'jbfruto1010@gmail.com'; // replace with the actual email address
+
+              const subject = encodeURIComponent('CALLING RESCUE!');
+              const body = encodeURIComponent(`URGENT: Requesting assistance at these coordinates:\n\nLatitude: ${latitude}, Longitude: ${longitude}`);
+
+
+              window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+          }, function(error) {
+              alert('Unable to retrieve your location. Please try again.');
+          });
+      } else {
+          alert('Geolocation is not supported by this browser.');
+      }
+  }
+</script>
+
+
     
 <!-- for the navigation bar-->
   <div class="navigation">
