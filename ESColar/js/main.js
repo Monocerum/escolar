@@ -209,10 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // A* Search Algorithm
   function aStarSearch(campus_map, origin, destination) {
-    const penalty = 1000; // Adjust this penalty to make shortest path nodes less desirable
+    const penalty = 100;                                                         // Adds 'penalty' to nodes that are included
 
     // Function to find a path with optional penalties for certain nodes
-    function findPath(avoidNodes = new Set(), penaltyNodes = new Set()) {
+    function findPath(avoidNodes = new Set()) {
         var toExplore = new PriorityQueue();
         var explored = new Set();
 
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
                 // Apply penalty if the node is part of the penalty nodes
-                if (penaltyNodes.has(adjacency)) {
+                if (avoidNodes.has(adjacency)) {
                     temp += penalty;
                 }
 
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
     campus_map.fscore = new Map();
     campus_map.parent = new Map();
 
-    let alternativePath = findPath(new Set(), shortestPathNodes);
+    let alternativePath = findPath(shortestPathNodes);
 
     return {
         shortestPath,
