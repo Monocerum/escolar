@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Leaflet
   // Define northeast and southwest lat and long to limit viewable areag
   var ne = L.latLng(14.599792, 121.01532);
   var sw = L.latLng(14.5958, 121.0082);
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     minZoom: 18,
     zoom: 19,
     maxBounds: bounds,
-    zoomControl: false,
   });
 
   // Set max zoom level
@@ -28,32 +26,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const mapWidth = document.getElementById("map").offsetWidth;
   const mapHeight = document.getElementById("map").offsetHeight;
 
-  // Graph Data Structure, class that contains main functions for the development of the graph
-  class Campus {
-    // Passes the number of node as a parameter to the constructor method
-    constructor(nodeNum) {
-      // Parameter is assigned to this constructors' id
-      this.id = nodeNum;
-      // Creates new map object as adjacency list (list of neighbors)
-      this.adjacent = new Map();
-      // Creates new map object for vertex information
-      this.vertexInfo = new Map();
-      // g(n) - actual cost from start to current node
-      this.gscore = new Map();
-      // h(n) - heuristic cost from current node to goal node
-      this.hscore = new Map();
-      // f(n) = g(n) + h(n)
-      this.fscore = new Map();
-      // parent node
-      this.parent = new Map();
+  class Campus {                                                                // Graph Data Structure, class that contains main functions for the development of the graph
+    constructor(nodeNum) {                                                      // Passes the number of node as a parameter to the constructor method
+      this.id = nodeNum;                                                        // Parameter is assigned to this constructors' id
+      this.adjacent = new Map();                                                // Creates new map object as adjacency list (list of neighbors)
+      this.vertexInfo = new Map();                                              // Creates new map object for vertex information
+      this.gscore = new Map();                                                  // g(n) - actual cost from start to current node
+      this.hscore = new Map();                                                  // h(n) - heuristic cost from current node to goal node
+      this.fscore = new Map();                                                  // f(n) = g(n) + h(n)
+      this.parent = new Map();                                                  // Creates new map object for parent node
     }
 
     // Adds vertex to graph data structure
     addVertex(id, latitude, longitude, x, y, vulnerabilityLevel) {
-      // Adds a key-value pair in the map; id serves as the key, and [] (empty array) serves as the value
-      this.adjacent.set(id, []);
-      // Sets the id, latitude, longitude, x, and y of specific vertex
-      this.vertexInfo.set(id, {
+      this.adjacent.set(id, []);                                                  // Adds a key-value pair in the map; id serves as the key, and [] (empty array) serves as the value
+      this.vertexInfo.set(id, {                                                   // Sets the id, latitude, longitude, x, and y of specific vertex
         id: id,
         latitude: latitude,
         longitude: longitude,
@@ -61,16 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
         y: y,
         vulnerabilityLevel: vulnerabilityLevel,
       });
-      this.gscore.set(id, Infinity);
+      this.gscore.set(id, Infinity);                                              // Initializes the g-score, h-score, f-score, and parent of node id
       this.hscore.set(id, 0);
       this.fscore.set(id, Infinity);
       this.parent.set(id, null);
     }
 
     // Adds edge between node a and node b
-    addEdge(a, b, edge_cost) {
-      this.adjacent.get(a).push({ node: b, edge_cost: edge_cost });
-      this.adjacent.get(b).push({ node: a, edge_cost: edge_cost });
+    addEdge(a, b, edge_cost) {                                                    // Function to add bidirectional edges
+      this.adjacent.get(a).push({ node: b, edge_cost: edge_cost });                 // Pushes node b to the adjacent nodes of node a
+      this.adjacent.get(b).push({ node: a, edge_cost: edge_cost });                 // Pushes node a to the adjacent nodes of node b
     }
   }
 
@@ -90,10 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to calculate the edges of each node using node a's x and y, and node b's x and y, as well as the order (p)
   // Uses Minkowski's Distance Formula
-  function calculateEdge(ax, ay, bx, by, p) {
-    const edge = Math.pow(Math.abs(ax - bx) ** p + Math.abs(ay - by) ** p, 1 / p);
+  function calculateEdge(ax, ay, bx, by, p) {                                             // O(1)
+    const edge = Math.pow(Math.abs(ax - bx) ** p + Math.abs(ay - by) ** p, 1 / p);          // O(1)
 
-    return edge;
+    return edge;                                                                            // O(1)
   }
 
   class PriorityQueue {
@@ -140,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
       let n = this.nodes.length - 1;                                          // 1 -> Assign the length of the priority queue to n
       while (n > 0) {                                                         // log n -> For every iteration in this binary heap, n is divided by half approximately.
         const p = Math.floor((n - 1) / 2);                                    // 1 -> Assigns the parent index to half of the priority queue's length. 
-        if (this.nodes[n][1] < this.nodes[p][1]) {                            // 1 -> Recall that in the first half contains the lower values and the second half contains the higher values. Hence, if we want to maintain the heap property, the loop runs until the index is less than the calculated parent index.
-          this.swap(n, p);                                                    // 1 -> If the current node's f-score is less than the parent node, then swap the indexes. To maintain the heap property, the value of the parent node should be greater than its children.
+        if (this.nodes[n][1] < this.nodes[p][1]) {                            // 1 -> If the f-score of current node is less than the f-score of the parent node (which is in the middle of the array),
+          this.swap(n, p);                                                    // 1 -> their indexes must be swapped. To maintain the heap property, the value of the parent node should always be greater than its children.
           n = p;                                                              // 1 -> Once swapped, the current node will have p's index and the parent node will have the current node's index.
         } else {
           break;                                                              // 1 -> End the loop if current node is indeed less than parent node because the heap property has already been satisfied.
@@ -149,145 +136,146 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     
-    minHeapify() {                                                            // 16 + log n or O(log n)
-      let i = 0;                                                              // 1
-      const n = this.nodes.length;                                            // 1
-      const node = this.nodes[0];                                             // 1
+    minHeapify() {                                                            // O(log n)
+      let i = 0;                                                                // O(1)
+      const n = this.nodes.length;                                              // O(1)
+      const node = this.nodes[0];                                               // O(1)
     
-      while (true) {                                                          // log n -> For every iteration in this binary heap, n is divided by half approximately.
-        let leftChild, rightChild;                                            // 1
-        let temp = null;                                                      // 1
-        let leftChildIndex = i * 2 + 1;                                       // 1 -> Get the index of the left child 
-        let rightChildIndex = i * 2 + 2;                                      // 1 -> Get the index of the right child                                         // -> Decla
+      while (true) {                                                            // O(log n) -> For every iteration in this binary heap, n is divided by half approximately.
+        let leftChild, rightChild;                                              // O(1)
+        let temp = null;                                                        // O(1)
+        let leftChildIndex = i * 2 + 1;                                         // O(1) -> Get the index of the left child 
+        let rightChildIndex = i * 2 + 2;                                        // O(1) -> Get the index of the right child  
         
   
-        if (leftChildIndex < n) {                                             // 1 -> If index is less than the length of the priority queue
-          leftChild = this.nodes[leftChildIndex];                             // 1 -> Assign the f-score of the left child to the variable of the same name
-          if (leftChild[1] < node[1]) {                                       // 1 -> If the f-score of the left child is less than the f-score of the root node
-            temp = leftChildIndex;                                            // 1 -> Store the left child index into a temporary variable for swapping
+        if (leftChildIndex < n) {                                               // O(1) -> If index is less than the length of the priority queue
+          leftChild = this.nodes[leftChildIndex];                               // O(1) -> Assign the f-score of the left child to the variable of the same name
+          if (leftChild[1] < node[1]) {                                         // O(1) -> If the f-score of the left child is less than the f-score of the root node
+            temp = leftChildIndex;                                              // O(1) -> Store the left child index into a temporary variable for swapping
           }
         }
     
-        if (rightChildIndex < n) {                                            // 1 -> If index is less than the length of the priority queue
-          rightChild = this.nodes[rightChildIndex];                           // 1 -> Assign the f-score of the right child to the variable of the same name
+        if (rightChildIndex < n) {                                              // O(1) -> If index is less than the length of the priority queue
+          rightChild = this.nodes[rightChildIndex];                             // O(1) -> Assign the f-score of the right child to the variable of the same name
           if ((temp === null && rightChild[1] < node[1]) || (temp !== null && rightChild[1] < leftChild[1])) {
-              // 1 * log n -> If there is no f-score stored in the temporary variable and the right child is greater than the f-score of the root node
-              // 1 * log n -> OR if there is f-score stored in the temporary variable and the f-score of the right child is less than the f-score of the left child
-              // 1 * log n -> The temporary variable is assigned the index of the right child
+              // O(1)-> If there is no f-score stored in the temporary variable and the right child is greater than the f-score of the root node
+              // O(1) -> OR if there is f-score stored in the temporary variable and the f-score of the right child is less than the f-score of the left child
+              // O(1) -> The temporary variable is assigned the index of the right child
               temp = rightChildIndex;
           }
         }
     
-        if (temp === null) {                                                  // 1 -> If there is no temporary variable, end the loop.
-          break;                                                              // 1 -> If there is no temporary variable, end the loop.
+        if (temp === null) {                                                    // O(1) -> If there is no temporary variable, end the loop.
+          break;                                                                // O(1) -> If there is no temporary variable, end the loop.
         }
     
-        this.swap(i, temp);                                                   // 1 -> Else, the index of the temporary variable will be swapped with the index of the root.
+        this.swap(i, temp);                                                     // O(1) -> Else, the index of the temporary variable will be swapped with the index of the root.
         i = temp;
       }
     }
     
     swap(i, j) {
-      [this.nodes[i], this.nodes[j]] = [this.nodes[j], this.nodes[i]];        // 1 -> Swaps the f-scores in specified indices.
+      [this.nodes[i], this.nodes[j]] = [this.nodes[j], this.nodes[i]];        // O(1) -> Swaps the f-scores in specified indices.
     }
   }
 
-// Heuristic function (h(n))
-function heuristic(node, destination, vertexInfo) {
-  const vw = 10;
-  const dw = 1;
+  // Heuristic function (h(n))
+  function heuristic(node, destination, vertexInfo) {                         // AVG: O(1) || WC: O(n)
+    const vw = 10;                                                              // O(1) -> vw of 10 ensures that vulnerabilityLevel and distance are of somewhat equivalent importance as it scales them
+    const dw = 1;                                                               // O(1)
 
-  let a = vertexInfo.get(node);
-  let b = vertexInfo.get(destination);
+    let a = vertexInfo.get(node);                                               // AVG: O(1) || WC: O(n)
+    let b = vertexInfo.get(destination);                                        // AVG: O(1) || WC: O(n)
 
-  var vulnerabilityLevel = a.vulnerabilityLevel;
-  var distance = calculateEdge(a.x, a.y, b.x, b.y, 2);
-  var heuristicCost = distance * dw + vulnerabilityLevel * vw;
+    var vulnerabilityLevel = a.vulnerabilityLevel;                              // O(1) -> Extract the vulnerability level of the first node
+    var distance = calculateEdge(a.x, a.y, b.x, b.y, 2);                        // O(1) -> Calculate the distance through calculateEdge()
+    var heuristicCost = distance * dw + vulnerabilityLevel * vw;                // O(1) -> Add the distance * distance weight and vulnerabilityLevel * vulnerability weight
 
-  return heuristicCost;
-}
+    return heuristicCost;                                                       // O(1)
+  }
 
   // A* Search Algorithm
-  function aStarSearch(campus_map, origin, destination) {
-    const penalty = 100;                                                        // Adds 'penalty' to nodes that are included in the generated path to make them less desirable
+  function aStarSearch(campus_map, origin, destination) {                       // AVG: O(n log n + m) || WC: O(n*m)
+    const penalty = 100;                                                        // O(1) -> Adds 'penalty' to nodes that are included in the generated path to make them less desirable
 
     // Function to find a path with optional penalties for certain nodes
-    function findPath(avoidNodes = new Set()) {                                 // findPath() function finds path and takes in a parameter of avoidNodes, which is the set of nodes that have already been generated in previous path
-      var toExplore = new PriorityQueue();                                      // Initialization of new PriorityQueue()
-      var explored = new Set();                                                 // Initalization of new Set()
+    function findPath(avoidNodes = new Set()) {                                 // O(1) -> finds path and takes in a parameter of avoidNodes, which is the set of nodes that have already been generated in previous path
+      var toExplore = new PriorityQueue();                                      // O(1) -> Initialization of new PriorityQueue()
+      var explored = new Set();                                                 // O(1) -> Initalization of new Set()
 
-      for (let id of campus_map.vertexInfo.keys()) {                            // Iterate through all nodes in campus_map and re-initialize/initialize the values of g-score, f-score, h-score, and parent
-        campus_map.gscore.set(id, Infinity);                                    // Initializes g-score as infinity
-        campus_map.fscore.set(id, Infinity);                                    // Initializes f-score as infinity
-        campus_map.hscore.set(id, 0);                                           // Initializes h-score as 0
-        campus_map.parent.set(id, Infinity);                                    // Initializes parent node as Infinity
+      for (let id of campus_map.vertexInfo.keys()) {                            // O(n) -> Iterate through all nodes in campus_map and re-initialize/initialize the values of g-score, f-score, h-score, and parent
+        campus_map.gscore.set(id, Infinity);                                    // O(n) -> Initializes g-score as infinity
+        campus_map.fscore.set(id, Infinity);                                    // O(n) -> Initializes f-score as infinity
+        campus_map.hscore.set(id, 0);                                           // O(n) -> Initializes h-score as 0
+        campus_map.parent.set(id, Infinity);                                    // O(n) -> Initializes parent node as Infinity
       }
 
-      const vw = 10;                                                            // Variable assignment
+      const vw = 10;                                                            // O(1) -> Variable assignment
 
-      campus_map.gscore.set(origin, 0);                                                               // Initialize/Set the g-score of the origin node to 0
-      campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));           // Initialize/Set the h-score of the origin node using the heuristic function
-      campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));   // Initialize/Set the f-score of the origin node to the sum of its g-score and h-score
+      campus_map.gscore.set(origin, 0);                                                               // AVG: O(1) || WC: O(n) -> Initialize/Set the g-score of the origin node to 0
+      campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));           // AVG: O(1) || WC: O(n) -> Initialize/Set the h-score of the origin node using the heuristic function
+      campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));   // AVG: O(1) || WC: O(n) -> Initialize/Set the f-score of the origin node to the sum of its g-score and h-score
 
-      toExplore.enqueue(origin, campus_map.fscore.get(origin));                 // Enqueue the f-score of the origin node to the toExplore priority queue.
+      toExplore.enqueue(origin, campus_map.fscore.get(origin));                 // O(log n) -> Enqueue the f-score of the origin node to the toExplore priority queue.
 
-      while (!toExplore.isEmpty()) {                                            // Evaluate if the toExplore priority queue is not empty.
-        let current = toExplore.dequeue();                                      // If it is not empty, the first element in the queue is dequeued and is then assigned as the current node.
+      while (!toExplore.isEmpty()) {                                            // O(n) -> Evaluate if the toExplore priority queue is not empty.
+        let current = toExplore.dequeue();                                      // O(n log n) -> If it is not empty, the first element in the queue is dequeued and is then assigned as the current node.
 
-        if (current === destination) {                                          // If the current node is the destination node, it means that the algorithm has reached its destination.
-          return drawPath(campus_map, current);                                 // The drawPath() function will then be executed.
+        if (current === destination) {                                          // O(n) -> If the current node is the destination node, it means that the algorithm has reached its destination.
+          return drawPath(campus_map, current);                                 // O(n * m) -> The drawPath() function will then be executed.
         }
 
-        explored.add(current);                                                  // If the current node is not the destination node, it means that we should continue with our exploration. The current node is added to the explored set.
+        explored.add(current);                                                  // O(n) -> If the current node is not the destination node, it means that we should continue with our exploration. The current node is added to the explored set.
 
-        let adjacencyList = campus_map.adjacent.get(current);                   // Assign the list of adjacent nodes to the adjacencyList.
+        let adjacencyList = campus_map.adjacent.get(current);                   // O(n) -> Assign the list of adjacent nodes to the adjacencyList.
 
-        if (!adjacencyList) {                                                   // If there is no adjacency list (or if there are no adjacent nodes for the current node)
+        if (!adjacencyList) {                                                   // O(n) -> If there is no adjacency list (or if there are no adjacent nodes for the current node)
           console.log("No adjacency list found for node:", current);          
-          continue;                                                             // Continue to the next iteration as there is no adjacent nodes to explore for the current node.
+          continue;                                                             // O(n) -> Continue to the next iteration as there is no adjacent nodes to explore for the current node.
         }
 
-        adjacencyList.forEach(({ node: adjacency }) => {                        // For each adjacent node (adjacency) in the adjacency list of the current node  
-          if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {           // If the adjacency has been explored (or is already in the explored set) OR vulnerability is === 3
-            return;                                                                                                 // Skip this adjacency.
+        adjacencyList.forEach(({ node: adjacency }) => {                        // O(m) -> assuming that m is the number of adjacent nodes
+          if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {           // O(m) -> If the adjacency has been explored (or is already in the explored set) OR vulnerability is === 3
+            return;                                                                                                 // O(m) -> Skip this adjacency.
           }
 
-          let current_node = campus_map.vertexInfo.get(current);                // The vertexInfo of the current node is assigned to current_node
-          let next_node = campus_map.vertexInfo.get(adjacency);                 // The vertexInfo of the adjacency (adjacent node) is assigned to next_node
-          let destination_node = campus_map.vertexInfo.get(destination);        // The vertexInfo of the destination is assigned to destination_node
+          let current_node = campus_map.vertexInfo.get(current);                // AVG: O(m) || WC: O(n * m) -> The vertexInfo of the current node is assigned to current_node
+          let next_node = campus_map.vertexInfo.get(adjacency);                 // AVG: O(m) || WC: O(n * m) -> The vertexInfo of the adjacency (adjacent node) is assigned to next_node
+          let destination_node = campus_map.vertexInfo.get(destination);        // AVG: O(m) || WC: O(n * m) -> The vertexInfo of the destination is assigned to destination_node
 
           // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
           // Temp will be equal to the g-score of the current node plus the distance between the current node and the next node evaluated using calculateEdge() plus the vulnerabilityLevel of the adjacent node * weight
+          // AVG: O(m) || WC: O(n * m)
           let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
-          if (avoidNodes.has(adjacency)) {                                      // If the node is part of the nodes that are already in the first path
-            temp += penalty;                                                    // Add penalty to the value of the temporary variable
+          if (avoidNodes.has(adjacency)) {                                      // O(m) -> If the node is part of the nodes that are already in the first path
+            temp += penalty;                                                    // O(m) -> Add penalty to the value of the temporary variable
           }
 
-          if (temp < campus_map.gscore.get(adjacency)) {                        // If the value of the temporary variable is less than the g-score of the adjacency
-            campus_map.parent.set(adjacency, current);                          // Set the current node as the parent of the adjacency
-            campus_map.gscore.set(adjacency, temp);                             // Set the temporary variable as the g-score of the adjacency
-            campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));     // Set the h-score of the adjacency to the value evaluated from the heuristic function
+          if (temp < campus_map.gscore.get(adjacency)) {                        // AVG: O(m) || WC: O(n * m) -> If the value of the temporary variable is less than the g-score of the adjacency
+            campus_map.parent.set(adjacency, current);                          // AVG: O(m) || WC: O(n * m) -> Set the current node as the parent of the adjacency
+            campus_map.gscore.set(adjacency, temp);                             // AVG: O(m) || WC: O(n * m) -> Set the temporary variable as the g-score of the adjacency
+            campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));     // AVG: O(m) || WC: O(n * m) -> Set the h-score of the adjacency to the value evaluated from the heuristic function
 
             // For admissibility check; to ensure that A* always gets the optimal path and never overestimates the actual cost
-            // Assign the acutal distance from the next node to the destination node evaluated through calculateEdge() and add the vulnerabilityLevel of the adjacency * weight to actual_cost
+            // AVG: O(m) || WC: O(n * m) -> Assign the acutal distance from the next node to the destination node evaluated through calculateEdge() and add the vulnerabilityLevel of the adjacency * weight to actual_cost
             let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
-            // Assign the sum of the g-score of the adjacency and the previously acquired actual cost to get the actual cost from the origin
+            // AVG: O(m) || WC: O(n * m) -> Assign the sum of the g-score of the adjacency and the previously acquired actual cost to get the actual cost from the origin
             let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
 
-            if (campus_map.hscore.get(adjacency) > actual_cost) {               // Check if the heuristic overestimates the actual cost
+            if (campus_map.hscore.get(adjacency) > actual_cost) {               // AVG: O(m) || WC: O(n * m) -> Check if the heuristic overestimates the actual cost
               console.log("Heuristic is not admissible!");
             }
 
-            campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));      // Set the f-score of the adjacency to the sum of the g-score and f-score
+            campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));      // AVG: O(m) || WC: O(n * m) -> Set the f-score of the adjacency to the sum of the g-score and f-score
 
-            if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {   // Check if the f-score is greater than the actual cost from the origin
+            if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {   // AVG: O(m) || WC: O(n * m) -> Check if the f-score is greater than the actual cost from the origin
               console.log("Heuristic is not admissible!");
             }
 
-            if (!toExplore.nodes.find((node) => node.node === adjacency)) {     // Uses find() to check if the adjacent node of current node is not yet in the list of nodes to be explored...
-              toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));   // Enqueue the f-score of the adjacency to the toExplore priority queue.
+            if (!toExplore.nodes.find((node) => node.node === adjacency)) {     // O(n * m) -> Uses find() to check if the adjacent node of current node is not yet in the list of nodes to be explored...
+              toExplore.enqueue(adjacency, campus_map.fscore.get(adjacency));   // O(m log n) -> Enqueue the f-score of the adjacency to the toExplore priority queue.
             }
           }
         });
@@ -320,21 +308,21 @@ function heuristic(node, destination, vertexInfo) {
     };
   }
 
-  function drawPath(campus_map, node) {                                         
-    let path = [];                                                              // Initialize the path as an empty array
-    while (node) {                                                              // While node evaluates to true
-      const nodeInfo = campus_map.vertexInfo.get(node);                         // Assign the vertexInfo of the given node to nodeInfo
-      if (!nodeInfo) {                                                          // If there is no nodeInfo
+  function drawPath(campus_map, node) {                                         // AVG: O(m) || WC: O(n * m)
+    let path = [];                                                                // O(1) -> Initialize the path as an empty array
+    while (node) {                                                                // O(m) -> Assuming that the path from the current node to origin node is an array of size m, iterate while node is true
+      const nodeInfo = campus_map.vertexInfo.get(node);                           // AVG: O(m) || WC: O(n * m) -> Assign the vertexInfo of the given node to nodeInfo
+      if (!nodeInfo) {                                                            // O(m) -> If there is no nodeInfo, O(1) * m
         console.error(`No vertex info found for node ID: ${node}`);             
-        break;                                                                  // End the loop
+        break;                                                                    // O(m) -> End the loop, O(1) * m
       }
 
-      const { latitude, longitude } = nodeInfo;                                 // Get the latitude and longitude from the nodeInfo
-      path.push([latitude, longitude]);                                         // Push the latitude and longitude of the node to the path
-      node = campus_map.parent.get(node);                                       // Get the parent of the current node and assign it to node
+      const { latitude, longitude } = nodeInfo;                                   // O(m) -> Get the latitude and longitude from the nodeInfo, O(1) * m
+      path.push([latitude, longitude]);                                           // O(m) -> Push the latitude and longitude of the node to the path, O(1) * m
+      node = campus_map.parent.get(node);                                         // O(m) -> Get the parent of the current node and assign it to node, O(1) * m
     }
 
-    return path.reverse();                                                      // Reverse the path to the destination from the origin
+    return path.reverse();                                                      // O(m) -> Reverse the path to the destination from the origin, .reverse() typically takes m/2 swaps
   }
 
   // Initializes left longitude, right longitude, bottom latitude
@@ -1872,9 +1860,6 @@ function heuristic(node, destination, vertexInfo) {
     ["CHI1", "I5"],
     ["I3", "I5"],
 
-    // BCourt (Court) -> CI1
-    ["BCourt", "CI1"],
-
     // CHI1 (Chapel Intersection 1) -> CH, I3, CHI9, OvalE2, CHI2
     ["CHI1", "CHI9"],
     ["CHI1", "OvalE2"],
@@ -1995,9 +1980,6 @@ function heuristic(node, destination, vertexInfo) {
     ["NWI1", "LAGI6"],
     ["NWI1", "TMBI2"],
 
-    // MDE1 (Main Dome Exit 1) -> MDI3, NWI1
-    ["MDI3", "MDE1"],
-
     // MDE2 (Main Dome Exit 2) -> CHI6, CHI7, CHI8
     ["MDE2", "CHI6"],
 
@@ -2094,9 +2076,8 @@ function heuristic(node, destination, vertexInfo) {
     ["GI3", "B1E"],
     ["GI3", "I1"],
 
-    // CI2: CI1, I1
+    // CI2: CI1
     ["CI2", "CI1"],
-    ["CI2", "I1"],
 
     // CI1: OBL5, OBL7, CI2
     ["CI1", "OBL5"],
@@ -2362,7 +2343,6 @@ function heuristic(node, destination, vertexInfo) {
     ["NALRCI1", "PKE"],
     ["NALRCI1", "WWI3"],
     ["NALRCI1", "LAGE2"],
-    ["NALRCI1", "NALRCI2"],
 
     // NALRCI9: NALRCI10, NALRCI8
     ["NALRCI9", "NALRCI8"],

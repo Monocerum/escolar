@@ -179,7 +179,7 @@ class PriorityQueue {
       let leftChild, rightChild;                                            // 1
       let temp = null;                                                      // 1
       let leftChildIndex = i * 2 + 1;                                       // 1 -> Get the index of the left child 
-      let rightChildIndex = i * 2 + 2;                                      // 1 -> Get the index of the right child                                         // -> Decla
+      let rightChildIndex = i * 2 + 2;                                      // 1 -> Get the index of the right child                            
             
       if (leftChildIndex < n) {                                             // 1 -> If index is less than the length of the priority queue
         leftChild = this.nodes[leftChildIndex];                             // 1 -> Assign the f-score of the left child to the variable of the same name
