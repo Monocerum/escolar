@@ -1872,6 +1872,9 @@ function heuristic(node, destination, vertexInfo) {
     ["CHI1", "I5"],
     ["I3", "I5"],
 
+    // BCourt (Court) -> CI1
+    ["BCourt", "CI1"],
+
     // CHI1 (Chapel Intersection 1) -> CH, I3, CHI9, OvalE2, CHI2
     ["CHI1", "CHI9"],
     ["CHI1", "OvalE2"],
@@ -1992,6 +1995,9 @@ function heuristic(node, destination, vertexInfo) {
     ["NWI1", "LAGI6"],
     ["NWI1", "TMBI2"],
 
+    // MDE1 (Main Dome Exit 1) -> MDI3, NWI1
+    ["MDI3", "MDE1"],
+
     // MDE2 (Main Dome Exit 2) -> CHI6, CHI7, CHI8
     ["MDE2", "CHI6"],
 
@@ -2088,8 +2094,9 @@ function heuristic(node, destination, vertexInfo) {
     ["GI3", "B1E"],
     ["GI3", "I1"],
 
-    // CI2: CI1
+    // CI2: CI1, I1
     ["CI2", "CI1"],
+    ["CI2", "I1"],
 
     // CI1: OBL5, OBL7, CI2
     ["CI1", "OBL5"],
@@ -2355,6 +2362,7 @@ function heuristic(node, destination, vertexInfo) {
     ["NALRCI1", "PKE"],
     ["NALRCI1", "WWI3"],
     ["NALRCI1", "LAGE2"],
+    ["NALRCI1", "NALRCI2"],
 
     // NALRCI9: NALRCI10, NALRCI8
     ["NALRCI9", "NALRCI8"],
