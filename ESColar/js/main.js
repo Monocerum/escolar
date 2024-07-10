@@ -97,60 +97,102 @@ document.addEventListener("DOMContentLoaded", () => {
 
   class PriorityQueue {
     constructor() {
-      this.nodes = []; // Initialize nodes as an instance variable
+      this.nodes = [];                                                        // 1 or O(1) -> Initializes nodes as an instance variable as empty array
     }
 
-    // Inserts the node and its f-score (priority) to the priority queue.
-    // The node with the lowest priority is sorted to the front of the priority queue,
-    // so, we are always exploring the node with the lowest f-score (estimated value
-    // from the current node to the destination node) first to find the optimal path.
-    enqueue(node, priority) {
-      // O(n)
-      if (this.isEmpty()) {
-        // 1
-        this.nodes.push([node, priority]); // 1
+    enqueue(node, priority) {                                                 // 1 + log(n) -> enqueues the node to its sorted position
+      this.nodes.push([node, priority]);                                      // 1 or O(1) -> since push adds elements to the end of the array, so time complexity rmeains the same regardless of the size of the array
+      this.maxHeapify();                                                      // log n -> heapify the new element (that is, continued swapping until max heap property is satisfied)
+    }
+
+    dequeue() {                                                               // 1 + log n or O(log n) -> dequeues the node with the lowest f-score and returns it
+      if (this.isEmpty()) {                                                   // 1 or O(1) -> if array is empty
+        return undefined;                                                     // 1 or O(1)
+      }
+      if (this.nodes.length === 1) {                                          // 1 or O(1) -> if there is only one node left
+        return this.nodes.pop()[0];                                           // 1 or O(1) -> simply pop (remove the element)
+      }
+    
+      const minimum = this.nodes[0][0];                                       // 1 or O(1) -> Assign the minimum value (which should be the first element in the heap) to minimum 
+      this.nodes[0] = this.nodes.pop();                                       // 1 or O(1) -> Assign the last element (that is popped from the heap) to the minimum's previous position
+      this.minHeapify();                                                      // log n -> heapify the new element (that is, continued swapping until min heap property is satisfied)
+      return minimum;                                                         // 1 or O(1)
+    }
+    
+    front() {                                                                 // 3 or O(1) -> Returns the front of the priority queue (the element with the minimum f-score)
+      if (this.nodes[0]) {                                                    // 1 or O(1)
+          return this.nodes[0][0];                                            // 1 or O(1) -> Return the first (minimum) element
       } else {
-        let added = false; // 1
-        for (let i = 0; i < this.nodes.length; i++) {
-          // n (length of nodes)
-          if (priority < this.nodes[i][1]) {
-            // n (length of nodes)
-            this.nodes.splice(i, 0, [node, priority]); // n - i
-            added = true;
-            break;
-          }
-        }
-        if (!added) {
-          this.nodes.push([node, priority]); // 1
+          return undefined;                                                   // 1 or O(1)
+      }
+    }
+    
+    size() {
+      return this.nodes.length;                                               // 1 or O(1) -> Return the number of elements in the priority queue
+    }
+    
+    isEmpty() {
+      return this.nodes.length === 0;                                         // 1 or O(1) -> Check if the priority queue is empty
+    }
+    
+    maxHeapify() {                                                            // 6 + log n or O(log n) -> Swaps the current node with parent until heap property is achieved (until it is sorted like a heap)
+      let n = this.nodes.length - 1;                                          // 1 -> Assign the length of the priority queue to n
+      while (n > 0) {                                                         // log n -> For every iteration in this binary heap, n is divided by half approximately.
+        const p = Math.floor((n - 1) / 2);                                    // 1 -> Assigns the parent index to half of the priority queue's length. 
+        if (this.nodes[n][1] < this.nodes[p][1]) {                            // 1 -> Recall that in the first half contains the lower values and the second half contains the higher values. Hence, if we want to maintain the heap property, the loop runs until the index is less than the calculated parent index.
+          this.swap(n, p);                                                    // 1 -> If the current node's f-score is less than the parent node, then swap the indexes. To maintain the heap property, the value of the parent node should be greater than its children.
+          n = p;                                                              // 1 -> Once swapped, the current node will have p's index and the parent node will have the current node's index.
+        } else {
+          break;                                                              // 1 -> End the loop if current node is indeed less than parent node because the heap property has already been satisfied.
         }
       }
     }
-
-    dequeue() {
-      // O(n)
-      const value = this.nodes.shift(); // nodes have to be shifted n times
-      return value ? value[0] : undefined; // Return the element, or undefined if nodes is empty
+    
+    minHeapify() {                                                            // 16 + log n or O(log n)
+      let i = 0;                                                              // 1
+      const n = this.nodes.length;                                            // 1
+      const node = this.nodes[0];                                             // 1
+    
+      while (true) {                                                          // log n -> For every iteration in this binary heap, n is divided by half approximately.
+        let leftChild, rightChild;                                            // 1
+        let temp = null;                                                      // 1
+        let leftChildIndex = i * 2 + 1;                                       // 1 -> Get the index of the left child 
+        let rightChildIndex = i * 2 + 2;                                      // 1 -> Get the index of the right child                                         // -> Decla
+        
+  
+        if (leftChildIndex < n) {                                             // 1 -> If index is less than the length of the priority queue
+          leftChild = this.nodes[leftChildIndex];                             // 1 -> Assign the f-score of the left child to the variable of the same name
+          if (leftChild[1] < node[1]) {                                       // 1 -> If the f-score of the left child is less than the f-score of the root node
+            temp = leftChildIndex;                                            // 1 -> Store the left child index into a temporary variable for swapping
+          }
+        }
+    
+        if (rightChildIndex < n) {                                            // 1 -> If index is less than the length of the priority queue
+          rightChild = this.nodes[rightChildIndex];                           // 1 -> Assign the f-score of the right child to the variable of the same name
+          if ((temp === null && rightChild[1] < node[1]) || (temp !== null && rightChild[1] < leftChild[1])) {
+              // 1 * log n -> If there is no f-score stored in the temporary variable and the right child is greater than the f-score of the root node
+              // 1 * log n -> OR if there is f-score stored in the temporary variable and the f-score of the right child is less than the f-score of the left child
+              // 1 * log n -> The temporary variable is assigned the index of the right child
+              temp = rightChildIndex;
+          }
+        }
+    
+        if (temp === null) {                                                  // 1 -> If there is no temporary variable, end the loop.
+          break;                                                              // 1 -> If there is no temporary variable, end the loop.
+        }
+    
+        this.swap(i, temp);                                                   // 1 -> Else, the index of the temporary variable will be swapped with the index of the root.
+        i = temp;
+      }
     }
-
-    front() {
-      // O(1)
-      return this.nodes[0];
-    }
-
-    size() {
-      // O(1)
-      return this.nodes.length;
-    }
-
-    isEmpty() {
-      // O(1)
-      return this.nodes.length === 0;
+    
+    swap(i, j) {
+      [this.nodes[i], this.nodes[j]] = [this.nodes[j], this.nodes[i]];        // 1 -> Swaps the f-scores in specified indices.
     }
   }
 
   // Heuristic function (h(n))
   function heuristic(node, destination, vertexInfo) {
-    // 1 weights ensure that vulnerability level and distance cost are 'balanced' and are treated with equal priority
     const vw = 10;
     const dw = 1;
 
@@ -171,7 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
     var explored = new Set();
 
     const vw = 10;
-    const dw = 1;
 
     // Initializes the g-score of the origin node to 0, as distance from itself to itself is always 0.
     campus_map.gscore.set(origin, 0);
@@ -189,7 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // If destination node has been reached...
       if (current === destination) {
-        // 1
         // Draw the path found by the algorithm
         const path = drawPath(campus_map, current, campus_map.vertexInfo.get(current).id);
         return path;
@@ -208,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (campus_map.adjacent.has(current)) {
         // 1
         adjacencyList.forEach(({ node: adjacency, edge_cost }) => {
-          // m (nodes in adjacency list)                                             // n (number of nodes in adjacency list)
           console.log("Processing adjacency:", adjacency, "with edge cost:", edge_cost);
           // If adjacent node has already been explored, skip node and proceed to next.
           if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
@@ -219,7 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           let current_node = campus_map.vertexInfo.get(current);
-          let origin_node = campus_map.vertexInfo.get(origin);
           let next_node = campus_map.vertexInfo.get(adjacency);
           let destination_node = campus_map.vertexInfo.get(destination);
 
@@ -273,8 +311,8 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       }
 
-      const { latitude, longitude } = nodeInfo; // Extract latitude and longitude correctly
-      path.push([latitude, longitude]); // Push the latitude and longitude as an array
+      const { latitude, longitude } = nodeInfo;
+      path.push([latitude, longitude]);
       node = campus_map.parent.get(node);
     }
     return path.reverse(); // Reverse the path to start from the origin
@@ -2464,7 +2502,8 @@ function setOrigin(originId) {
   console.log('Origin set to:', originId);
   // Perform actions to update the origin for pathfinding
   // For example, you can store the originId in a variable
-  originNode = originId;
+  let originNode = originId;
+  document.getElementById("origin").value = originNode;
 }
 
   function visualizePath(path) {
@@ -2475,6 +2514,4 @@ function setOrigin(originId) {
   const path = aStarSearch(campus_map, "LAGI7", "Oval");
   console.log("Path found:", path);
   visualizePath(path);
-
-  document.getElementById("origin").value = originNode;
 });
