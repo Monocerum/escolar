@@ -2508,9 +2508,10 @@ document.addEventListener("DOMContentLoaded", () => {
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
   });
-  
+
 let originNode;
 let originNodeName;
+let markers = []; // Store markers to manage click events later
 
 // Markers for nodes
 vertices.forEach((vertice) => {
@@ -2548,6 +2549,8 @@ vertices.forEach((vertice) => {
             document.getElementById("start-navigation").innerHTML = "START";
             document.querySelector(".navigate-info").style = "display: flex; ";
         });
+
+    markers.push(current); // Add the marker to the array
 });
 
 function setOrigin(originId, originName) {
@@ -2568,12 +2571,12 @@ function setOrigin(originId, originName) {
 }
 
 function getNodeIdFromCoordinates(lat, lon, vertexInfo) {
-  for (let [nodeId, info] of vertexInfo) {
-      if (info.latitude === lat && info.longitude === lon) {
-          return nodeId;
-      }
-  }
-  return null;
+    for (let [nodeId, info] of vertexInfo) {
+        if (info.latitude === lat && info.longitude === lon) {
+            return nodeId;
+        }
+    }
+    return null;
 }
 
 function visualizePath(path, color, weight) {
@@ -2594,6 +2597,14 @@ function startNavigation() {
 
         document.getElementById("start-navigation").style.display = "none";
         document.getElementById("navigate-content").className = "active";
+
+        // Disable only the click events for setting the origin, keep popups available
+        markers.forEach(marker => {
+            marker.off('click');
+            marker.on('click', function () {
+                this.openPopup();
+            });
+        });
     } else {
         console.error("Origin node is not set.");
     }
@@ -2602,7 +2613,7 @@ function startNavigation() {
 }
 
 function resetNavigation() {
-  location.reload();
+    location.reload();
 }
 
 // Ensure that these functions are available globally if needed
@@ -2611,5 +2622,6 @@ window.resetNavigation = resetNavigation;
 
 // Disable the start navigation button initially
 document.getElementById("start-navigation").disabled = true;
+
 
 });
