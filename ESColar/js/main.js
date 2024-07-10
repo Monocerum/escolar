@@ -71,47 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
       this.adjacent.get(a).push({ node: b, edge_cost: edge_cost });
       this.adjacent.get(b).push({ node: a, edge_cost: edge_cost });
     }
-
-    printCampusMap() {
-      var vertices = this.adjacent.keys();
-
-      for (var i of vertices) {
-        var adjacency = this.adjacent.get(i);
-        var conc = "";
-
-        for (var j of adjacency) {
-          conc += `(${j.node}, ${j.edge_cost})`;
-        }
-
-        console.log(i + "->" + conc);
-      }
-    }
   }
 
   // Convert latitude and longitude to x and y; See: https://stackoverflow.com/questions/2103924/mercator-longitude-and-latitude-calculations-to-x-and-y-on-a-cropped-map-of-the
-  function convertGeo(
-    latitude,
-    longitude,
-    width,
-    height,
-    leftLong,
-    rightLong,
-    latBottom
-  ) {
+  function convertGeo(latitude, longitude, width, height, leftLong, rightLong, latBottom) {
     const radLatBottom = latBottom * (Math.PI / 180);
     const radLat = latitude * (Math.PI / 180);
     const long = rightLong - leftLong;
     const mapWidth = ((width / long) * 360) / (2 * Math.PI);
-    const offsetY =
-      (mapWidth / 2) *
-      Math.log((1 + Math.sin(radLatBottom)) / (1 - Math.sin(radLatBottom)));
+    const offsetY = (mapWidth / 2) * Math.log((1 + Math.sin(radLatBottom)) / (1 - Math.sin(radLatBottom)));
 
     const x = (longitude - leftLong) * (width / long);
-    const y =
-      height -
-      ((mapWidth / 2) *
-        Math.log((1 + Math.sin(radLat)) / (1 - Math.sin(radLat))) -
-        offsetY);
+    const y = height - ((mapWidth / 2) * Math.log((1 + Math.sin(radLat)) / (1 - Math.sin(radLat))) - offsetY);
 
     return { x, y };
   }
@@ -119,10 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to calculate the edges of each node using node a's x and y, and node b's x and y, as well as the order (p)
   // Uses Minkowski's Distance Formula
   function calculateEdge(ax, ay, bx, by, p) {
-    const edge = Math.pow(
-      Math.abs(ax - bx) ** p + Math.abs(ay - by) ** p,
-      1 / p
-    );
+    const edge = Math.pow(Math.abs(ax - bx) ** p + Math.abs(ay - by) ** p, 1 / p);
 
     return edge;
   }
@@ -208,14 +176,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initializes the g-score of the origin node to 0, as distance from itself to itself is always 0.
     campus_map.gscore.set(origin, 0);
     // Initialize the h-score of the origin node to destination node.
-    campus_map.hscore.set(
-      origin,
-      heuristic(origin, destination, campus_map.vertexInfo)
-    );
-    campus_map.fscore.set(
-      origin,
-      campus_map.gscore.get(origin) + campus_map.hscore.get(origin)
-    );
+    campus_map.hscore.set(origin, heuristic(origin, destination, campus_map.vertexInfo));
+    campus_map.fscore.set(origin, campus_map.gscore.get(origin) + campus_map.hscore.get(origin));
 
     // Enqueue/Add the origin and destination node to nodes to explore.
     toExplore.enqueue(origin, campus_map.fscore.get(origin));
@@ -229,11 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (current === destination) {
         // 1
         // Draw the path found by the algorithm
-        const path = drawPath(
-          campus_map,
-          current,
-          campus_map.vertexInfo.get(current).id
-        );
+        const path = drawPath(campus_map, current, campus_map.vertexInfo.get(current).id);
         return path;
       }
 
@@ -251,17 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1
         adjacencyList.forEach(({ node: adjacency, edge_cost }) => {
           // m (nodes in adjacency list)                                             // n (number of nodes in adjacency list)
-          console.log(
-            "Processing adjacency:",
-            adjacency,
-            "with edge cost:",
-            edge_cost
-          );
+          console.log("Processing adjacency:", adjacency, "with edge cost:", edge_cost);
           // If adjacent node has already been explored, skip node and proceed to next.
-          if (
-            explored.has(adjacency) ||
-            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3
-          ) {
+          if (explored.has(adjacency) || campus_map.vertexInfo.get(adjacency).vulnerabilityLevel === 3) {
             // 1
             // If adjacency has already been explored or all adjacent nodes are highly vulnerable, skip.
             console.log("Adjacency has already been explored.");
@@ -274,16 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let destination_node = campus_map.vertexInfo.get(destination);
 
           // Initialize temporary variable for g-score that must include all that is being considered; in which case, we are considering the distance and the vulnerability, so...
-          let temp =
-            campus_map.gscore.get(current) +
-            calculateEdge(
-              current_node.x,
-              current_node.y,
-              next_node.x,
-              next_node.y,
-              2
-            ) +
-            campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
+          let temp = campus_map.gscore.get(current) + calculateEdge(current_node.x, current_node.y, next_node.x, next_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
 
           // Only update the path to adjacent node only if it is shorter than previous paths.
           // If the current g-score is less than the adjacent node's g-score...
@@ -293,21 +234,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Compute g-score of adjacent node.
             campus_map.gscore.set(adjacency, temp);
             // Compute the h-score of adjacent node.
-            campus_map.hscore.set(
-              adjacency,
-              heuristic(adjacency, destination, campus_map.vertexInfo)
-            );
+            campus_map.hscore.set(adjacency, heuristic(adjacency, destination, campus_map.vertexInfo));
 
-            let actual_cost =
-              calculateEdge(
-                next_node.x,
-                next_node.y,
-                destination_node.x,
-                destination_node.y,
-                2
-              ) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
-            let actual_cost_from_origin =
-              campus_map.gscore.get(adjacency) + actual_cost;
+            let actual_cost = calculateEdge(next_node.x, next_node.y, destination_node.x, destination_node.y, 2) + campus_map.vertexInfo.get(adjacency).vulnerabilityLevel * vw;
+            let actual_cost_from_origin = campus_map.gscore.get(adjacency) + actual_cost;
 
             // Check if heuristic is admissible.
             if (campus_map.hscore.get(adjacency) > actual_cost) {
@@ -315,11 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Compute the f-score of adjacent node.
-            campus_map.fscore.set(
-              adjacency,
-              campus_map.gscore.get(adjacency) +
-                campus_map.hscore.get(adjacency)
-            );
+            campus_map.fscore.set(adjacency, campus_map.gscore.get(adjacency) + campus_map.hscore.get(adjacency));
 
             if (campus_map.fscore.get(adjacency) > actual_cost_from_origin) {
               console.log("Heuristic is not admissible!");
