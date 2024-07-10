@@ -2426,8 +2426,11 @@ document.addEventListener("DOMContentLoaded", () => {
     shadowSize: [41, 41],
   });
 
-  // Markers for nodes
-  vertices.forEach((vertice) => {
+let originNode;
+let originNodeName;
+
+// Markers for nodes
+vertices.forEach((vertice) => {
     let icon;
     switch (vertice.class) {
         case "bn":
@@ -2455,26 +2458,47 @@ document.addEventListener("DOMContentLoaded", () => {
         .addTo(map)
         .bindPopup(vertice.name)
         .on('click', function () {
-            // Set the origin to the clicked marker's ID or coordinates
-            setOrigin(vertice.id); // Assuming vertice.id is the ID of the marker
+            // Set the origin to the clicked marker's ID and name
+            setOrigin(vertice.id, vertice.name);
         });
 });
 
-function setOrigin(originId) {
-  console.log('Origin set to:', originId);
-  // Perform actions to update the origin for pathfinding
-  // For example, you can store the originId in a variable
-  originNode = originId;
+function setOrigin(originId, originName) {
+    console.log('Origin set to:', originId);
+    // Perform actions to update the origin for pathfinding
+    originNode = originId;
+    originNodeName = originName;
+
+    // Update the origin input field value and display the name
+    document.getElementById("origin").value = originNodeName;
+    document.getElementById("origin").disabled = false;
+
+    // Show the navigate content
+    document.getElementById("navigate-content").style.display = "block";
 }
 
-  function visualizePath(path) {
+function visualizePath(path) {
     var polyline = L.polyline(path, { color: "red", weight: 7 }).addTo(map);
     map.fitBounds(polyline.getBounds()); // Adjust the map view to fit the polyline
-  }
+}
 
-  const path = aStarSearch(campus_map, "LAGI7", "Oval");
-  console.log("Path found:", path);
-  visualizePath(path);
+// Navigation function
+function startNavigation() {
+    if (originNode) {
+        const path = aStarSearch(campus_map, originNode, "Oval");
+        console.log("Path found:", path);
+        visualizePath(path);
+    } else {
+        console.error("Origin node is not set.");
+    }
+}
 
-  document.getElementById("origin").value = originNode;
+function resetNavigation() {
+  location.reload();
+}
+
+// Ensure that these functions are available globally if needed
+window.startNavigation = startNavigation;
+window.resetNavigation = resetNavigation;
+  
 });
