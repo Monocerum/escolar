@@ -1849,6 +1849,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // I3: I2, CHI1
     ["I3", "CHI1"],
 
+    // BCourt: CI1
+    ["BCourt", "CI1"],
+
     // I4: I5, AMME, NWE1, NWE3, CHI8, CHI9
     ["I4", "I5"],
     ["I4", "AMME"],
@@ -1982,6 +1985,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ["NWI1", "LAGI6"],
     ["NWI1", "TMBI2"],
 
+    // MDE1 (Main Dome Exit 1) -> MDI3, NWI1
+    ["MDI3", "MDE1"],
+
     // MDE2 (Main Dome Exit 2) -> CHI6, CHI7, CHI8
     ["MDE2", "CHI6"],
 
@@ -2078,12 +2084,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ["GI3", "B1E"],
     ["GI3", "I1"],
 
-    // CI2: CI1
+    // CI2: CI1, I1
     ["CI2", "CI1"],
+    ["CI2", "I1"],
 
-    // CI1: OBL5, OBL7, CI2
+    // CI1: OBL5, OBL7, CI2, I1
     ["CI1", "OBL5"],
     ["CI1", "OBL7"],
+    ["CI1", "I1"],
 
     // GI1: PEI3, GI2, GI3, GE1, GE2, GE3
     ["GI1", "GI3"],
