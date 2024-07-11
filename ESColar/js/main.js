@@ -1849,6 +1849,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // I3: I2, CHI1
     ["I3", "CHI1"],
 
+    // I4: I5, AMME, NWE1, NWE3, CHI8, CHI9
     ["I4", "I5"],
     ["I4", "AMME"],
     ["I4", "NWE1"],
@@ -1856,6 +1857,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["I4", "CHI8"],
     ["I4", "CHI9"],
 
+    // I5: CHI9, CHI1, I3
     ["CHI9", "I5"],
     ["CHI1", "I5"],
     ["I3", "I5"],
@@ -2343,6 +2345,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ["NALRCI1", "PKE"],
     ["NALRCI1", "WWI3"],
     ["NALRCI1", "LAGE2"],
+    ["NALRCI1", "NALRCI2"],
+    ["NALRCI1", "NALRCI6"],
 
     // NALRCI9: NALRCI10, NALRCI8
     ["NALRCI9", "NALRCI8"],
