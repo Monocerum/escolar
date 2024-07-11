@@ -1979,6 +1979,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // NWI2 (North Wing Intersection 2) -> NWE2, OBL3, NWI1
     ["NWI2", "OBL3"],
     ["NWI2", "NWI1"],
+    ["NWI2", "NWE2"],
+
 
     // NWI1 (North Wing Intersection 1) -> NWI2, MDE1, LAGI6, TMBI2
     ["NWI1", "MDE1"],
