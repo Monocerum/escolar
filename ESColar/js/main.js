@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
         campus_map.gscore.set(id, Infinity);                                    // O(n) -> Initializes g-score as infinity
         campus_map.fscore.set(id, Infinity);                                    // O(n) -> Initializes f-score as infinity
         campus_map.hscore.set(id, 0);                                           // O(n) -> Initializes h-score as 0
-        campus_map.parent.set(id, Infinity);                                    // O(n) -> Initializes parent node as Infinity
+        campus_map.parent.set(id, null);                                    // O(n) -> Initializes parent node as Infinity
       }
 
       const vw = 10;                                                            // O(1) -> Variable assignment

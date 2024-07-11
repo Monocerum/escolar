@@ -786,3 +786,7 @@ button .inactive {
   display: flex;
   justify-content: center;
 }
+
+#message-btn {
+  width: 100%;
+}
