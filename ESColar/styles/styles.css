@@ -790,3 +790,12 @@ button .inactive {
 #message-btn {
   width: 100%;
 }
+
+.map-credit {
+  text-align: right;
+  margin-right: 40px;
+  font-family: 'Inria Serif', serif;
+  font-size: 0.8em;
+  color: #E1E1E1;
+  margin-top: 100px;
+}
