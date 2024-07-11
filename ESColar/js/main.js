@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Interfaith Ecumenical Chapel",
       latitude: 14.597136,
       longitude: 121.011442,
-      vulnerabilityLevel: 2,
+      vulnerabilityLevel: 3,
     }, // Intersection around PUP Chapel, near East Wing
     {
       id: "NFSB",
